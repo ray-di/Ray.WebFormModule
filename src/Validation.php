@@ -6,13 +6,22 @@
  */
 namespace Ray\Validation;
 
-class ValidationResult implements FailureInterface
+use Ray\Aop\MethodInvocation;
+
+class Validation implements ValidationInterface
 {
     private $failure = [];
+
+    private $invocation;
 
     public function __construct(array $failure = [])
     {
         $this->failure = $failure;
+    }
+
+    public function setInvocation(MethodInvocation $invocation)
+    {
+        $this->invocation = $invocation;
     }
 
     public function addError($name, $message)
@@ -23,5 +32,10 @@ class ValidationResult implements FailureInterface
     public function getMessages()
     {
         return $this->failure;
+    }
+
+    public function getInvocation()
+    {
+        return $this->invocation;
     }
 }

@@ -6,6 +6,8 @@
  */
 namespace Ray\Validation;
 
+use Ray\Aop\MethodInvocation;
+
 interface FailureInterface
 {
     /**
@@ -14,4 +16,11 @@ interface FailureInterface
      * @return string[]
      */
     public function getMessages();
+
+    /**
+     * Return method invocation
+     *
+     * @return MethodInvocation
+     */
+    public function getInvocation();
 }

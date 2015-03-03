@@ -27,23 +27,24 @@ class ValidateInterceptor implements MethodInterceptor
         $object = $invocation->getThis();
         $target = [$object, $method];
         $onValidate = [$object, self::VALIDATE_PREFIX . ucfirst($method)];
-        if (is_callable($onValidate)) {
-            $validationResult = $this->validate($target, $onValidate, (array) $invocation->getArguments());
-            if ($validationResult === true) {
-                return $invocation->proceed();
-            }
-
-            return $validationResult;
+        if (! is_callable($onValidate)) {
+            throw new ValidateMethodNotFound($method);
+        }
+        $validationResult = $this->validate($target, $onValidate, $invocation);
+        if ($validationResult === true) {
+            return $invocation->proceed();
         }
 
-        throw new ValidateMethodNotFound($method);
+        return $validationResult;
     }
 
-    private function validate(callable $target, callable $onValidate, $params)
+    private function validate(callable $target, callable $onValidate, MethodInvocation $invocation)
     {
-        $result = call_user_func_array($onValidate, $params);
-        if ($result instanceof ValidationResult && $result->getMessages()) {
-            $failure = $this->getFailure($target, $result);
+        $validation = call_user_func_array($onValidate, (array) $invocation->getArguments());
+        if ($validation instanceof Validation && $validation->getMessages()) {
+            /* @var $validation Validation */
+            $validation->setInvocation($invocation);
+            $failure = $this->getFailure($target, $validation);
             if ($failure instanceof \Exception) {
                 throw $failure;
             }
@@ -54,6 +55,11 @@ class ValidateInterceptor implements MethodInterceptor
         return true;
     }
 
+    /**
+     * @param  callable                       $target
+     * @param  FailureInterface               $failure
+     * @return mixed|InvalidArgumentException
+     */
     private function getFailure(callable $target, FailureInterface $failure)
     {
         $onInvalidate = [$target[0], self::INVALID_PREFIX . ucwords($target[1])];

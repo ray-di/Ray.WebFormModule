@@ -14,11 +14,11 @@ class FakeUser2
     }
 
     /**
-     * @return ValidationResult
+     * @return Validation
      */
     public function onValidateCreateUser($name)
     {
-        $result = new ValidationResult;
+        $result = new Validation;
         if (! is_string($name)) {
             $result->addError('name', 'name should be string');
         }
