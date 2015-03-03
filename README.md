@@ -2,8 +2,6 @@
 
 # Ray.ValidateModule
 
-## A standard PHP project skeleton
-
 ## Installation
 
 ### Composer install
@@ -27,7 +25,7 @@ class AppModule extends AbstractModule
 ```
 ### Usage
 
-Annotate target method with `@Valid`
+Annotate target method with `@Valid` annotation.
 
 ```php
 use Ray\Validation\Annotation\Valid;
@@ -43,7 +41,7 @@ class User
     }
 ```
 
-Provide validate `onValidate` prefixed name for validation.
+Provide `onValidate` prefixed name validation method.
 
 ```php
     /**
@@ -59,10 +57,9 @@ Provide validate `onValidate` prefixed name for validation.
         return $result;
     }
 ```
-Add error if validation failed.
+Validate all parameters. If validation failed, 'addError' with parameter name and message.
 
-`Ray\Validation\Exception\InvalidArgumentException` thrown, but if you provide **OnInvalid** method with `onValidate` prefixed method,
-Alternative result is return.
+`Ray\Validation\Exception\InvalidArgumentException` thrown on validation failed, But if you provide **OnInvalid** method with `onValidate` prefixed method, Alternative result is return.
 
 ```php
     public function onInvalidCreateUser(FailureInterface $failure)
