@@ -1,5 +1,9 @@
 # Ray.ValidateModule
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ray-di/Ray.ValidateModule/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/ray-di/Ray.ValidateModule/?branch=develop)
+[![Code Coverage](https://scrutinizer-ci.com/g/ray-di/Ray.ValidateModule/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/ray-di/Ray.ValidateModule/?branch=develop)
+[![Build Status](https://travis-ci.org/ray-di/Ray.ValidateModule.svg?branch=develop)](https://travis-ci.org/ray-di/Ray.ValidateModule)
+
 ## Installation
 
 ### Composer install
