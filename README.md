@@ -6,7 +6,7 @@
 
 ### Composer install
 
-    $ composer require ray/validation-module
+    $ composer require ray/validate-module
  
 ### Module install
 
