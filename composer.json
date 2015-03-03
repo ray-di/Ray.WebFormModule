@@ -1,0 +1,30 @@
+{
+    "name": "ray/validate-module",
+    "description":"Validation module for Ray.Di",
+    "keywords":[
+      "validation",
+      "Ray.Di module"
+    ],
+    "require": {
+      "ray/di": "~2.0"
+    },
+    "license": "BSD-3-Clause",
+    "autoload":{
+        "psr-4":{
+            "Ray\\Validation\\": "src/"
+        }
+    },
+    "autoload-dev":{
+        "psr-4":{
+            "Ray\\Validation\\": "tests/",
+            "Ray\\Validation\\": "tests/Fake"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.1.x-dev"
+        }
+    }
+}
