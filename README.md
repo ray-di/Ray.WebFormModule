@@ -1,5 +1,3 @@
-# WIP; RFC
-
 # Ray.ValidateModule
 
 ## Installation
@@ -64,14 +62,16 @@ Validate all parameters. If validation failed, `addError` with invalid parameter
 ```php
     public function onInvalidCreateUser(FailureInterface $failure)
     {
-        $error = '';
+
+        // original parameters
+        list($this->defaultName) = $failure->getInvocation()->getArguments();
+
+        // errors
         foreach ($failure->getMessages() as $name => $messages) {
             foreach ($messages as $message) {
-                $error .= "Input '{$name}': {$message}" . PHP_EOL;
+                echo "Input '{$name}': {$message}" . PHP_EOL;
             }
         }
-
-        return $error;
     }
 ```
 
