@@ -57,7 +57,7 @@ Provide `onValidate` prefixed name validation method.
         return $result;
     }
 ```
-Validate all parameters. If validation failed, 'addError' with parameter name and message.
+Validate all parameters. If validation failed, `addError` with invalid parameter name and message.
 
 `Ray\Validation\Exception\InvalidArgumentException` thrown on validation failed, But if you provide **OnInvalid** method with `onValidate` prefixed method, Alternative result is return.
 
