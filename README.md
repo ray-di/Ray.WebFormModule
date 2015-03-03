@@ -41,7 +41,7 @@ class User
     }
 ```
 
-Provide `onValidate` prefixed name validation method.
+Provide `onValidate` prefixed name validation method in same class.
 
 ```php
     /**
