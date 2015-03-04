@@ -96,13 +96,13 @@ use Ray\Validation\Annotation\OnInvalid;
     /**
      * @Valid("foo")
      */
-    public function fooAction(FailureInterface $failure)
+    public function fooAction($name, $address, $zip)
     {
     
     /**
      * @OnValidate("foo")
      */
-    public function onValidateFoo(FailureInterface $failure)
+    public function onValidateFoo($name, $address, $zip)
     {
 
     // ...
