@@ -139,17 +139,41 @@ class ValidateInterceptor implements MethodInterceptor
     {
         $onValidateMethod = $onFailureMethod = null;
         foreach ($class->getMethods() as $method) {
-            /* @var $onValidate OnValidate */
-            $onValidate = $this->reader->getMethodAnnotation($method, OnValidate::class);
-            if ($onValidate && $onValidate->value === $valid->value) {
-                $onValidateMethod = $method;
-            }
-            $onFailure = $this->reader->getMethodAnnotation($method, OnFailure::class);
-            if ($onFailure && $onFailure->value === $valid->value) {
-                $onFailureMethod = $method;
+            $annotations = $this->reader->getMethodAnnotations($method);
+            foreach ($annotations as $annotation) {
+                if ($this->isOnValidateFound($annotation, $valid, $onValidateMethod)) {
+                    $onValidateMethod = $method;
+                }
+                if ($this->isOnFailureFound($annotation, $valid, $onFailureMethod)) {
+                    $onFailureMethod = $method;
+                }
             }
         }
 
         return [$onValidateMethod, $onFailureMethod];
+    }
+
+    /**
+     * @param object            $annotation
+     * @param Valid             $valid
+     * @param \ReflectionMethod $onValidateMethod
+     *
+     * @return bool
+     */
+    private function isOnValidateFound($annotation, Valid $valid, \ReflectionMethod $onValidateMethod = null)
+    {
+        return (is_null($onValidateMethod) && $annotation instanceof OnValidate && $annotation->value === $valid->value) ? true : false;
+    }
+
+    /**
+     * @param object            $annotation
+     * @param Valid             $valid
+     * @param \ReflectionMethod $onFailureMethod
+     *
+     * @return bool
+     */
+    private function isOnFailureFound($annotation, Valid $valid, \ReflectionMethod $onFailureMethod = null)
+    {
+        return (is_null($onFailureMethod) && $annotation instanceof OnFailure && $annotation->value === $valid->value) ? true : false;
     }
 }
