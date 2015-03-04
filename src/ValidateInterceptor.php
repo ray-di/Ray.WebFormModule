@@ -73,6 +73,7 @@ class ValidateInterceptor implements MethodInterceptor
      * @param \ReflectionMethod $onFailure
      *
      * @return bool|mixed|InvalidArgumentException
+     *
      * @throws \Exception
      */
     private function validate(MethodInvocation $invocation, \ReflectionMethod $onValidate, \ReflectionMethod $onFailure = null)
