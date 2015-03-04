@@ -121,7 +121,7 @@ class ValidateInterceptor implements MethodInterceptor
     private function failureException(MethodInvocation $invocation, FailureInterface $failure)
     {
         $class = new \ReflectionClass($invocation->getThis());
-        $className = $class->implementsInterface(WeavedInterface::class) ? $class->getParentClass()->name : $class->getName();
+        $className = $class->implementsInterface(WeavedInterface::class) ? $class->getParentClass()->name : $class->name;
         $errors = json_encode($failure->getMessages());
         $msg = sprintf("%s::%s() %s", $className, $invocation->getMethod()->name, $errors);
 
