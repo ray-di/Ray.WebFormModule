@@ -58,9 +58,8 @@ class ValidateInterceptor implements MethodInterceptor
         /** @var $valid Valid */
         $valid = $this->reader->getMethodAnnotation($method, Valid::class);
         $class = $method->getDeclaringClass();
-        $onFailureMethod = null;
         $onMethods = $this->findOnMethods($class, $valid);
-        if ($onMethods[0]) {
+        if ($onMethods[0] && $onMethods[0] instanceof \ReflectionMethod) {
             return $onMethods;
         }
         throw new ValidateMethodNotFound($method->getShortName());
@@ -122,7 +121,7 @@ class ValidateInterceptor implements MethodInterceptor
     private function failureException(MethodInvocation $invocation, FailureInterface $failure)
     {
         $class = new \ReflectionClass($invocation->getThis());
-        $className = $class->implementsInterface(WeavedInterface::class) ? $class->getParentClass()->getName() : $class->getName();
+        $className = $class->implementsInterface(WeavedInterface::class) ? $class->getParentClass()->name : $class->getName();
         $errors = json_encode($failure->getMessages());
         $msg = sprintf("%s::%s() %s", $className, $invocation->getMethod()->name, $errors);
 
