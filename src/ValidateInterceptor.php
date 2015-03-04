@@ -144,8 +144,8 @@ class ValidateInterceptor implements MethodInterceptor
             if ($onValidate && $onValidate->value === $valid->value) {
                 $onValidateMethod = $method;
             }
-            $onValidate = $this->reader->getMethodAnnotation($method, OnFailure::class);
-            if ($onValidate && $onValidate->value === $valid->value) {
+            $onFailure = $this->reader->getMethodAnnotation($method, OnFailure::class);
+            if ($onFailure && $onFailure->value === $valid->value) {
                 $onFailureMethod = $method;
             }
         }
