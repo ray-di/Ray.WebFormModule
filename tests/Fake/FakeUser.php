@@ -2,6 +2,7 @@
 
 namespace Ray\Validation;
 
+use Ray\Validation\Annotation\OnValidate;
 use Ray\Validation\Annotation\Valid;
 
 class FakeUser
@@ -14,7 +15,12 @@ class FakeUser
         return true;
     }
 
-    public function onValidateCreateUser($name)
+    /**
+     * @return Validation
+     *
+     * @OnValidate
+     */
+    public function onValidate($name)
     {
         $result = new Validation;
         if (! is_string($name)) {

@@ -2,10 +2,14 @@
 
 namespace Ray\Validation;
 
+use Ray\Validation\Annotation\OnFailure;
+use Ray\Validation\Annotation\OnValidate;
 use Ray\Validation\Annotation\Valid;
 
 class FakeUser2
 {
+    public $target;
+
     /**
      * @Valid
      */
@@ -15,8 +19,10 @@ class FakeUser2
 
     /**
      * @return Validation
+     *
+     * @OnValidate
      */
-    public function onValidateCreateUser($name)
+    public function onValidate($name)
     {
         $result = new Validation;
         if (! is_string($name)) {
@@ -26,7 +32,10 @@ class FakeUser2
         return $result;
     }
 
-    public function onInvalidCreateUser(FailureInterface $failure)
+    /**
+     * @OnFailure
+     */
+    public function onFailure(FailureInterface $failure)
     {
         $error = '';
         foreach ($failure->getMessages() as $name => $messages) {
@@ -34,6 +43,7 @@ class FakeUser2
                 $error .= "Input '{$name}': {$message}" . PHP_EOL;
             }
         }
+        $this->target = $failure->getInvocation()->getMethod()->getShortName();
 
         return $error;
     }

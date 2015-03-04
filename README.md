@@ -1,5 +1,9 @@
 # Ray.ValidateModule
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ray-di/Ray.ValidateModule/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/ray-di/Ray.ValidateModule/?branch=develop)
+[![Code Coverage](https://scrutinizer-ci.com/g/ray-di/Ray.ValidateModule/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/ray-di/Ray.ValidateModule/?branch=develop)
+[![Build Status](https://travis-ci.org/ray-di/Ray.ValidateModule.svg?branch=develop)](https://travis-ci.org/ray-di/Ray.ValidateModule)
+
 ## Installation
 
 ### Composer install
@@ -39,13 +43,16 @@ class User
     }
 ```
 
-Provide `onValidate` prefixed name validation method in same class.
+Provide `onValidate` annotated method in same class for validation. Method can be named freely.
 
 ```php
+use Ray\Validation\Annotation\OnValidate;
+// ...
+
     /**
-     * @return ValidationResult
+     * @OnValidate
      */
-    public function onValidateCreateUser($name)
+    public function onValidate($name)
     {
         $result = new ValidationResult;
         if (! is_string($name)) {
@@ -55,12 +62,18 @@ Provide `onValidate` prefixed name validation method in same class.
         return $result;
     }
 ```
-Validate all parameters. If validation failed, `addError` with invalid parameter name and message.
+Validate all parameters.  `addError` with invalid parameter name and message in case of the validation failed.
 
-`Ray\Validation\Exception\InvalidArgumentException` thrown on validation failed, But if you provide **OnInvalid** method with `onValidate` prefixed method, Alternative result is return.
+`Ray\Validation\Exception\InvalidArgumentException` thrown on validation failed, But if `@OnFailure` annoted method exists, The result of `@OnFailure` method returns isntead of original. 
 
 ```php
-    public function onInvalidCreateUser(FailureInterface $failure)
+use Ray\Validation\Annotation\OnInvalid;
+// ...
+
+    /**
+     * @OnInvalid
+     */
+    public function onInvalid(FailureInterface $failure)
     {
 
         // original parameters
@@ -74,6 +87,32 @@ Validate all parameters. If validation failed, `addError` with invalid parameter
         }
     }
 ```
+If you need multiple validation in one class, You can name validation at annotation property as follows.
+
+```php
+use Ray\Validation\Annotation\OnInvalid;
+// ...
+
+    /**
+     * @Valid("foo")
+     */
+    public function fooAction(FailureInterface $failure)
+    {
+    
+    /**
+     * @OnValidate("foo")
+     */
+    public function onValidateFoo(FailureInterface $failure)
+    {
+
+    // ...
+    /**
+     * @OnInvalid("foo")
+     */
+    public function onInvalidFoo(FailureInterface $failure)
+    {
+    // ...
+```
 
 ### Demo
 
@@ -84,5 +123,4 @@ Validate all parameters. If validation failed, `addError` with invalid parameter
 
  * PHP 5.4+
  * hhvm
- 
 

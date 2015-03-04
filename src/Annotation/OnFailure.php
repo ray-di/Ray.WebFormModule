@@ -10,7 +10,7 @@ namespace Ray\Validation\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-final class Valid
+final class OnFailure
 {
     /**
      * Validation name
