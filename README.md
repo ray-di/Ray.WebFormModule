@@ -54,15 +54,15 @@ use Ray\Validation\Annotation\OnValidate;
      */
     public function onValidate($name)
     {
-        $result = new ValidationResult;
+        $validation = new Validation;
         if (! is_string($name)) {
-            $result->addError('name', 'name should be string');
+            $validation->addError('name', 'name should be string');
         }
 
         return $result;
     }
 ```
-Validate all parameters.  `addError` with invalid parameter name and message in case of the validation failed.
+Validate all parameters in validation method.  `addError($name, $message)` with invalid parameter name and message in the case of  validation failed.
 
 `Ray\Validation\Exception\InvalidArgumentException` thrown on validation failed, But if `@OnFailure` annoted method exists, The result of `@OnFailure` method returns instead of original. 
 
