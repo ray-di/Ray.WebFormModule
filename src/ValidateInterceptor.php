@@ -73,6 +73,7 @@ class ValidateInterceptor implements MethodInterceptor
      * @param \ReflectionMethod $onFailure
      *
      * @return bool|mixed|InvalidArgumentException
+     *
      * @throws \Exception
      */
     private function validate(MethodInvocation $invocation, \ReflectionMethod $onValidate, \ReflectionMethod $onFailure = null)
@@ -139,17 +140,40 @@ class ValidateInterceptor implements MethodInterceptor
         $onValidateMethod = $onFailureMethod = null;
         foreach ($class->getMethods() as $method) {
             $annotations = $this->reader->getMethodAnnotations($method);
-            foreach ($annotations as $annotation) {
-                if ($this->isOnValidateFound($annotation, $valid, $onValidateMethod)) {
-                    $onValidateMethod = $method;
-                }
-                if ($this->isOnFailureFound($annotation, $valid, $onFailureMethod)) {
-                    $onFailureMethod = $method;
-                }
-            }
+            list($onValidateMethod, $onFailureMethod) = $this->scanAnnotation($valid, $annotations, $method,
+                $onValidateMethod, $onFailureMethod
+            );
         }
 
         return [$onValidateMethod, $onFailureMethod];
+    }
+
+    /**
+     * @param Valid             $valid
+     * @param array             $annotations
+     * @param \ReflectionMethod $method
+     * @param \ReflectionMethod $onValidateMethod
+     * @param \ReflectionMethod $onFailureMethod
+     *
+     * @return array
+     */
+    private function scanAnnotation(
+        Valid $valid,
+        array $annotations,
+        \ReflectionMethod $method,
+        \ReflectionMethod $onValidateMethod = null,
+        \ReflectionMethod $onFailureMethod = null
+    ) {
+        foreach ($annotations as $annotation) {
+            if ($this->isOnValidateFound($annotation, $valid, $onValidateMethod)) {
+                $onValidateMethod = $method;
+            }
+            if ($this->isOnFailureFound($annotation, $valid, $onFailureMethod)) {
+                $onFailureMethod = $method;
+            }
+        }
+
+        return [$onValidateMethod ,$onFailureMethod];
     }
 
     /**

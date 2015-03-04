@@ -10,8 +10,14 @@ use Ray\Aop\MethodInvocation;
 
 class Validation implements ValidationInterface
 {
+    /**
+     * @var array [$name =>]
+     */
     private $failure = [];
 
+    /**
+     * @var MethodInvocation
+     */
     private $invocation;
 
     public function __construct(array $failure = [])
@@ -24,16 +30,26 @@ class Validation implements ValidationInterface
         $this->invocation = $invocation;
     }
 
+    /**
+     * @param string $name    error target name
+     * @param string $message message
+     */
     public function addError($name, $message)
     {
         $this->failure[$name][] = $message;
     }
 
+    /**
+     * @return array
+     */
     public function getMessages()
     {
         return $this->failure;
     }
 
+    /**
+     * @return MethodInvocation
+     */
     public function getInvocation()
     {
         return $this->invocation;
