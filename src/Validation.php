@@ -11,7 +11,7 @@ use Ray\Aop\MethodInvocation;
 class Validation implements ValidationInterface
 {
     /**
-     * @var array [$name => $errorMessage]
+     * @var array [$name =>]
      */
     private $failure = [];
 
