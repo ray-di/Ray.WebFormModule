@@ -90,6 +90,8 @@ use Ray\Validation\Annotation\OnInvalid;
 If you need multiple validation in one class, You can name validation at annotation property as follows.
 
 ```php
+use Ray\Validation\Annotation\Valid;
+use Ray\Validation\Annotation\OnValidate;
 use Ray\Validation\Annotation\OnInvalid;
 // ...
 
