@@ -7,7 +7,6 @@
 namespace Ray\Validation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
@@ -20,7 +19,6 @@ class ValidateModule extends AbstractModule
      */
     protected function configure()
     {
-        AnnotationRegistry::registerFile(dirname(__DIR__) . '/src-files/doctrine_annotations.php');
         $this->bind(Reader::class)->to(AnnotationReader::class)->in(Scope::SINGLETON);
         $this->bindInterceptor(
             $this->matcher->any(),
