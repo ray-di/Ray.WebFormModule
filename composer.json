@@ -20,8 +20,6 @@
             "Ray\\Validation\\": "tests/Fake"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "extra": {
         "branch-alias": {
             "dev-develop": "0.1.x-dev"
