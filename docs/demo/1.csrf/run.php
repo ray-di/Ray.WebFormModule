@@ -1,0 +1,22 @@
+<?php
+
+/* @var $loader \Composer\Autoload\ClassLoader */
+$loader = require dirname(__DIR__) . '/autoload.php';
+$loader->addPsr4('Ray\FormModule\\', __DIR__);
+use Aura\Input\Exception\CsrfViolation;
+use Ray\Di\Injector;
+use Ray\FormModule\Controller;
+use Ray\FormModule\MyModule;
+
+/** @var $controller Controller */
+$controller = (new Injector(new MyModule))->getInstance(Controller::class);
+
+try {
+    $controller->createUser(['name' => 'bear', 'message' => 'hello']);
+} catch (CsrfViolation $e) {
+    echo "Anti CSRF works !". PHP_EOL;
+    exit;
+}
+echo "Anti CSRF DOES NOT works !" . PHP_EOL;
+//$works = $controller->response['body'] == 'create bear';
+//echo ($works ? 'It works!' : 'It DOES NOT work!') . PHP_EOL;
