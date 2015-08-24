@@ -1,8 +1,8 @@
-# Ray.FormModule
+# Ray.WebFormModule
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ray-di/Ray.FormModule/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.FormModule/?branch=1.x)
-[![Code Coverage](https://scrutinizer-ci.com/g/ray-di/Ray.FormModule/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.FormModule/?branch=1.x)
-[![Build Status](https://travis-ci.org/ray-di/Ray.FormModule.svg?branch=1.x)](https://travis-ci.org/ray-di/Ray.FormModule)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
+[![Build Status](https://travis-ci.org/ray-di/Ray.WebFormModule.svg?branch=1.x)](https://travis-ci.org/ray-di/Ray.WebFormModule)
 
 Web form ([Aura.Input](https://github.com/auraphp/Aura.Input)) module for `Ray.Di`
 
@@ -16,7 +16,7 @@ Web form ([Aura.Input](https://github.com/auraphp/Aura.Input)) module for `Ray.D
 
 ```php
 use Ray\Di\AbstractModule;
-use Ray\FormModule\FormModule;
+use Ray\WebFormModule\FormModule;
 
 class AppModule extends AbstractModule
 {
@@ -31,8 +31,8 @@ class AppModule extends AbstractModule
 ### Form
 
 ```php
-use Ray\FormModule\AbstractAuraForm;
-use Ray\FormModule\SetAntiCsrfTrait;
+use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\SetAntiCsrfTrait;
 
 class MyForm extends AbstractAuraForm
 {
@@ -94,8 +94,8 @@ class MyForm extends AbstractAuraForm
 ```php
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-use Ray\FormModule\Annotation\FormValidation;
-use Ray\FormModule\FormInterface;
+use Ray\WebFormModule\Annotation\FormValidation;
+use Ray\WebFormModule\FormInterface;
 
 class MyController
 {
@@ -143,7 +143,7 @@ or render input element basis.
 ## CSRF Protections
 
 ```php
-use Ray\FormModule\SetAntiCsrfTrait;
+use Ray\WebFormModule\SetAntiCsrfTrait;
 
 class MyController 
 {

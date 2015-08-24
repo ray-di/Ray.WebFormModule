@@ -2,7 +2,7 @@
 /**
  * This file is taken from Aura.Session and modified.
  */
-namespace Ray\FormModule;
+namespace Ray\WebFormModule;
 
 // a session handler that does nothing, for testing purposes only
 class FakeSessionHandler

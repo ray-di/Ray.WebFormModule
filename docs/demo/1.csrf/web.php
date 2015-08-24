@@ -1,13 +1,13 @@
 <?php
 
 use Ray\Di\Injector;
-use Ray\FormModule\Controller;
-use Ray\FormModule\MyModule;
+use Ray\WebFormModule\Controller;
+use Ray\WebFormModule\MyModule;
 
 load: {
     /* @var $loader \Composer\Autoload\ClassLoader */
     $loader = require dirname(__DIR__) . '/autoload.php';
-    $loader->addPsr4('Ray\FormModule\\' ,__DIR__);
+    $loader->addPsr4('Ray\WebFormModule\\' ,__DIR__);
 }
 
 /** @var $controller Controller */

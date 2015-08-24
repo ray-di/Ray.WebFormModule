@@ -1,6 +1,6 @@
 <?php
 
-namespace Ray\FormModule;
+namespace Ray\WebFormModule;
 
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\Builder;
@@ -8,8 +8,8 @@ use Aura\Input\Filter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
-use Ray\FormModule\Exception\InvalidFormPropertyException;
-use Ray\FormModule\Exception\InvalidOnFailureMethod;
+use Ray\WebFormModule\Exception\InvalidFormPropertyException;
+use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
 class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
 {

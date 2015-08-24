@@ -1,8 +1,8 @@
 {
-    "name": "ray/form-module",
-    "description":"HTML Form module for Ray.Di",
+    "name": "ray/web-form-module",
+    "description":"Web Form module for Ray.Di",
     "keywords":[
-        "form",
+        "web form",
         "Ray.Di module"
     ],
     "require": {
@@ -15,13 +15,13 @@
     "license": "MIT",
     "autoload":{
         "psr-4":{
-            "Ray\\FormModule\\": "src/"
+            "Ray\\WebFormModule\\": "src/"
         }
     },
     "autoload-dev":{
         "psr-4":{
-            "Ray\\FormModule\\": "tests/",
-            "Ray\\FormModule\\": "tests/Fake"
+            "Ray\\WebFormModule\\": "tests/",
+            "Ray\\WebFormModule\\": "tests/Fake"
         }
     }
 }

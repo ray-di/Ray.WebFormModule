@@ -1,6 +1,6 @@
 <?php
 
-namespace Ray\FormModule;
+namespace Ray\WebFormModule;
 
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\Builder;

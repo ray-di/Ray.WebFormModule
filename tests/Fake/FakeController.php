@@ -1,10 +1,10 @@
 <?php
 
-namespace Ray\FormModule;
+namespace Ray\WebFormModule;
 
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-use Ray\FormModule\Annotation\FormValidation;
+use Ray\WebFormModule\Annotation\FormValidation;
 
 class FakeController
 {

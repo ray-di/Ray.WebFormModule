@@ -1,19 +1,19 @@
 <?php
 /**
- * This file is part of the Ray.FormModule package
+ * This file is part of the Ray.WebFormModule package
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace Ray\FormModule;
+namespace Ray\WebFormModule;
 
 use Aura\Input\Form;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
-use Ray\FormModule\Annotation\FormValidation;
-use Ray\FormModule\Exception\InvalidArgumentException;
-use Ray\FormModule\Exception\InvalidFormPropertyException;
-use Ray\FormModule\Exception\InvalidOnFailureMethod;
+use Ray\WebFormModule\Annotation\FormValidation;
+use Ray\WebFormModule\Exception\InvalidArgumentException;
+use Ray\WebFormModule\Exception\InvalidFormPropertyException;
+use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
 class AuraInputInterceptor implements MethodInterceptor
 {

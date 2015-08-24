@@ -1,10 +1,10 @@
 <?php
 /**
- * This file is part of the Ray.FormModule package
+ * This file is part of the Ray.WebFormModule package
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Ray\FormModule\Annotation;
+namespace Ray\WebFormModule\Annotation;
 
 /**
  * @Annotation

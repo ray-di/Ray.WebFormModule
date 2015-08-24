@@ -1,10 +1,10 @@
 <?php
 /**
- * This file is part of the Ray.FormModule package
+ * This file is part of the Ray.WebFormModule package
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Ray\FormModule;
+namespace Ray\WebFormModule;
 
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
@@ -16,7 +16,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
-use Ray\FormModule\Annotation\FormValidation;
+use Ray\WebFormModule\Annotation\FormValidation;
 
 class FormModule extends AbstractModule
 {

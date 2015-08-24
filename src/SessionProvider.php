@@ -1,10 +1,10 @@
 <?php
 /**
- * This file is part of the Ray.FormModule package
+ * This file is part of the Ray.WebFormModule package
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Ray\FormModule;
+namespace Ray\WebFormModule;
 
 use Aura\Session\SessionFactory;
 use Ray\Di\ProviderInterface;

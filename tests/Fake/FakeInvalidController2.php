@@ -1,8 +1,8 @@
 <?php
 
-namespace Ray\FormModule;
+namespace Ray\WebFormModule;
 
-use Ray\FormModule\Annotation\FormValidation;
+use Ray\WebFormModule\Annotation\FormValidation;
 
 class FakeInvalidController2
 {
