@@ -16,13 +16,13 @@ Web form ([Aura.Input](https://github.com/auraphp/Aura.Input)) module for `Ray.D
 
 ```php
 use Ray\Di\AbstractModule;
-use Ray\WebFormModule\FormModule;
+use Ray\WebFormModule\WebFormModule;
 
 class AppModule extends AbstractModule
 {
     protected function configure()
     {
-        $this->install(new FormModule);
+        $this->install(new WebFormModule);
     }
 }
 ```
