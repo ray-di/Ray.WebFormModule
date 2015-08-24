@@ -14,6 +14,8 @@ final class AntiCsrf implements AntiCsrfInterface
 {
     const TEST_TOKEN = '1234';
 
+    const TOKEN_KEY = '__csrf_token';
+
     /**
      * @var Session
      */
@@ -26,18 +28,18 @@ final class AntiCsrf implements AntiCsrfInterface
 
     public function setField(Fieldset $fieldset)
     {
-        $fieldset->setField('__csrf_token', 'hidden')
+        $fieldset->setField(self::TOKEN_KEY, 'hidden')
                  ->setAttribs(['value' => $this->getToken()]);
     }
 
-    /**
+    /** 
      * @param array $data
      *
      * @return bool
      */
     public function isValid(array $data)
     {
-        return isset($data['__csrf_token']) && $data['__csrf_token'] == $this->getToken();
+        return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] == $this->getToken();
     }
 
     private function getToken()
