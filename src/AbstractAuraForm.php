@@ -65,14 +65,16 @@ abstract class AbstractAuraForm extends Form implements FormInterface
     }
 
     /**
+     * @param array $attr Attributes for the form tag.
+     *
      * @return string
      *
      * @throws \Aura\Html\Exception\HelperNotFound
      * @throws \Aura\Input\Exception\NoSuchInput
      */
-    public function form()
+    public function form($attr = [])
     {
-        $form = $this->helper->form();
+        $form = $this->helper->form($attr);
         if (isset($this->inputs['__csrf_token'])) {
             $form .= $this->helper->input($this->get('__csrf_token'));
         }
