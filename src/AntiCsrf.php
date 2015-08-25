@@ -39,8 +39,11 @@ final class AntiCsrf implements AntiCsrfInterface
      */
     public function isValid(array $data)
     {
-        return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] == $this->getToken();
-    }
+        if (isset($_POST[self::TOKEN_KEY])) {
+            $data[self::TOKEN_KEY] = $_POST[self::TOKEN_KEY];
+        }
+
+        return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] == $this->getToken();    }
 
     private function getToken()
     {
