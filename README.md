@@ -4,7 +4,9 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
 [![Build Status](https://travis-ci.org/ray-di/Ray.WebFormModule.svg?branch=1.x)](https://travis-ci.org/ray-di/Ray.WebFormModule)
 
-Web form ([Aura.Input](https://github.com/auraphp/Aura.Input)) module for `Ray.Di`
+An aspect oriented web form module powered by [Aura.Input](https://github.com/auraphp/Aura.Input) and [Ray.Di](https://github.com/ray-di/Ray.Di).
+
+# Getting Started
 
 ## Installation
 
@@ -28,7 +30,9 @@ class AppModule extends AbstractModule
 ```
 ## Usage
 
-### Form
+### Form class
+
+We provide two methods on self-initializing form class, one is `init()` method where we add an input field on form and apply fileters and rules. The other method method is `submit()` where it submit data. See more detail at [Aura.Input self-initializing forms](https://github.com/auraphp/Aura.Input/blob/1.x/README.md#self-initializing-forms).
 
 ```php
 use Ray\WebFormModule\AbstractAuraForm;
@@ -91,6 +95,8 @@ class MyForm extends AbstractAuraForm
 ```
 ### Controller
 
+We annotate the methods which web form validation is required with `@FormValidation`. We can specify form object property name with `name` and failiure method name with `onFailure`.
+
 ```php
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
@@ -129,7 +135,8 @@ class MyController
 ```
 ### View
 
-You can render entire form html when `__toString` is provided.
+You can render entire form html when `__toString` is given.
+
 ```php
   echo $form; // render entire form html
 ```
