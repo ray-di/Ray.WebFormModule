@@ -95,7 +95,7 @@ class MyForm extends AbstractAuraForm
 ```
 ### Controller
 
-We annotate the methods which web form validation is required with `@FormValidation`. We can specify form object property name with `name` and failiure method name with `onFailure`.
+We annotate the methods which web form validation is required with `@FormValidation`. We can specify form object property name with `name` and failiure method name with `@onFailure`.
 
 ```php
 use Ray\Di\Di\Inject;
