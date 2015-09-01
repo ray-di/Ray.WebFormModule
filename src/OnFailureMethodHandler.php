@@ -15,7 +15,7 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(FormValidation $formValidation, MethodInvocation $invocation)
+    public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractAuraForm $form)
     {
         $args = (array) $invocation->getArguments();
         $object = $invocation->getThis();

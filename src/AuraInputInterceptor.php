@@ -53,7 +53,7 @@ class AuraInputInterceptor implements MethodInterceptor
             return $invocation->proceed();
         }
 
-        return $this->failureHandler->handle($formValidation, $invocation);
+        return $this->failureHandler->handle($formValidation, $invocation, $form);
     }
 
     /**
@@ -77,7 +77,7 @@ class AuraInputInterceptor implements MethodInterceptor
      * @param FormValidation $formValidation
      * @param object         $object
      *
-     * @return mixed
+     * @return AbstractAuraForm
      */
     private function getFormProperty(FormValidation $formValidation, $object)
     {
