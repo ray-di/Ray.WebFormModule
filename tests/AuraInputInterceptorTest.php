@@ -34,7 +34,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
             new \ReflectionMethod($object, $method),
             new Arguments([]),
             [
-                new AuraInputInterceptor(new AnnotationReader)
+                new AuraInputInterceptor(new AnnotationReader, new OnFailureMethodHandler)
             ]
         );
     }
@@ -57,7 +57,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
             new \ReflectionMethod($controller, 'createAction'),
             new Arguments([]),
             [
-                new AuraInputInterceptor(new AnnotationReader)
+                new AuraInputInterceptor(new AnnotationReader, new OnFailureMethodHandler)
             ]
         );
         $invocation->proceed();
@@ -113,7 +113,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
             new \ReflectionMethod($object, 'createAction'),
             new Arguments([]),
             [
-                new AuraInputInterceptor(new AnnotationReader)
+                new AuraInputInterceptor(new AnnotationReader, new OnFailureMethodHandler)
             ]
         );
         $invocation->proceed();
