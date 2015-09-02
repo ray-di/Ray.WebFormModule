@@ -18,7 +18,8 @@ final class VndErrorHandler implements FailureHandlerInterface
     public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractAuraForm $form)
     {
         $messages = $form->getMessages();
-        $error =  new FormValidationError($messages);
+        $path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+        $error =  new FormValidationError($path, $messages);
         $e = new FormValidationException('Validation failed.', 400, null, $error);
 
         throw $e;

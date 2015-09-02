@@ -8,18 +8,37 @@ namespace Ray\WebFormModule;
 
 class FormValidationError
 {
+    /**
+     * @var int
+     */
     public $total;
 
+    /**
+     * @var array
+     */
     public $messages = [];
 
-    public function __construct(array $messages)
+    /**
+     * @var
+     */
+    public $path;
+
+
+    public function __construct($path, array $messages)
     {
+        $this->path = $path;
         $this->total = count($messages);
         $this->messages = $messages;
     }
 
     public function __toString()
     {
-        return json_encode($this->messages);
+        $vndError = [
+            'path' => $this->path,
+            'message' => 'Validation failed',
+            'validation_messages' => [$this->messages]
+        ];
+
+        return json_encode($vndError, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 }

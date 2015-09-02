@@ -128,6 +128,18 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
             $invocation->proceed();
         } catch (FormValidationException $e) {
             $this->assertInstanceOf(FormValidationError::class, $e->error);
+            $json = (string) $e->error;
+            $this->assertSame('{
+    "path": "/",
+    "message": "Validation failed",
+    "validation_messages": [
+        {
+            "name": [
+                "Name must be alphabetic only."
+            ]
+        }
+    ]
+}', $json);
         }
     }
 }
