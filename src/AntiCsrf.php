@@ -32,13 +32,16 @@ final class AntiCsrf implements AntiCsrfInterface
                  ->setAttribs(['value' => $this->getToken()]);
     }
 
-    /** 
+    /**
      * @param array $data
      *
      * @return bool
      */
     public function isValid(array $data)
     {
+        if (PHP_SAPI === 'cli') {
+            return true;
+        }
         if (isset($_POST[self::TOKEN_KEY])) {
             $data[self::TOKEN_KEY] = $_POST[self::TOKEN_KEY];
         }
