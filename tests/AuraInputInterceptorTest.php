@@ -124,21 +124,19 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     public function testProceedWithVndErrorHandler()
     {
         try {
-            $invocation = $this->getMethodInvocation('createAction', [], new VndErrorHandler);
+            $invocation = $this->getMethodInvocation('createAction', [], new VndErrorHandler(new AnnotationReader));
             $invocation->proceed();
         } catch (FormValidationException $e) {
             $this->assertInstanceOf(FormValidationError::class, $e->error);
             $json = (string) $e->error;
             $this->assertSame('{
-    "path": "/",
     "message": "Validation failed",
-    "validation_messages": [
-        {
-            "name": [
-                "Name must be alphabetic only."
-            ]
-        }
-    ]
+    "path": "",
+    "validation_messages": {
+        "name": [
+            "Name must be alphabetic only."
+        ]
+    }
 }', $json);
         }
     }

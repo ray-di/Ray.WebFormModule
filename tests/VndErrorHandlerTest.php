@@ -31,16 +31,36 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
         } catch(FormValidationException $e) {
             $vndError = (string) $e->error;
             $this->assertSame('{
-    "path": "/",
     "message": "Validation failed",
-    "validation_messages": [
-        {
-            "name": [
-                "Name must be alphabetic only."
-            ]
-        }
-    ]
+    "path": "",
+    "validation_messages": {
+        "name": [
+            "Name must be alphabetic only."
+        ]
+    }
 }', $vndError);
         }
     }
+
+    public function testVndErrorAnnotation()
+    {
+        /** @var $controller FakeControllerVndError */
+        $controller = (new Injector(new FakeVndErrorModule))->getInstance(FakeControllerVndError::class);
+        try {
+            $controller->createAction();
+        } catch(FormValidationException $e) {
+            $vndError = (string) $e->error;
+            $this->assertSame('{
+    "message": "foo validation failed",
+    "path": "/path/to/error",
+    "logref": "a1000",
+    "validation_messages": {
+        "name": [
+            "Name must be alphabetic only."
+        ]
+    }
+}', $vndError);
+        }
+    }
+
 }

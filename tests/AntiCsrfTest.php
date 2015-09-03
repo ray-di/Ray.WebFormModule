@@ -53,11 +53,6 @@ class AntiCsrfTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($result);
     }
 
-    public function testIsValidFailed()
-    {
-        $this->assertFalse($this->antiCsrf->isValid([]));
-    }
-
     public function testIsValid()
     {
         $data = ['__csrf_token' => AntiCsrf::TEST_TOKEN];
