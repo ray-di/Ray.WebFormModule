@@ -17,6 +17,7 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
      */
     public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractAuraForm $form)
     {
+        unset($form);
         $args = (array) $invocation->getArguments();
         $object = $invocation->getThis();
         if (! method_exists($object, $formValidation->onFailure)) {

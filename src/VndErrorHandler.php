@@ -29,6 +29,7 @@ final class VndErrorHandler implements FailureHandlerInterface
      */
     public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractAuraForm $form)
     {
+        unset($formValidation);
         $vndError = $this->reader->getMethodAnnotation($invocation->getMethod(), VndError::class);
         $error =  new FormValidationError($this->makeVndError($form, $vndError));
         $e = new FormValidationException('Validation failed.', 400, null, $error);

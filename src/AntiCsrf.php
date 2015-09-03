@@ -46,7 +46,8 @@ final class AntiCsrf implements AntiCsrfInterface
             $data[self::TOKEN_KEY] = $_POST[self::TOKEN_KEY];
         }
 
-        return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] == $this->getToken();    }
+        return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] == $this->getToken();
+    }
 
     private function getToken()
     {
