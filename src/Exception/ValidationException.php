@@ -8,7 +8,7 @@ namespace Ray\WebFormModule\Exception;
 
 use Ray\WebFormModule\FormValidationError;
 
-class FormValidationException extends \Exception
+class ValidationException extends \Exception
 {
     public $error;
 

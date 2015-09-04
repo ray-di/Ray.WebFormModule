@@ -8,7 +8,7 @@ use Aura\Input\Filter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
-use Ray\WebFormModule\Exception\FormValidationException;
+use Ray\WebFormModule\Exception\ValidationException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
 use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
@@ -126,7 +126,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
         try {
             $invocation = $this->getMethodInvocation('createAction', [], new VndErrorHandler(new AnnotationReader));
             $invocation->proceed();
-        } catch (FormValidationException $e) {
+        } catch (ValidationException $e) {
             $this->assertInstanceOf(FormValidationError::class, $e->error);
             $json = (string) $e->error;
             $this->assertSame('{
