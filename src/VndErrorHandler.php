@@ -10,7 +10,7 @@ use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Annotation\VndError;
-use Ray\WebFormModule\Exception\FormValidationException;
+use Ray\WebFormModule\Exception\ValidationException;
 
 final class VndErrorHandler implements FailureHandlerInterface
 {
@@ -32,7 +32,7 @@ final class VndErrorHandler implements FailureHandlerInterface
         unset($formValidation);
         $vndError = $this->reader->getMethodAnnotation($invocation->getMethod(), VndError::class);
         $error =  new FormValidationError($this->makeVndError($form, $vndError));
-        $e = new FormValidationException('Validation failed.', 400, null, $error);
+        $e = new ValidationException('Validation failed.', 400, null, $error);
 
         throw $e;
     }

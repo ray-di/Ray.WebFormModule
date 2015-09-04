@@ -3,7 +3,7 @@
 namespace Ray\WebFormModule;
 
 use Ray\Di\Injector;
-use Ray\WebFormModule\Exception\FormValidationException;
+use Ray\WebFormModule\Exception\ValidationException;
 
 class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,17 +18,17 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $this->controller = (new Injector(new FakeVndErrorModule))->getInstance(FakeController::class);
     }
 
-    public function testFormValidationException()
+    public function testValidationException()
     {
-        $this->setExpectedException(FormValidationException::class);
+        $this->setExpectedException(ValidationException::class);
         $this->controller->createAction();
     }
 
-    public function testFormValidationExceptionError()
+    public function testValidationExceptionError()
     {
         try {
             $this->controller->createAction();
-        } catch(FormValidationException $e) {
+        } catch(ValidationException $e) {
             $vndError = (string) $e->error;
             $this->assertSame('{
     "message": "Validation failed",
@@ -48,7 +48,7 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $controller = (new Injector(new FakeVndErrorModule))->getInstance(FakeControllerVndError::class);
         try {
             $controller->createAction();
-        } catch(FormValidationException $e) {
+        } catch(ValidationException $e) {
             $vndError = (string) $e->error;
             $this->assertSame('{
     "message": "foo validation failed",
