@@ -23,11 +23,17 @@ class AuraInputInterceptor implements MethodInterceptor
     private $reader;
 
     /**
+     * @var FailureHandlerInterface
+     */
+    private $failureHandler;
+
+    /**
      * @param Reader $reader Annotation reader
      */
-    public function __construct(Reader $reader)
+    public function __construct(Reader $reader, FailureHandlerInterface $handler)
     {
         $this->reader = $reader;
+        $this->failureHandler = $handler;
     }
 
     /**
@@ -46,13 +52,8 @@ class AuraInputInterceptor implements MethodInterceptor
             // validation   success
             return $invocation->proceed();
         }
-        $args = (array) $invocation->getArguments();
-        $object = $invocation->getThis();
-        if (! method_exists($object, $formValidation->onFailure)) {
-            throw new InvalidOnFailureMethod($formValidation->onFailure);
-        }
 
-        return call_user_func_array([$invocation->getThis(), $formValidation->onFailure], $args);
+        return $this->failureHandler->handle($formValidation, $invocation, $form);
     }
 
     /**
@@ -76,7 +77,7 @@ class AuraInputInterceptor implements MethodInterceptor
      * @param FormValidation $formValidation
      * @param object         $object
      *
-     * @return mixed
+     * @return AbstractAuraForm
      */
     private function getFormProperty(FormValidation $formValidation, $object)
     {

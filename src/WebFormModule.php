@@ -31,6 +31,7 @@ class WebFormModule extends AbstractModule
         $this->bind(FilterInterface::class)->to(Filter::class);
         $this->bind(HelperLocatorFactory::class);
         $this->bind(AntiCsrfInterface::class)->to(AntiCsrf::class)->in(Scope::SINGLETON);
+        $this->bind(FailureHandlerInterface::class)->to(OnFailureMethodHandler::class);
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith(FormValidation::class),

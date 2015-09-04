@@ -8,6 +8,7 @@ use Aura\Input\Filter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
+use Ray\WebFormModule\Exception\FormValidationException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
 use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
@@ -26,15 +27,16 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $method
      */
-    public function getMethodInvocation($method, array $submit)
+    public function getMethodInvocation($method, array $submit, FailureHandlerInterface $handler = null)
     {
+        $handler = $handler ?: new OnFailureMethodHandler;
         $object = $this->getController($submit);
         return new ReflectiveMethodInvocation(
             $object,
             new \ReflectionMethod($object, $method),
             new Arguments([]),
             [
-                new AuraInputInterceptor(new AnnotationReader)
+                new AuraInputInterceptor(new AnnotationReader, $handler)
             ]
         );
     }
@@ -57,7 +59,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
             new \ReflectionMethod($controller, 'createAction'),
             new Arguments([]),
             [
-                new AuraInputInterceptor(new AnnotationReader)
+                new AuraInputInterceptor(new AnnotationReader, new OnFailureMethodHandler)
             ]
         );
         $invocation->proceed();
@@ -113,9 +115,29 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
             new \ReflectionMethod($object, 'createAction'),
             new Arguments([]),
             [
-                new AuraInputInterceptor(new AnnotationReader)
+                new AuraInputInterceptor(new AnnotationReader, new OnFailureMethodHandler)
             ]
         );
         $invocation->proceed();
+    }
+
+    public function testProceedWithVndErrorHandler()
+    {
+        try {
+            $invocation = $this->getMethodInvocation('createAction', [], new VndErrorHandler(new AnnotationReader));
+            $invocation->proceed();
+        } catch (FormValidationException $e) {
+            $this->assertInstanceOf(FormValidationError::class, $e->error);
+            $json = (string) $e->error;
+            $this->assertSame('{
+    "message": "Validation failed",
+    "path": "",
+    "validation_messages": {
+        "name": [
+            "Name must be alphabetic only."
+        ]
+    }
+}', $json);
+        }
     }
 }
