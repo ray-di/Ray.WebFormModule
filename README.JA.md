@@ -141,6 +141,54 @@ class MyForm extends AbstractAuraForm
 セキュリティレベルを高めるためにはユーザーの認証を含んだカスタムCsrfクラスを作成してフォームクラスにセットします。
 詳しくはAura.Inputの[Applying CSRF Protections](https://github.com/auraphp/Aura.Input#applying-csrf-protections)をご覧ください。
 
+## Validation Exception
+
+以下のように `Ray\WebFormModule\FormVndErrorModule`をインストールするとフォームのバリデーションが失敗したときに`Ray\WebFormModule\Exception\ValidationException`例外が投げられるよになります。
+
+```php
+use Ray\Di\AbstractModule;
+
+class FakeVndErrorModule extends AbstractModule
+{
+    protected function configure()
+    {
+        $this->install(new WebFormModule);
+        $this->override(new FormVndErrorModule);
+    }
+``` 
+
+キャッチした例外の`error`プロパティを`echo`すると[application/vnd.error+json](https://tools.ietf.org/html/rfc6906)メディアタイプの表現が出力されます。 
+
+```php
+http_response_code(400);
+echo $e->error;
+
+//{
+//    "message": "Validation failed",
+//    "path": "/path/to/error",
+//    "validation_messages": {
+//        "name": [
+//            "Name must be alphabetic only."
+//        ]
+//    }
+//}
+```
+
+`@VndError`アノテーションで`vnd.error+json`に必要な情報を加えることができます。
+
+```php
+    /**
+     * @FormValidation(form="contactForm")
+     * @VndError(
+     *   message="foo validation failed",
+     *   logref="a1000", path="/path/to/error",
+     *   href={"_self"="/path/to/error", "help"="/path/to/help"}
+     * )
+     */
+```
+
+このオプションのモジュールはAPIアプリケーションの時に有用です。
+
 ## Demo
 
     $ php -S docs/demo/1.csrf/web.php
@@ -149,4 +197,3 @@ class MyForm extends AbstractAuraForm
 
  * PHP 5.5+
  * hhvm
-

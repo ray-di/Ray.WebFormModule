@@ -158,6 +158,53 @@ class MyController
 ```
 You can provide your custom `AntiCsrf` class. See more detail at [Aura.Input](https://github.com/auraphp/Aura.Input#applying-csrf-protections)
 
+## Validation Exception
+
+When we install `Ray\WebFormModule\FormVndErrorModule` as following,
+
+```php
+use Ray\Di\AbstractModule;
+
+class FakeVndErrorModule extends AbstractModule
+{
+    protected function configure()
+    {
+        $this->install(new WebFormModule);
+        $this->override(new FormVndErrorModule);
+    }
+``` 
+A `Ray\WebFormModule\Exception\ValidationException` will be thrown.
+We can echo catched exception to get [application/vnd.error+json](https://tools.ietf.org/html/rfc6906) media type. 
+
+```php
+echo $e->error;
+
+//{
+//    "message": "Validation failed",
+//    "path": "/path/to/error",
+//    "validation_messages": {
+//        "name": [
+//            "Name must be alphabetic only."
+//        ]
+//    }
+//}
+```
+
+More detail for `vnd.error+json`can be add with `@VndError` annotation. 
+
+```php
+    /**
+     * @FormValidation(form="contactForm")
+     * @VndError(
+     *   message="foo validation failed",
+     *   logref="a1000", path="/path/to/error",
+     *   href={"_self"="/path/to/error", "help"="/path/to/help"}
+     * )
+     */
+```
+
+This optional module is handy for API application. 
+   
 ### Demo
 
     $ php -S docs/demo/1.csrf/web.php
@@ -166,4 +213,3 @@ You can provide your custom `AntiCsrf` class. See more detail at [Aura.Input](ht
 
  * PHP 5.5+
  * hhvm
-
