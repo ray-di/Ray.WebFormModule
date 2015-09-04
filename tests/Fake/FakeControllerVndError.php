@@ -25,7 +25,11 @@ class FakeControllerVndError
 
     /**
      * @FormValidation(form="form1", onFailure="badRequestAction")
-     * @VndError(message="foo validation failed", logref="a1000", path="/path/to/error", href={"_self"="/path/to/error", "help"="/path/to/help"})
+     * @VndError(
+     *   message="foo validation failed",
+     *   logref="a1000", path="/path/to/error",
+     *   href={"_self"="/path/to/error", "help"="/path/to/help"}
+     * )
      */
     public function createAction()
     {
