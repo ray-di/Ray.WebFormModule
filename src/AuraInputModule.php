@@ -14,6 +14,7 @@ use Aura\Input\Filter;
 use Aura\Input\FilterInterface;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
+use Ray\AuraSessionModule\AuraSessionModule;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 use Ray\WebFormModule\Annotation\FormValidation;
