@@ -9,11 +9,43 @@ namespace Ray\WebFormModule;
 use Aura\Html\HelperLocator;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
+use Aura\Input\BuilderInterface;
+use Aura\Input\FilterInterface;
 use Aura\Input\Form;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\PostConstruct;
 
 abstract class AbstractAuraForm extends Form implements FormInterface
 {
+    /**
+     * @\Ray\Di\Di\Inject
+     *
+     * @param BuilderInterface $builder An object to build input objects.
+     *
+     * @param FilterInterface $filter A filter object for this fieldset.
+     *
+     * @param object $options An arbitrary options object for use when setting
+     * up inputs and filters.
+     *
+     */
+    public function parentConstruct(
+        BuilderInterface $builder,
+        FilterInterface  $filter,
+        $options = null
+    ) {
+        $this->builder  = $builder;
+        $this->filter   = $filter;
+        $this->options  = $options;
+    }
+
+    /**
+     * @PostConstruct
+     */
+    public function postConstruct()
+    {
+        $this->init();
+    }
+
     /**
      * @var HelperLocator
      */
