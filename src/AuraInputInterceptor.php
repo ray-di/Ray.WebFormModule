@@ -13,7 +13,6 @@ use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
-use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
@@ -61,6 +60,7 @@ class AuraInputInterceptor implements MethodInterceptor
      * @param Form  $form
      *
      * @return bool
+     *
      * @throws \Aura\Input\Exception\CsrfViolation
      */
     public function isValidForm(array $submit, Form $form)

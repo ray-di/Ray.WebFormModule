@@ -14,6 +14,7 @@ interface FormInterface
      * @param string $input
      *
      * @return string
+     *
      * @throws \Aura\Input\Exception\NoSuchInput
      */
     public function input($input);

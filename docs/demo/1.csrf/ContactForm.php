@@ -27,7 +27,7 @@ class ContactForm extends AbstractAuraForm
                  'name' => 'message',
                  'cols' => 40,
                  'rows' => 5,
-                 'class'=> 'form-control',
+                 'class' => 'form-control',
                  'placeholder' => 'Message here'
              ]);
         $this->setField('submit', 'submit')

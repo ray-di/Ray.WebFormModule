@@ -21,12 +21,9 @@ abstract class AbstractAuraForm extends Form implements FormInterface
      * @\Ray\Di\Di\Inject
      *
      * @param BuilderInterface $builder An object to build input objects.
-     *
-     * @param FilterInterface $filter A filter object for this fieldset.
-     *
-     * @param object $options An arbitrary options object for use when setting
-     * up inputs and filters.
-     *
+     * @param FilterInterface  $filter  A filter object for this fieldset.
+     * @param object           $options An arbitrary options object for use when setting
+     *                                  up inputs and filters.
      */
     public function parentConstruct(
         BuilderInterface $builder,

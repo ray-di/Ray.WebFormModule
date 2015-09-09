@@ -8,9 +8,9 @@ use Aura\Session\Phpfunc;
 
 class FakePhpfunc extends Phpfunc
 {
-    public $extensions = array();
+    public $extensions = [];
 
-    public $functions = array();
+    public $functions = [];
 
     public function __construct()
     {
@@ -25,7 +25,7 @@ class FakePhpfunc extends Phpfunc
     public function extension_loaded($name)
     {
         // for parent coverage
-        $this->__call('extension_loaded', array($name));
+        $this->__call('extension_loaded', [$name]);
 
         // for testing
         return in_array($name, $this->extensions);
@@ -36,7 +36,7 @@ class FakePhpfunc extends Phpfunc
         if (isset($this->functions[$name])) {
             return $this->functions[$name];
         } else {
-            return $this->__call('function_exists', array($name));
+            return $this->__call('function_exists', [$name]);
         }
     }
 }

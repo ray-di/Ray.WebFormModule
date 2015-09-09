@@ -12,12 +12,12 @@ class AuraInputModuleTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $handler = new FakeSessionHandler();
         session_set_save_handler(
-            array($handler, 'open'),
-            array($handler, 'close'),
-            array($handler, 'read'),
-            array($handler, 'write'),
-            array($handler, 'destroy'),
-            array($handler, 'gc')
+            [$handler, 'open'],
+            [$handler, 'close'],
+            [$handler, 'read'],
+            [$handler, 'write'],
+            [$handler, 'destroy'],
+            [$handler, 'gc']
         );
     }
 
@@ -30,7 +30,5 @@ class AuraInputModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testFormModule()
     {
-
     }
-
 }

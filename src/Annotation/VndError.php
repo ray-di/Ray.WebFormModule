@@ -39,6 +39,7 @@ final class VndError
      * OPTIONAL
      *
      * help
+     *
      * @see http://www.w3.org/TR/html5/links.html#link-type-help
      *
      * about

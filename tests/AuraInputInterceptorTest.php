@@ -8,9 +8,9 @@ use Aura\Input\Filter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
-use Ray\WebFormModule\Exception\ValidationException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
 use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
+use Ray\WebFormModule\Exception\ValidationException;
 
 class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,6 +31,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $handler ?: new OnFailureMethodHandler;
         $object = $this->getController($submit);
+
         return new ReflectiveMethodInvocation(
             $object,
             new \ReflectionMethod($object, $method),

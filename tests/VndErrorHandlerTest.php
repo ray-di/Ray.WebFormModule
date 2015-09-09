@@ -28,7 +28,7 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->controller->createAction();
-        } catch(ValidationException $e) {
+        } catch (ValidationException $e) {
             $vndError = (string) $e->error;
             $this->assertSame('{
     "message": "Validation failed",
@@ -48,7 +48,7 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $controller = (new Injector(new FakeVndErrorModule))->getInstance(FakeControllerVndError::class);
         try {
             $controller->createAction();
-        } catch(ValidationException $e) {
+        } catch (ValidationException $e) {
             $vndError = (string) $e->error;
             $this->assertSame('{
     "message": "foo validation failed",
@@ -62,5 +62,4 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
 }', $vndError);
         }
     }
-
 }
