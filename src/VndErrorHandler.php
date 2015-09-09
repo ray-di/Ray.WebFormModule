@@ -6,6 +6,7 @@
  */
 namespace Ray\WebFormModule;
 
+use Aura\Input\Form;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\FormValidation;
@@ -27,7 +28,7 @@ final class VndErrorHandler implements FailureHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractAuraForm $form)
+    public function handle(FormValidation $formValidation, MethodInvocation $invocation, Form $form)
     {
         unset($formValidation);
         $vndError = $this->reader->getMethodAnnotation($invocation->getMethod(), VndError::class);
