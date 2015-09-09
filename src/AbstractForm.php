@@ -119,12 +119,9 @@ abstract class AbstractForm extends Form implements FormInterface
         return $form;
     }
 
-    /**
-     * @return bool
-     */
-    public function filter()
+    public function apply(array $data)
     {
-        $submit = $this->submit();
+        $submit = $data ?: $this->submit();
         $isValid = $this->filter->apply($submit);
 
         return $isValid;
