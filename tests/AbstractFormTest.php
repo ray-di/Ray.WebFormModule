@@ -9,7 +9,7 @@ use Aura\Input\Builder;
 class AbstractFormTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AbstractAuraForm
+     * @var AbstractForm
      */
     private $form;
 
@@ -21,8 +21,8 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     public function testSubmit()
     {
-        $this->form->fill([]);
-        $isValid = $this->form->filter();
+        $data = [];
+        $isValid = $this->form->apply($data);
         $this->assertTrue($isValid);
     }
 }
