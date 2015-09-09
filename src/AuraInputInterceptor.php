@@ -13,7 +13,7 @@ use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
-use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
+use Ray\WebFormModule\Exception\LogicException;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
@@ -61,14 +61,25 @@ class AuraInputInterceptor implements MethodInterceptor
      * @param Form  $form
      *
      * @return bool
+     *
      * @throws \Aura\Input\Exception\CsrfViolation
      */
     public function isValidForm(array $submit, Form $form)
     {
-        $form->fill($submit);
-        $isValid = $form->filter();
+        if ($form instanceof AbstractAuraForm) {
+            $form->fill($submit);
+            $isValid = $form->filter();
 
-        return $isValid;
+            return $isValid;
+        }
+
+        if ($form instanceof AbstractForm) {
+            $isValid = $form->apply($submit);
+
+            return $isValid;
+        }
+
+        throw new LogicException('invalid form type');
     }
 
     /**

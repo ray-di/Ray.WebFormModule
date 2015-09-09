@@ -6,33 +6,44 @@
  */
 namespace Ray\WebFormModule;
 
+use Aura\Filter\FilterFactory;
+use Aura\Filter\SubjectFilter;
 use Aura\Html\HelperLocator;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
+use Aura\Input\Builder;
 use Aura\Input\BuilderInterface;
+use Aura\Input\Filter;
 use Aura\Input\FilterInterface;
 use Aura\Input\Form;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\PostConstruct;
 
-abstract class AbstractAuraForm extends Form implements FormInterface
+abstract class AbstractForm extends Form implements FormInterface
 {
     /**
-     * @\Ray\Di\Di\Inject
-     *
-     * @param BuilderInterface $builder An object to build input objects.
-     * @param FilterInterface  $filter  A filter object for this fieldset.
-     * @param object           $options An arbitrary options object for use when setting
-     *                                  up inputs and filters.
+     * @var SubjectFilter
      */
-    public function parentConstruct(
-        BuilderInterface $builder,
-        FilterInterface  $filter,
-        $options = null
+    protected $filter;
+
+    /**
+     * @var null | array
+     */
+    protected $errorMessages;
+
+    /**
+     * @param BuilderInterface     $builder
+     * @param FilterFactory        $filterFactory
+     * @param HelperLocatorFactory $helperFactory
+     */
+    public function __construct(
+        BuilderInterface $builder = null,
+        FilterFactory $filterFactory = null,
+        HelperLocatorFactory $helperFactory = null
     ) {
-        $this->builder  = $builder;
-        $this->filter   = $filter;
-        $this->options  = $options;
+        $this->builder  = $builder ?: new Builder;
+        $this->filter = $filterFactory ? $filterFactory->newSubjectFilter() : (new FilterFactory)->newSubjectFilter();
+        $this->helper = $helperFactory ? $helperFactory->newInstance() : (new HelperLocatorFactory)->newInstance();
     }
 
     /**
@@ -56,14 +67,6 @@ abstract class AbstractAuraForm extends Form implements FormInterface
     protected $string = '<form></form>';
 
     /**
-     * @Inject
-     */
-    public function setFormHelper(HelperLocatorFactory $factory)
-    {
-        $this->helper = $factory->newInstance();
-    }
-
-    /**
      * @param AntiCsrfInterface $antiCsrf
      */
     public function setCsrf(AntiCsrfInterface $antiCsrf)
@@ -84,13 +87,18 @@ abstract class AbstractAuraForm extends Form implements FormInterface
      */
     public function error($input, $format = '%s', $layout = '%s')
     {
-        $errorMessages = $this->getFilter()->getMessages($input);
-        array_filter($errorMessages, function (&$item) use ($format) {
-            $item = sprintf($format, $item);
-        });
-        $errors = implode('', $errorMessages);
+        if (! $this->errorMessages) {
+            $failure = $this->filter->getFailures();
+            if ($failure) {
+                $this->errorMessages = $failure->getMessages();
+            }
+        }
 
-        return sprintf($layout, $errors);
+        if (isset($this->errorMessages[$input])) {
+            return $this->errorMessages[$input][0];
+        }
+
+        return '';
     }
 
     /**
@@ -109,5 +117,13 @@ abstract class AbstractAuraForm extends Form implements FormInterface
         }
 
         return $form;
+    }
+
+    public function apply(array $data)
+    {
+        $submit = $data ?: $this->submit();
+        $isValid = $this->filter->apply($submit);
+
+        return $isValid;
     }
 }

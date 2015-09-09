@@ -14,9 +14,10 @@ $controller = (new Injector(new MyModule))->getInstance(Controller::class);
 try {
     $controller->createUser(['name' => 'bear', 'message' => 'hello']);
 } catch (CsrfViolation $e) {
-    echo "Anti CSRF works !". PHP_EOL;
+    echo 'Anti CSRF works !'. PHP_EOL;
     exit;
 }
-echo "Anti CSRF DOES NOT works !" . PHP_EOL;
+echo 'Anti CSRF DOES NOT works !' . PHP_EOL;
 //$works = $controller->response['body'] == 'create bear';
 //echo ($works ? 'It works!' : 'It DOES NOT work!') . PHP_EOL;
+
