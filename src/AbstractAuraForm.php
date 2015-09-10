@@ -18,6 +18,11 @@ use Ray\Di\Di\PostConstruct;
 abstract class AbstractAuraForm extends Form implements FormInterface
 {
     /**
+     * @var AntiCsrfInterface
+     */
+    protected $antiCsrf;
+
+    /**
      * @param BuilderInterface $builder An object to build input objects.
      * @param FilterInterface  $filter  A filter object for this fieldset.
      * @param object           $options An arbitrary options object for use when setting

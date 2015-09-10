@@ -28,6 +28,11 @@ abstract class AbstractForm extends Form implements FormInterface
     protected $errorMessages;
 
     /**
+     * @var AntiCsrfInterface
+     */
+    protected $antiCsrf;
+
+    /**
      * @param BuilderInterface     $builder
      * @param FilterFactory        $filterFactory
      * @param HelperLocatorFactory $helperFactory
