@@ -18,29 +18,37 @@ use Ray\Di\Di\PostConstruct;
 abstract class AbstractAuraForm extends Form implements FormInterface
 {
     /**
-     * @\Ray\Di\Di\Inject
-     *
      * @param BuilderInterface $builder An object to build input objects.
      * @param FilterInterface  $filter  A filter object for this fieldset.
      * @param object           $options An arbitrary options object for use when setting
      *                                  up inputs and filters.
+     * @\Ray\Di\Di\Inject
      */
-    public function parentConstruct(
+    public function setBaseDependencies(
         BuilderInterface $builder,
         FilterInterface  $filter,
+        HelperLocatorFactory $factory,
         $options = null
     ) {
         $this->builder  = $builder;
         $this->filter   = $filter;
         $this->options  = $options;
+        $this->helper = $factory->newInstance();
+    }
+
+    public function __construct()
+    {
     }
 
     /**
-     * @PostConstruct
+     * @\Ray\Di\Di\PostConstruct
      */
     public function postConstruct()
     {
         $this->init();
+        if ($this->antiCsrf instanceof AntiCsrfInterface) {
+            $this->setAntiCsrf($this->antiCsrf);
+        }
     }
 
     /**
@@ -54,14 +62,6 @@ abstract class AbstractAuraForm extends Form implements FormInterface
      * @var string
      */
     protected $string = '<form></form>';
-
-    /**
-     * @Inject
-     */
-    public function setFormHelper(HelperLocatorFactory $factory)
-    {
-        $this->helper = $factory->newInstance();
-    }
 
     /**
      * @param AntiCsrfInterface $antiCsrf
