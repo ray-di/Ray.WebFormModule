@@ -13,10 +13,7 @@ use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
 use Aura\Input\Builder;
 use Aura\Input\BuilderInterface;
-use Aura\Input\Filter;
-use Aura\Input\FilterInterface;
 use Aura\Input\Form;
-use Ray\Di\Di\Inject;
 use Ray\Di\Di\PostConstruct;
 
 abstract class AbstractForm extends Form implements FormInterface
@@ -35,8 +32,10 @@ abstract class AbstractForm extends Form implements FormInterface
      * @param BuilderInterface     $builder
      * @param FilterFactory        $filterFactory
      * @param HelperLocatorFactory $helperFactory
+     *
+     * @\Ray\Di\Di\Inject
      */
-    public function __construct(
+    public function setBaseDependencies(
         BuilderInterface $builder = null,
         FilterFactory $filterFactory = null,
         HelperLocatorFactory $helperFactory = null
@@ -44,6 +43,10 @@ abstract class AbstractForm extends Form implements FormInterface
         $this->builder  = $builder ?: new Builder;
         $this->filter = $filterFactory ? $filterFactory->newSubjectFilter() : (new FilterFactory)->newSubjectFilter();
         $this->helper = $helperFactory ? $helperFactory->newInstance() : (new HelperLocatorFactory)->newInstance();
+    }
+
+    public function __construct()
+    {
     }
 
     /**

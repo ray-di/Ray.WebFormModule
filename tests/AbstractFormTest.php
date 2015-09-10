@@ -16,7 +16,8 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->form = new FakeNameForm(new Builder, new FilterFactory, new HelperLocatorFactory);
+        $this->form = new FakeNameForm;
+        $this->form->setBaseDependencies(new Builder, new FilterFactory, new HelperLocatorFactory);
     }
 
     public function testSubmit()
