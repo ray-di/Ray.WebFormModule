@@ -14,7 +14,6 @@ use Aura\Input\AntiCsrfInterface;
 use Aura\Input\Builder;
 use Aura\Input\BuilderInterface;
 use Aura\Input\Form;
-use Ray\Di\Di\PostConstruct;
 
 abstract class AbstractForm extends Form implements FormInterface
 {
@@ -50,7 +49,7 @@ abstract class AbstractForm extends Form implements FormInterface
     }
 
     /**
-     * @PostConstruct
+     * @\Ray\Di\Di\PostConstruct
      */
     public function postConstruct()
     {

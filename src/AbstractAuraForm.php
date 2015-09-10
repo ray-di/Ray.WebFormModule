@@ -34,7 +34,6 @@ abstract class AbstractAuraForm extends Form implements FormInterface
         $this->filter   = $filter;
         $this->options  = $options;
         $this->helper = $factory->newInstance();
-
     }
 
     public function __construct()
@@ -42,7 +41,7 @@ abstract class AbstractAuraForm extends Form implements FormInterface
     }
 
     /**
-     * @PostConstruct
+     * @\Ray\Di\Di\PostConstruct
      */
     public function postConstruct()
     {
