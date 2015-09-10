@@ -27,19 +27,14 @@ abstract class AbstractAuraForm extends Form implements FormInterface
     public function setBaseDependencies(
         BuilderInterface $builder,
         FilterInterface  $filter,
+        HelperLocatorFactory $factory,
         $options = null
     ) {
         $this->builder  = $builder;
         $this->filter   = $filter;
         $this->options  = $options;
-    }
-
-    /**
-     * @\Ray\Di\Di\Inject
-     */
-    public function setFormHelper(HelperLocatorFactory $factory)
-    {
         $this->helper = $factory->newInstance();
+
     }
 
     public function __construct()

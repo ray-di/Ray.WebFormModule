@@ -17,9 +17,8 @@ class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->form = new FakeForm;
-        $this->form->setBaseDependencies(new Builder, new Filter);
+        $this->form->setBaseDependencies(new Builder, new Filter, new HelperLocatorFactory);
         $this->form->postConstruct();
-        $this->form->setFormHelper(new HelperLocatorFactory);
     }
 
     public function testForm()
