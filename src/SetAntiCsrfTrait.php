@@ -11,11 +11,6 @@ use Aura\Input\AntiCsrfInterface;
 trait SetAntiCsrfTrait
 {
     /**
-     * @var AntiCsrfInterface
-     */
-    protected $antiCsrf;
-
-    /**
      * @param AntiCsrfInterface $antiCsrf
      *
      * @\Ray\Di\Di\Inject
