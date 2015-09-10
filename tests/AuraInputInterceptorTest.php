@@ -58,7 +58,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     private function getFakeForm()
     {
         $fakeForm = new FakeForm;
-        $fakeForm->setBaseDependencies(new Builder ,new Filter);
+        $fakeForm->setBaseDependencies(new Builder, new Filter);
         $fakeForm->setFormHelper(new HelperLocatorFactory);
         $fakeForm->postConstruct();
 

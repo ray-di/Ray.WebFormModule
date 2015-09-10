@@ -20,4 +20,3 @@ try {
 echo 'Anti CSRF DOES NOT works !' . PHP_EOL;
 //$works = $controller->response['body'] == 'create bear';
 //echo ($works ? 'It works!' : 'It DOES NOT work!') . PHP_EOL;
-
