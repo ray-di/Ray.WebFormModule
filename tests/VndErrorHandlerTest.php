@@ -15,7 +15,7 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->controller = (new Injector(new FakeVndErrorModule))->getInstance(FakeController::class);
+        $this->controller = (new Injector(new FakeVndErrorModule, __DIR__ . '/tmp'))->getInstance(FakeController::class);
     }
 
     public function testValidationException()

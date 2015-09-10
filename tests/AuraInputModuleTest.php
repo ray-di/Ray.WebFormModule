@@ -23,7 +23,7 @@ class AuraInputModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testAuraInputModule()
     {
-        $injector = new Injector(new FakeModule);
+        $injector = new Injector(new FakeModule, __DIR__ . '/tmp');
         $controller = $injector->getInstance(FakeController::class);
         $this->assertInstanceOf(WeavedInterface::class, $controller);
     }
