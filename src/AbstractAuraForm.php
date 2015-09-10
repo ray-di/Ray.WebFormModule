@@ -35,7 +35,7 @@ abstract class AbstractAuraForm extends Form implements FormInterface
     }
 
     /**
-     * @Inject
+     * @\Ray\Di\Di\Inject
      */
     public function setFormHelper(HelperLocatorFactory $factory)
     {
