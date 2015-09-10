@@ -45,12 +45,24 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     public function getController(array $submit)
     {
         $controller = new FakeController;
-        $fakeForm = new FakeForm(new Builder, new Filter);
+        $fakeForm = $this->getFakeForm();
         $fakeForm->setSubmit($submit);
-        $fakeForm->setFormHelper(new HelperLocatorFactory);
         $controller->setForm($fakeForm);
 
         return $controller;
+    }
+
+    /**
+     * @return FakeForm
+     */
+    private function getFakeForm()
+    {
+        $fakeForm = new FakeForm;
+        $fakeForm->setBaseDependencies(new Builder ,new Filter);
+        $fakeForm->setFormHelper(new HelperLocatorFactory);
+        $fakeForm->postConstruct();
+
+        return $fakeForm;
     }
 
     public function proceed($controller)
@@ -103,7 +115,8 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidOnFailureMethod::class);
         $controller = new FakeInvalidController3;
-        $controller->setForm(new FakeForm(new Builder, new Filter));
+        $fakeForm = $this->getFakeForm();
+        $controller->setForm($fakeForm);
         $this->proceed($controller);
     }
 
