@@ -35,10 +35,10 @@ class AppModule extends AbstractModule
 フォームの`input`要素を登録する`init()`メソッドとフォーム送信を行う`submit()`メソッドを持つフォームクラスを用意します。
 
 ```php
-use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\AbstractForm;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 
-class MyForm extends AbstractAuraForm
+class MyForm extends AbstractForm
 {
     /**
      * {@inheritdoc}
@@ -51,15 +51,8 @@ class MyForm extends AbstractAuraForm
                  'id' => 'name'
              ]);
         // set input filters
-        /** @var $filter Filter */
-        $filter = $this->getFilter();
-        $filter->setRule(
-            'name',
-            'Name must be alphabetic only.',
-            function ($value) {
-                return ctype_alpha($value);
-            }
-        );
+        $this->filter->validate('name')->is('alnum');
+        $this->filter->useFieldMessage('name', 'Name must be alphabetic only.');
     }
 
     /**

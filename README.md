@@ -35,10 +35,10 @@ class AppModule extends AbstractModule
 We provide two methods on self-initializing form class, one is `init()` method where we add an input field on form and apply fileters and rules. The other method method is `submit()` where it submit data. See more detail at [Aura.Input self-initializing forms](https://github.com/auraphp/Aura.Input/blob/1.x/README.md#self-initializing-forms).
 
 ```php
-use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\AbstractForm;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 
-class MyForm extends AbstractAuraForm
+class MyForm extends AbstractForm
 {
     // for anti CSRF
     use SetAntiCsrfTrait;
@@ -52,15 +52,8 @@ class MyForm extends AbstractAuraForm
              ->setAttribs([
                  'id' => 'name'
              ]);
-        /** @var $filter Filter */
-        $filter = $this->getFilter();
-        $filter->setRule(
-            'name',
-            'Name must be alphabetic only.',
-            function ($value) {
-                return ctype_alpha($value);
-            }
-        );
+        $this->filter->validate('name')->is('alnum');
+        $this->filter->useFieldMessage('name', 'Name must be alphabetic only.');
     }
 
     /**
