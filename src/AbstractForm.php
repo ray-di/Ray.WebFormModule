@@ -54,6 +54,9 @@ abstract class AbstractForm extends Form implements FormInterface
     public function postConstruct()
     {
         $this->init();
+        if ($this->antiCsrf instanceof AntiCsrfInterface) {
+            $this->setAntiCsrf($this->antiCsrf);
+        }
     }
 
     /**
