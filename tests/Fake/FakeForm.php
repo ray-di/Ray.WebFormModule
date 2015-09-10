@@ -2,11 +2,20 @@
 
 namespace Ray\WebFormModule;
 
+use Aura\Input\AntiCsrfInterface;
 use Aura\Input\Filter;
 
 class FakeForm extends AbstractAuraForm
 {
-    use SetAntiCsrfTrait;
+    /**
+     * @param AntiCsrfInterface $antiCsrf
+     *
+     * @\Ray\Di\Di\Inject
+     */
+    public function injectAntiCsrf(AntiCsrfInterface $antiCsrf)
+    {
+        $this->setAntiCsrf($antiCsrf);
+    }
 
     /**
      * @var array
