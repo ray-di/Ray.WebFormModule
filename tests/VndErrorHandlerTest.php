@@ -21,13 +21,13 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
     public function testValidationException()
     {
         $this->setExpectedException(ValidationException::class);
-        $this->controller->createAction();
+        $this->controller->createAction('');
     }
 
     public function testValidationExceptionError()
     {
         try {
-            $this->controller->createAction();
+            $this->controller->createAction('');
         } catch (ValidationException $e) {
             $vndError = (string) $e->error;
             $this->assertSame('{

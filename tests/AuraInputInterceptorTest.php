@@ -75,7 +75,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testProceed()
     {
-        $invocation = $this->getMethodInvocation('createAction', ['name' => 'BEAR']);
+        $invocation = $this->getMethodInvocation('createAction', ['BEAR']);
         $result = $invocation->proceed();
         $this->assertSame('201', $result);
     }

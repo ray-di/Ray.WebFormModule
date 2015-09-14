@@ -44,7 +44,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
         return new ReflectiveMethodInvocation(
             $controller,
             new \ReflectionMethod($controller, 'createAction'),
-            new Arguments([$arguments]),
+            new Arguments($arguments),
             [
                 $interceptor
             ]
