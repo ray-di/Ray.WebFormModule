@@ -38,7 +38,7 @@ final class VndErrorHandler implements FailureHandlerInterface
         throw $e;
     }
 
-    private function makeVndError(AbstractAuraForm $form, VndError $vndError = null)
+    private function makeVndError(Form $form, VndError $vndError = null)
     {
         $body = ['message' => 'Validation failed'];
         $body['path'] = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';

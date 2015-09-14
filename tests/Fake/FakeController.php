@@ -25,7 +25,7 @@ class FakeController
     /**
      * @FormValidation(form="form1", onFailure="badRequestAction")
      */
-    public function createAction()
+    public function createAction($name)
     {
         return '201';
     }
