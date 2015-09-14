@@ -8,9 +8,9 @@ use Aura\Input\Filter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
+use Ray\WebFormModule\Exception\ValidationException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
 use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
-use Ray\WebFormModule\Exception\ValidationException;
 
 class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,11 +31,10 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $handler ?: new OnFailureMethodHandler;
         $object = $this->getController($submit);
-
         return new ReflectiveMethodInvocation(
             $object,
             new \ReflectionMethod($object, $method),
-            new Arguments([]),
+            new Arguments($submit),
             [
                 new AuraInputInterceptor(new AnnotationReader, $handler)
             ]
@@ -45,23 +44,13 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     public function getController(array $submit)
     {
         $controller = new FakeController;
-        $fakeForm = $this->getFakeForm();
+        $fakeForm = new FakeForm;
+        $fakeForm->setBaseDependencies(new Builder, new Filter, new HelperLocatorFactory);
+        $fakeForm->postConstruct();
         $fakeForm->setSubmit($submit);
         $controller->setForm($fakeForm);
 
         return $controller;
-    }
-
-    /**
-     * @return FakeForm
-     */
-    private function getFakeForm()
-    {
-        $fakeForm = new FakeForm;
-        $fakeForm->setBaseDependencies(new Builder, new Filter, new HelperLocatorFactory);
-        $fakeForm->postConstruct();
-
-        return $fakeForm;
     }
 
     public function proceed($controller)
@@ -114,7 +103,9 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidOnFailureMethod::class);
         $controller = new FakeInvalidController3;
-        $fakeForm = $this->getFakeForm();
+        $fakeForm = new FakeForm;
+        $fakeForm->setBaseDependencies(new Builder, new Filter, new HelperLocatorFactory);
+        $fakeForm->postConstruct();
         $controller->setForm($fakeForm);
         $this->proceed($controller);
     }

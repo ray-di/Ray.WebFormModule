@@ -28,6 +28,11 @@ abstract class AbstractForm extends Form implements FormInterface
     protected $errorMessages;
 
     /**
+     * @var HelperLocator
+     */
+    protected $helper;
+
+    /**
      * @var AntiCsrfInterface
      */
     protected $antiCsrf;
@@ -54,6 +59,14 @@ abstract class AbstractForm extends Form implements FormInterface
     }
 
     /**
+     * @param AntiCsrfInterface $antiCsrf
+     */
+    public function setCsrf(AntiCsrfInterface $antiCsrf)
+    {
+        $this->setAntiCsrf($antiCsrf);
+    }
+
+    /**
      * @\Ray\Di\Di\PostConstruct
      */
     public function postConstruct()
@@ -62,26 +75,6 @@ abstract class AbstractForm extends Form implements FormInterface
         if ($this->antiCsrf instanceof AntiCsrfInterface) {
             $this->setAntiCsrf($this->antiCsrf);
         }
-    }
-
-    /**
-     * @var HelperLocator
-     */
-    protected $helper;
-
-    /**
-     * HTML
-     *
-     * @var string
-     */
-    protected $string = '<form></form>';
-
-    /**
-     * @param AntiCsrfInterface $antiCsrf
-     */
-    public function setCsrf(AntiCsrfInterface $antiCsrf)
-    {
-        $this->setAntiCsrf($antiCsrf);
     }
 
     /**
@@ -129,11 +122,37 @@ abstract class AbstractForm extends Form implements FormInterface
         return $form;
     }
 
+    /**
+     * Applies the filter to a subject.
+     *
+     * @param array|object $subject The subject to be filtered.     * @param array $data
+     *
+     * @return bool
+     */
     public function apply(array $data)
     {
-        $submit = $data ?: $this->submit();
-        $isValid = $this->filter->apply($submit);
+        $isValid = $this->filter->apply($data);
 
         return $isValid;
+    }
+
+    /**
+     *
+     * Gets the filter messages.
+     *
+     * @param string $name The input name to get the filter message for; if
+     * empty, gets all messages for all inputs.
+     *
+     * @return array The filter messages.
+     *
+     */
+    public function getMessages($name = null)
+    {
+        $messages = $this->filter->getFailures()->getMessages();
+        if ($name && isset($messages[$name])) {
+            return $messages[$name];
+        }
+
+        return $messages;
     }
 }
