@@ -29,11 +29,4 @@ interface FormInterface
      * @return string
      */
     public function error($input, $format = '%s', $layout = '%s');
-
-    /**
-     * Return submit data
-     *
-     * @return array
-     */
-    public function submit();
 }
