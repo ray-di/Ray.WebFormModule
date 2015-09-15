@@ -11,11 +11,11 @@ use Aura\Filter\SubjectFilter;
 use Aura\Html\HelperLocator;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
-use Aura\Input\Builder;
 use Aura\Input\BuilderInterface;
-use Aura\Input\Form;
+use Aura\Input\Fieldset;
+use Ray\WebFormModule\Exception\CsrfViolationException;
 
-abstract class AbstractForm extends Form implements FormInterface
+abstract class AbstractForm extends Fieldset implements FormInterface
 {
     /**
      * @var SubjectFilter
@@ -45,25 +45,22 @@ abstract class AbstractForm extends Form implements FormInterface
      * @\Ray\Di\Di\Inject
      */
     public function setBaseDependencies(
-        BuilderInterface $builder = null,
-        FilterFactory $filterFactory = null,
-        HelperLocatorFactory $helperFactory = null
+        BuilderInterface $builder,
+        FilterFactory $filterFactory,
+        HelperLocatorFactory $helperFactory
     ) {
-        $this->builder  = $builder ?: new Builder;
-        $this->filter = $filterFactory ? $filterFactory->newSubjectFilter() : (new FilterFactory)->newSubjectFilter();
-        $this->helper = $helperFactory ? $helperFactory->newInstance() : (new HelperLocatorFactory)->newInstance();
+        $this->builder  = $builder;
+        $this->filter = $filterFactory->newSubjectFilter();
+        $this->helper = $helperFactory->newInstance();
     }
 
     public function __construct()
     {
     }
 
-    /**
-     * @param AntiCsrfInterface $antiCsrf
-     */
-    public function setCsrf(AntiCsrfInterface $antiCsrf)
+    public function setAntiCsrf(AntiCsrfInterface $antiCsrf)
     {
-        $this->setAntiCsrf($antiCsrf);
+        $this->antiCsrf = $antiCsrf;
     }
 
     /**
@@ -73,7 +70,7 @@ abstract class AbstractForm extends Form implements FormInterface
     {
         $this->init();
         if ($this->antiCsrf instanceof AntiCsrfInterface) {
-            $this->setAntiCsrf($this->antiCsrf);
+            $this->antiCsrf->setField($this);
         }
     }
 
@@ -131,27 +128,37 @@ abstract class AbstractForm extends Form implements FormInterface
      */
     public function apply(array $data)
     {
+        if ($this->antiCsrf && ! $this->antiCsrf->isValid($data)) {
+            throw new CsrfViolationException;
+        }
         $isValid = $this->filter->apply($data);
 
         return $isValid;
     }
 
     /**
-     * Gets the filter messages.
+     * Returns all failure messages for all fields.
      *
-     * @param string $name The input name to get the filter message for; if
-     *                     empty, gets all messages for all inputs.
-     *
-     * @return array The filter messages.
+     * @return array
      */
-    public function getMessages($name = null)
+    public function getFailureMessages()
     {
         $messages = $this->filter->getFailures()->getMessages();
-        if ($name && isset($messages[$name])) {
-            return $messages[$name];
-        }
 
         return $messages;
+    }
+
+
+    /**
+     *
+     * Returns all the fields collection
+     *
+     * @return \ArrayIterator
+     *
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->inputs);
     }
 
     public function __clone()

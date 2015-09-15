@@ -13,7 +13,6 @@ use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
-use Ray\WebFormModule\Exception\LogicException;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
@@ -48,7 +47,7 @@ class AuraInputInterceptor implements MethodInterceptor
         $formValidation = $this->reader->getMethodAnnotation($invocation->getMethod(), FormValidation::class);
         $form = $this->getFormProperty($formValidation, $object);
         $data = $object instanceof SubmitInterface ? $object->submit() : $this->getNamedArguments($invocation);
-        $isValid = $this->isValidForm($data, $form);
+        $isValid = $this->isValid($data, $form);
         if ($isValid === true) {
             // validation   success
             return $invocation->proceed();
@@ -85,22 +84,11 @@ class AuraInputInterceptor implements MethodInterceptor
      *
      * @throws \Aura\Input\Exception\CsrfViolation
      */
-    public function isValidForm(array $submit, Form $form)
+    public function isValid(array $submit, AbstractForm $form)
     {
-        if ($form instanceof AbstractAuraForm) {
-            $form->fill($submit);
-            $isValid = $form->filter();
+        $isValid = $form->apply($submit);
 
-            return $isValid;
-        }
-
-        if ($form instanceof AbstractForm) {
-            $isValid = $form->apply($submit);
-
-            return $isValid;
-        }
-
-        throw new LogicException('invalid form type');
+        return $isValid;
     }
 
     /**
@@ -109,7 +97,7 @@ class AuraInputInterceptor implements MethodInterceptor
      * @param FormValidation $formValidation
      * @param object         $object
      *
-     * @return AbstractAuraForm
+     * @return AbstractForm
      */
     private function getFormProperty(FormValidation $formValidation, $object)
     {
@@ -119,7 +107,7 @@ class AuraInputInterceptor implements MethodInterceptor
         $prop = (new \ReflectionClass($object))->getProperty($formValidation->form);
         $prop->setAccessible(true);
         $form = $prop->getValue($object);
-        if (! $form instanceof FormInterface) {
+        if (! $form instanceof AbstractForm) {
             throw new InvalidFormPropertyException($formValidation->form);
         }
 

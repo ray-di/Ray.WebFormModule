@@ -9,16 +9,14 @@ use Aura\Input\Filter;
 class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AbstractAuraForm
+     * @var AbstractForm
      */
     private $form;
 
     public function setUp()
     {
         parent::setUp();
-        $this->form = new FakeForm;
-        $this->form->setBaseDependencies(new Builder, new Filter, new HelperLocatorFactory);
-        $this->form->postConstruct();
+        $this->form = (new FormFactory)->newInstance(FakeForm::class);
     }
 
     public function testForm()
@@ -29,7 +27,8 @@ class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
 
     public function testAntiCsrfForm()
     {
-        $this->form->setCsrf(new FakeAntiCsrf);
+        $this->form->setAntiCsrf(new FakeAntiCsrf);
+        $this->form->postConstruct();
         $formHtml = $this->form->form();
         $this->assertSame('<form method="post" enctype="multipart/form-data"><input type="hidden" name="__csrf_token" value="goodvalue" />' . PHP_EOL, $formHtml);
     }
@@ -43,7 +42,8 @@ class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
     public function testError()
     {
         $this->form->fill([]);
-        $isValid = $this->form->filter();
+        $data = ['name' => '@invalid@'];
+        $isValid = $this->form->apply($data);
         $this->assertFalse($isValid);
         $error = $this->form->error('name');
         $this->assertSame('Name must be alphabetic only.', $error);

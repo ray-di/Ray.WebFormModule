@@ -2,9 +2,7 @@
 
 namespace Ray\WebFormModule;
 
-use Aura\Input\Filter;
-
-class FakeForm extends AbstractAuraForm
+class FakeForm extends AbstractForm
 {
     use SetAntiCsrfTrait;
 
@@ -27,15 +25,8 @@ class FakeForm extends AbstractAuraForm
              ->setAttribs([
                  'id' => 'name'
              ]);
-        /** @var $filter Filter */
-        $filter = $this->getFilter();
-        $filter->setRule(
-            'name',
-            'Name must be alphabetic only.',
-            function ($value) {
-                return ctype_alpha($value);
-            }
-        );
+        $this->filter->validate('name')->is('alnum');
+        $this->filter->useFieldMessage('name', 'Name must be alphabetic only.');
     }
 
     /**

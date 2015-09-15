@@ -15,7 +15,7 @@ trait SetAntiCsrfTrait
      *
      * @\Ray\Di\Di\Inject
      */
-    public function injectAntiCsrf(AntiCsrfInterface $antiCsrf)
+    public function setAntiCsrf(AntiCsrfInterface $antiCsrf)
     {
         $this->antiCsrf = $antiCsrf;
     }

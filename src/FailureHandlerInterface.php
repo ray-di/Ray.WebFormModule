@@ -12,5 +12,5 @@ use Ray\WebFormModule\Annotation\FormValidation;
 
 interface FailureHandlerInterface
 {
-    public function handle(FormValidation $formValidation, MethodInvocation $invocation, Form $form);
+    public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractForm $form);
 }

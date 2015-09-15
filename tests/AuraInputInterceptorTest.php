@@ -2,9 +2,6 @@
 
 namespace Ray\WebFormModule;
 
-use Aura\Html\HelperLocatorFactory;
-use Aura\Input\Builder;
-use Aura\Input\Filter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
@@ -45,9 +42,8 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     public function getController(array $submit)
     {
         $controller = new FakeController;
-        $fakeForm = new FakeForm;
-        $fakeForm->setBaseDependencies(new Builder, new Filter, new HelperLocatorFactory);
-        $fakeForm->postConstruct();
+        /** @var $fakeForm FakeForm */
+        $fakeForm = (new FormFactory)->newInstance(FakeForm::class);
         $fakeForm->setSubmit($submit);
         $controller->setForm($fakeForm);
 
@@ -104,9 +100,9 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidOnFailureMethod::class);
         $controller = new FakeInvalidController3;
-        $fakeForm = new FakeForm;
-        $fakeForm->setBaseDependencies(new Builder, new Filter, new HelperLocatorFactory);
-        $fakeForm->postConstruct();
+        /** @var $fakeForm FakeForm */
+        $fakeForm = (new FormFactory)->newInstance(FakeForm::class);
+        $fakeForm->setSubmit(['name' => '']);
         $controller->setForm($fakeForm);
         $this->proceed($controller);
     }
@@ -118,7 +114,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
         $invocation = new ReflectiveMethodInvocation(
             $object,
             new \ReflectionMethod($object, 'createAction'),
-            new Arguments([]),
+            new Arguments(['name' => '']),
             [
                 new AuraInputInterceptor(new AnnotationReader, new OnFailureMethodHandler)
             ]
