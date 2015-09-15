@@ -32,7 +32,7 @@ class AppModule extends AbstractModule
 
 ### Form
 
-フォームの`input`要素を登録する`init()`メソッドとフォーム送信を行う`submit()`メソッドを持つフォームクラスを用意します。
+`init()`メソッドでフォームの`input`要素を登録とルールの設定を行います。
 
 ```php
 use Ray\WebFormModule\AbstractForm;
@@ -54,7 +54,18 @@ class MyForm extends AbstractForm
         $this->filter->validate('name')->is('alnum');
         $this->filter->useFieldMessage('name', 'Name must be alphabetic only.');
     }
+}
+```
+メソッドの引数を名前付き引数にしたものがフォームオブジェクトに渡されバリデーションされます。
+```php
 
+// このメソッドの場合['id' => $id, 'name' => $name]配列が渡されます
+public function createAction($id, $name, $body)
+{
+```
+
+`Ray\WebFormModule\WebFormModule\SubmitInterface`を実装すると`submit()`メソッドで返された値がフォームオブジェクトに渡されます。
+```php
     /**
      * {@inheritdoc}
      */
@@ -64,10 +75,7 @@ class MyForm extends AbstractForm
     }
 }
 ```
- * `init()`メソッドではinput属性を指定してフォームを登録し、フィルターやルールを適用します。
-フォームクラスで利用できるメソッドについて詳しく`は[Aura.Input](https://github.com/auraphp/Aura.Input#self-initializing-forms)をご覧ください
-
- * `submit()メソッド`ではフォームでバリデーションを行うための`$_POST`や`$_GET`を返します。
+`init()`メソッドでで利用できるメソッドについて詳しく`は[Aura.Input](https://github.com/auraphp/Aura.Input#self-initializing-forms)をご覧ください
 
 ### Controller
 
