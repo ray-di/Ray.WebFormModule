@@ -31,7 +31,7 @@ class FakeControllerVndError
      *   href={"_self"="/path/to/error", "help"="/path/to/help"}
      * )
      */
-    public function createAction()
+    public function createAction($name)
     {
     }
 }

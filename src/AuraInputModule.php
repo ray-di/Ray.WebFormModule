@@ -6,6 +6,7 @@
  */
 namespace Ray\WebFormModule;
 
+use Aura\Filter\FilterFactory;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
 use Aura\Input\Builder;
@@ -30,9 +31,10 @@ class AuraInputModule extends AbstractModule
         $this->bind(Reader::class)->to(AnnotationReader::class)->in(Scope::SINGLETON);
         $this->bind(BuilderInterface::class)->to(Builder::class);
         $this->bind(FilterInterface::class)->to(Filter::class);
-        $this->bind(HelperLocatorFactory::class);
         $this->bind(AntiCsrfInterface::class)->to(AntiCsrf::class)->in(Scope::SINGLETON);
         $this->bind(FailureHandlerInterface::class)->to(OnFailureMethodHandler::class);
+        $this->bind(HelperLocatorFactory::class);
+        $this->bind(FilterFactory::class);
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith(FormValidation::class),

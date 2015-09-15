@@ -47,7 +47,7 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
         /** @var $controller FakeControllerVndError */
         $controller = (new Injector(new FakeVndErrorModule))->getInstance(FakeControllerVndError::class);
         try {
-            $controller->createAction();
+            $controller->createAction('');
         } catch (ValidationException $e) {
             $vndError = (string) $e->error;
             $this->assertSame('{
