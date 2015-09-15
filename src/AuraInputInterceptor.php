@@ -10,6 +10,7 @@ use Aura\Input\Form;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
+use Ray\WebFormModule\Annotation\AbstractValidation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
@@ -19,15 +20,16 @@ class AuraInputInterceptor implements MethodInterceptor
     /**
      * @var Reader
      */
-    private $reader;
+    protected $reader;
 
     /**
      * @var FailureHandlerInterface
      */
-    private $failureHandler;
+    protected $failureHandler;
 
     /**
-     * @param Reader $reader Annotation reader
+     * @param Reader                  $reader
+     * @param FailureHandlerInterface $handler
      */
     public function __construct(Reader $reader, FailureHandlerInterface $handler)
     {
@@ -44,7 +46,7 @@ class AuraInputInterceptor implements MethodInterceptor
     {
         $object = $invocation->getThis();
         /* @var $formValidation FormValidation */
-        $formValidation = $this->reader->getMethodAnnotation($invocation->getMethod(), FormValidation::class);
+        $formValidation = $this->reader->getMethodAnnotation($invocation->getMethod(), AbstractValidation::class);
         $form = $this->getFormProperty($formValidation, $object);
         $data = $object instanceof SubmitInterface ? $object->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);
@@ -99,7 +101,7 @@ class AuraInputInterceptor implements MethodInterceptor
      *
      * @return AbstractForm
      */
-    private function getFormProperty(FormValidation $formValidation, $object)
+    private function getFormProperty(AbstractValidation $formValidation, $object)
     {
         if (! property_exists($object, $formValidation->form)) {
             throw new InvalidFormPropertyException($formValidation->form);

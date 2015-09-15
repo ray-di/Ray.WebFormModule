@@ -34,9 +34,9 @@ final class AntiCsrf implements AntiCsrfInterface
     private $session;
 
     /**
-     * @param Session      $session
-     * @param bool|null    $isCli
-s     */
+     * @param Session   $session
+     * @param bool|null $isCli
+     s     */
     public function __construct(Session $session, $isCli = null)
     {
         $this->session = $session;

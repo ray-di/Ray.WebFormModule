@@ -19,6 +19,7 @@ use Ray\AuraSessionModule\AuraSessionModule;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 use Ray\WebFormModule\Annotation\FormValidation;
+use Ray\WebFormModule\Annotation\InputValidation;
 
 class AuraInputModule extends AbstractModule
 {
@@ -33,8 +34,14 @@ class AuraInputModule extends AbstractModule
         $this->bind(FilterInterface::class)->to(Filter::class);
         $this->bind(AntiCsrfInterface::class)->to(AntiCsrf::class)->in(Scope::SINGLETON);
         $this->bind(FailureHandlerInterface::class)->to(OnFailureMethodHandler::class);
+        $this->bind(FailureHandlerInterface::class)->annotatedWith('vnd_error')->to(VndErrorHandler::class)->in(Scope::SINGLETON);
         $this->bind(HelperLocatorFactory::class);
         $this->bind(FilterFactory::class);
+        $this->bindInterceptor(
+            $this->matcher->any(),
+            $this->matcher->annotatedWith(InputValidation::class),
+            [InputValidationInterceptor::class]
+        );
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith(FormValidation::class),

@@ -2,10 +2,6 @@
 
 namespace Ray\WebFormModule;
 
-use Aura\Html\HelperLocatorFactory;
-use Aura\Input\Builder;
-use Aura\Input\Filter;
-
 class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
 {
     /**

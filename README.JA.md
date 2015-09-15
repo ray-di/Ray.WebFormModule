@@ -144,6 +144,21 @@ class MyForm extends AbstractAuraForm
 
 ## Validation Exception
 
+`@FormValidation`の代わりに`@InputValidation`とアノテートするとバリデーションが失敗したときに`Ray\WebFormModule\Exception\ValidationException`が投げられるよになります。この場合はHTML表現は使われません。Web APIアプリケーションなどに便利です。
+
+```php
+use Ray\WebFormModule\Annotation\InputValidation;
+
+class Foo
+{
+    /**
+     * @InputValidation(form="form1")
+     */
+    public function createAction($name)
+    {
+      // ...
+    }
+```
 以下のように `Ray\WebFormModule\FormVndErrorModule`をインストールするとフォームのバリデーションが失敗したときに`Ray\WebFormModule\Exception\ValidationException`例外が投げられるよになります。
 
 ```php

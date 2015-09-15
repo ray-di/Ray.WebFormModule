@@ -97,5 +97,4 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
         $this->form->setAntiCsrf(new AntiCsrf($session, false));
         $this->form->apply([]);
     }
-
 }

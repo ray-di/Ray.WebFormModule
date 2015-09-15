@@ -10,17 +10,10 @@ namespace Ray\WebFormModule\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-final class FormValidation extends AbstractValidation
+class AbstractValidation
 {
     /**
-     * @var bool
-     */
-    public $antiCsrf = false;
-
-    /**
-     * Method name on validation faild.
-     *
      * @var string
      */
-    public $onFailure;
+    public $form = 'form';
 }
