@@ -2,7 +2,6 @@
 
 namespace Ray\WebFormModule;
 
-use Aura\Input\Exception\CsrfViolation;
 use Aura\Session\CsrfTokenFactory;
 use Aura\Session\Phpfunc;
 use Aura\Session\Randval;
@@ -11,6 +10,7 @@ use Aura\Session\Session;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
+use Ray\WebFormModule\Exception\CsrfViolationException;
 use Ray\WebFormModule\Exception\ValidationException;
 
 class AbstractFormTest extends \PHPUnit_Framework_TestCase
@@ -87,7 +87,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     public function testAntiCsrfViolation()
     {
-        $this->setExpectedException(CsrfViolation::class);
+        $this->setExpectedException(CsrfViolationException::class);
         $session = new Session(
             new SegmentFactory,
             new CsrfTokenFactory(new Randval(new Phpfunc)),

@@ -12,8 +12,8 @@ use Aura\Html\HelperLocator;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
 use Aura\Input\BuilderInterface;
-use Aura\Input\Exception\CsrfViolation;
 use Aura\Input\Fieldset;
+use Ray\WebFormModule\Exception\CsrfViolationException;
 
 abstract class AbstractForm extends Fieldset implements FormInterface
 {
@@ -129,7 +129,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     public function apply(array $data)
     {
         if ($this->antiCsrf && ! $this->antiCsrf->isValid($data)) {
-            throw new CsrfViolation;
+            throw new CsrfViolationException;
         }
         $isValid = $this->filter->apply($data);
 
