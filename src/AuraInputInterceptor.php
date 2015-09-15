@@ -47,7 +47,7 @@ class AuraInputInterceptor implements MethodInterceptor
         /* @var $formValidation FormValidation */
         $formValidation = $this->reader->getMethodAnnotation($invocation->getMethod(), FormValidation::class);
         $form = $this->getFormProperty($formValidation, $object);
-        $data = method_exists($object, 'submit') ? $object->submit() : $this->getNamedArguments($invocation);
+        $data = $object instanceof SubmitInterface ? $object->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValidForm($data, $form);
         if ($isValid === true) {
             // validation   success
