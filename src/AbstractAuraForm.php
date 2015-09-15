@@ -12,8 +12,6 @@ use Aura\Input\AntiCsrfInterface;
 use Aura\Input\BuilderInterface;
 use Aura\Input\FilterInterface;
 use Aura\Input\Form;
-use Ray\Di\Di\Inject;
-use Ray\Di\Di\PostConstruct;
 
 abstract class AbstractAuraForm extends Form implements FormInterface
 {

@@ -5,7 +5,6 @@ namespace Ray\WebFormModule;
 use Aura\Filter\FilterFactory;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\Builder;
-use Aura\Input\Filter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;

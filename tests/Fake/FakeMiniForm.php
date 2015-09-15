@@ -2,8 +2,6 @@
 
 namespace Ray\WebFormModule;
 
-use Aura\Input\Filter;
-
 class FakeMiniForm extends AbstractForm
 {
     /**
