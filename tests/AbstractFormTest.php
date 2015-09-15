@@ -2,9 +2,12 @@
 
 namespace Ray\WebFormModule;
 
-use Aura\Filter\FilterFactory;
-use Aura\Html\HelperLocatorFactory;
-use Aura\Input\Builder;
+use Aura\Input\Exception\CsrfViolation;
+use Aura\Session\CsrfTokenFactory;
+use Aura\Session\Phpfunc;
+use Aura\Session\Randval;
+use Aura\Session\SegmentFactory;
+use Aura\Session\Session;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
@@ -29,9 +32,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
     public function getMethodInvocation(array $arguments)
     {
         // form
-        $fakeForm = new FakeMiniForm;
-        $fakeForm->setBaseDependencies(new Builder, new FilterFactory, new HelperLocatorFactory);
-        $fakeForm->postConstruct();
+        $fakeForm = (new FormFactory)->newInstance(FakeMiniForm::class);
         // controller
         $controller = new FakeController;
         $controller->setForm($fakeForm);
@@ -62,4 +63,39 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
         $invocation = $this->getMethodInvocation(['na']);
         $invocation->proceed();
     }
+
+    public function testErrorReturnEmpty()
+    {
+        $result = $this->form->error('name');
+        $expected = '';
+        $this->assertSame($expected, $result);
+    }
+
+    public function testClone()
+    {
+        $form = clone $this->form;
+        (new \ReflectionProperty($form, 'filter'))->setAccessible(true);
+        (new \ReflectionProperty($this->form, 'filter'))->setAccessible(true);
+        $this->assertNotSame(spl_object_hash($form), spl_object_hash($this->form));
+    }
+
+    public function testGetItelator()
+    {
+        $itelator = $this->form->getIterator();
+        $this->assertInstanceOf(\Iterator::class, $itelator);
+    }
+
+    public function testAntiCsrfViolation()
+    {
+        $this->setExpectedException(CsrfViolation::class);
+        $session = new Session(
+            new SegmentFactory,
+            new CsrfTokenFactory(new Randval(new Phpfunc)),
+            new FakePhpfunc,
+            []
+        );
+        $this->form->setAntiCsrf(new AntiCsrf($session, false));
+        $this->form->apply([]);
+    }
+
 }

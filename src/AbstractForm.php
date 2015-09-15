@@ -58,6 +58,11 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     {
     }
 
+    public function setAntiCsrf(AntiCsrfInterface $antiCsrf)
+    {
+        $this->antiCsrf = $antiCsrf;
+    }
+
     /**
      * @\Ray\Di\Di\PostConstruct
      */
@@ -132,19 +137,13 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     }
 
     /**
-     * Gets the filter messages.
+     * Returns all failure messages for all fields.
      *
-     * @param string $name The input name to get the filter message for; if
-     *                     empty, gets all messages for all inputs.
-     *
-     * @return array The filter messages.
+     * @return array
      */
-    public function getMessages($name = null)
+    public function getFailureMessages()
     {
         $messages = $this->filter->getFailures()->getMessages();
-        if ($name && isset($messages[$name])) {
-            return $messages[$name];
-        }
 
         return $messages;
     }
@@ -161,7 +160,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     {
         return new \ArrayIterator($this->inputs);
     }
-    
+
     public function __clone()
     {
         $this->filter = clone $this->filter;
