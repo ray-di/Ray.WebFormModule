@@ -31,6 +31,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $handler ?: new OnFailureMethodHandler;
         $object = $this->getController($submit);
+
         return new ReflectiveMethodInvocation(
             $object,
             new \ReflectionMethod($object, $method),

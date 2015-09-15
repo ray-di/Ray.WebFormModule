@@ -137,14 +137,12 @@ abstract class AbstractForm extends Form implements FormInterface
     }
 
     /**
-     *
      * Gets the filter messages.
      *
      * @param string $name The input name to get the filter message for; if
-     * empty, gets all messages for all inputs.
+     *                     empty, gets all messages for all inputs.
      *
      * @return array The filter messages.
-     *
      */
     public function getMessages($name = null)
     {

@@ -38,6 +38,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
         // interceptor
         $reader = new AnnotationReader;
         $interceptor = new AuraInputInterceptor($reader, new VndErrorHandler($reader));
+
         return new ReflectiveMethodInvocation(
             $controller,
             new \ReflectionMethod($controller, 'createAction'),
