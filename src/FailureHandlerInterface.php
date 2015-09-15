@@ -6,11 +6,10 @@
  */
 namespace Ray\WebFormModule;
 
-use Aura\Input\Form;
 use Ray\Aop\MethodInvocation;
-use Ray\WebFormModule\Annotation\FormValidation;
+use Ray\WebFormModule\Annotation\AbstractValidation;
 
 interface FailureHandlerInterface
 {
-    public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractForm $form);
+    public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form);
 }

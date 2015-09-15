@@ -148,13 +148,10 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         return $messages;
     }
 
-
     /**
-     *
      * Returns all the fields collection
      *
      * @return \ArrayIterator
-     *
      */
     public function getIterator()
     {

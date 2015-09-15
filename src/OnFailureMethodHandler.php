@@ -6,8 +6,8 @@
  */
 namespace Ray\WebFormModule;
 
-use Aura\Input\Form;
 use Ray\Aop\MethodInvocation;
+use Ray\WebFormModule\Annotation\AbstractValidation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
@@ -16,13 +16,13 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
+    public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
         unset($form);
         $args = (array) $invocation->getArguments();
         $object = $invocation->getThis();
-        if (! method_exists($object, $formValidation->onFailure)) {
-            throw new InvalidOnFailureMethod($formValidation->onFailure);
+        if (! $formValidation instanceof FormValidation || ! method_exists($object, $formValidation->onFailure)) {
+            throw new InvalidOnFailureMethod(get_class($invocation->getThis()));
         }
 
         return call_user_func_array([$invocation->getThis(), $formValidation->onFailure], $args);
