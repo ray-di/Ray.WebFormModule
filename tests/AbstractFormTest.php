@@ -5,7 +5,6 @@ namespace Ray\WebFormModule;
 use Aura\Filter\FilterFactory;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\Builder;
-use Aura\Input\Filter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
@@ -21,9 +20,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->form = new FakeMiniForm;
-        $this->form->setBaseDependencies(new Builder, new FilterFactory, new HelperLocatorFactory);
-        $this->form->postConstruct();
+        $this->form = (new FormFactory)->newInstance(FakeMiniForm::class);
     }
 
     /**
@@ -41,6 +38,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
         // interceptor
         $reader = new AnnotationReader;
         $interceptor = new AuraInputInterceptor($reader, new VndErrorHandler($reader));
+
         return new ReflectiveMethodInvocation(
             $controller,
             new \ReflectionMethod($controller, 'createAction'),
