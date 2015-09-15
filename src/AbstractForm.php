@@ -155,4 +155,9 @@ abstract class AbstractForm extends Form implements FormInterface
 
         return $messages;
     }
+
+    public function __clone()
+    {
+        $this->filter = clone $this->filter;
+    }
 }
