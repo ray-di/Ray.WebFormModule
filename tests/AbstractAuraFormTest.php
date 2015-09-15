@@ -27,7 +27,8 @@ class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
 
     public function testAntiCsrfForm()
     {
-        $this->form->setCsrf(new FakeAntiCsrf);
+        $this->form->setAntiCsrf(new FakeAntiCsrf);
+        $this->form->postConstruct();
         $formHtml = $this->form->form();
         $this->assertSame('<form method="post" enctype="multipart/form-data"><input type="hidden" name="__csrf_token" value="goodvalue" />' . PHP_EOL, $formHtml);
     }

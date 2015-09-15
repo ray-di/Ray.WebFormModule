@@ -11,11 +11,11 @@ use Aura\Filter\SubjectFilter;
 use Aura\Html\HelperLocator;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
-use Aura\Input\Builder;
 use Aura\Input\BuilderInterface;
-use Aura\Input\Form;
+use Aura\Input\Exception\CsrfViolation;
+use Aura\Input\Fieldset;
 
-abstract class AbstractForm extends Form implements FormInterface
+abstract class AbstractForm extends Fieldset implements FormInterface
 {
     /**
      * @var SubjectFilter
@@ -59,21 +59,13 @@ abstract class AbstractForm extends Form implements FormInterface
     }
 
     /**
-     * @param AntiCsrfInterface $antiCsrf
-     */
-    public function setCsrf(AntiCsrfInterface $antiCsrf)
-    {
-        $this->setAntiCsrf($antiCsrf);
-    }
-
-    /**
      * @\Ray\Di\Di\PostConstruct
      */
     public function postConstruct()
     {
         $this->init();
         if ($this->antiCsrf instanceof AntiCsrfInterface) {
-            $this->setAntiCsrf($this->antiCsrf);
+            $this->antiCsrf->setField($this);
         }
     }
 
@@ -131,6 +123,9 @@ abstract class AbstractForm extends Form implements FormInterface
      */
     public function apply(array $data)
     {
+        if ($this->antiCsrf && ! $this->antiCsrf->isValid($data)) {
+            throw new CsrfViolation;
+        }
         $isValid = $this->filter->apply($data);
 
         return $isValid;
@@ -154,6 +149,19 @@ abstract class AbstractForm extends Form implements FormInterface
         return $messages;
     }
 
+
+    /**
+     *
+     * Returns all the fields collection
+     *
+     * @return \ArrayIterator
+     *
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->inputs);
+    }
+    
     public function __clone()
     {
         $this->filter = clone $this->filter;

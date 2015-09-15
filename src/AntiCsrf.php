@@ -17,13 +17,30 @@ final class AntiCsrf implements AntiCsrfInterface
     const TOKEN_KEY = '__csrf_token';
 
     /**
+     * @var bool
+     */
+    private $isCli;
+
+    /**
+     * $_POST
+     *
+     * @var array
+     */
+    private $post;
+
+    /**
      * @var Session
      */
     private $session;
 
-    public function __construct(Session $session)
+    /**
+     * @param Session      $session
+     * @param bool|null    $isCli
+s     */
+    public function __construct(Session $session, $isCli = null)
     {
         $this->session = $session;
+        $this->isCli = is_bool($isCli) ? $isCli : PHP_SAPI === 'cli';
     }
 
     public function setField(Fieldset $fieldset)
@@ -39,19 +56,19 @@ final class AntiCsrf implements AntiCsrfInterface
      */
     public function isValid(array $data)
     {
-        if (PHP_SAPI === 'cli') {
+        if ($this->isCli) {
             return true;
-        }
-        if (isset($_POST[self::TOKEN_KEY])) {
-            $data[self::TOKEN_KEY] = $_POST[self::TOKEN_KEY];
         }
 
         return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] == $this->getToken();
     }
 
+    /**
+     * @return string
+     */
     private function getToken()
     {
-        $value = PHP_SAPI === 'cli' ? self::TEST_TOKEN : $this->session->getCsrfToken()->getValue();
+        $value = $this->isCli ? self::TEST_TOKEN : $this->session->getCsrfToken()->getValue();
 
         return $value;
     }

@@ -107,7 +107,7 @@ class AuraInputInterceptor implements MethodInterceptor
         $prop = (new \ReflectionClass($object))->getProperty($formValidation->form);
         $prop->setAccessible(true);
         $form = $prop->getValue($object);
-        if (! $form instanceof FormInterface) {
+        if (! $form instanceof AbstractForm) {
             throw new InvalidFormPropertyException($formValidation->form);
         }
 

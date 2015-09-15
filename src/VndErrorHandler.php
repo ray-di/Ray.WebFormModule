@@ -28,7 +28,7 @@ final class VndErrorHandler implements FailureHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(FormValidation $formValidation, MethodInvocation $invocation, Form $form)
+    public function handle(FormValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
         unset($formValidation);
         $vndError = $this->reader->getMethodAnnotation($invocation->getMethod(), VndError::class);
@@ -38,7 +38,7 @@ final class VndErrorHandler implements FailureHandlerInterface
         throw $e;
     }
 
-    private function makeVndError(Form $form, VndError $vndError = null)
+    private function makeVndError(AbstractForm $form, VndError $vndError = null)
     {
         $body = ['message' => 'Validation failed'];
         $body['path'] = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';

@@ -29,7 +29,7 @@ class AntiCsrfTest extends \PHPUnit_Framework_TestCase
     {
         $this->phpfunc = new FakePhpfunc;
         $this->session = $this->newSession();
-        $this->antiCsrf = new AntiCsrf($this->newSession([]));
+        $this->antiCsrf = new AntiCsrf($this->newSession([]), false, [AntiCsrf::TOKEN_KEY => AntiCsrf::TEST_TOKEN]);
     }
 
     protected function newSession(array $cookies = [])
@@ -55,7 +55,7 @@ class AntiCsrfTest extends \PHPUnit_Framework_TestCase
 
     public function testIsValid()
     {
-        $data = ['__csrf_token' => AntiCsrf::TEST_TOKEN];
+        $data = [AntiCsrf::TOKEN_KEY => $this->session->getCsrfToken()->getValue()];
         $this->assertTrue($this->antiCsrf->isValid($data));
     }
 }
