@@ -11,7 +11,7 @@ class FakeController
     /**
      * @var FormInterface
      */
-    protected $form1;
+    protected $form;
 
     /**
      * @Inject
@@ -19,18 +19,20 @@ class FakeController
      */
     public function setForm(FormInterface $form)
     {
-        $this->form1 = $form;
+        $this->form = $form;
     }
 
     /**
-     * @FormValidation(form="form1", onFailure="badRequestAction")
+     * @FormValidation
+     * 
+     * = is same as @ FormValidation(form="form", onFailure="createActionValidationFailed")
      */
     public function createAction($name)
     {
         return '201';
     }
 
-    public function badRequestAction()
+    public function createActionValidationFailed()
     {
         return '400';
     }
