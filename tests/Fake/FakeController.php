@@ -24,7 +24,7 @@ class FakeController
 
     /**
      * @FormValidation
-     * 
+     *
      * = is same as @ FormValidation(form="form", onFailure="createActionValidationFailed")
      */
     public function createAction($name)

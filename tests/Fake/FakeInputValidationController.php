@@ -11,7 +11,7 @@ class FakeInputValidationController
     /**
      * @var FormInterface
      */
-    protected $form1;
+    protected $form;
 
     /**
      * @Inject
@@ -19,11 +19,11 @@ class FakeInputValidationController
      */
     public function setForm(FormInterface $form)
     {
-        $this->form1 = $form;
+        $this->form  = $form;
     }
 
     /**
-     * @InputValidation(form="form1")
+     * @InputValidation
      */
     public function createAction($name)
     {
