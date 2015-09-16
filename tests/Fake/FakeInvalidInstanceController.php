@@ -9,7 +9,7 @@ class FakeInvalidInstanceController
     private $form;
 
     /**
-     * @FormValidation(form="form")
+     * @FormValidation
      */
     public function createAction()
     {

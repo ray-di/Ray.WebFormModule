@@ -9,7 +9,7 @@ class FakeInvalidController2
     private $form = null;
 
     /**
-     * @FormValidation(form="form")
+     * @FormValidation
      */
     public function createAction()
     {

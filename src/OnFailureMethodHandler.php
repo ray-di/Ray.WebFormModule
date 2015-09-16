@@ -13,6 +13,8 @@ use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
 final class OnFailureMethodHandler implements FailureHandlerInterface
 {
+    const FAILURE_SUFFIX = 'ValidationFailed';
+
     /**
      * {@inheritdoc}
      */
@@ -21,10 +23,14 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
         unset($form);
         $args = (array) $invocation->getArguments();
         $object = $invocation->getThis();
-        if (! $formValidation instanceof FormValidation || ! method_exists($object, $formValidation->onFailure)) {
+        if (! $formValidation instanceof FormValidation) {
+            throw new InvalidOnFailureMethod(get_class($invocation->getThis()));
+        }
+        $onFailureMethod = $formValidation->onFailure ?: $invocation->getMethod()->getName() . self::FAILURE_SUFFIX;
+        if (! $formValidation instanceof FormValidation || ! method_exists($object, $onFailureMethod)) {
             throw new InvalidOnFailureMethod(get_class($invocation->getThis()));
         }
 
-        return call_user_func_array([$invocation->getThis(), $formValidation->onFailure], $args);
+        return call_user_func_array([$invocation->getThis(), $onFailureMethod], $args);
     }
 }
