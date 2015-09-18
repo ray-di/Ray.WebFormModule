@@ -23,10 +23,8 @@ interface FormInterface
      * Return error message
      *
      * @param string $input
-     * @param string $format
-     * @param string $layout
      *
      * @return string
      */
-    public function error($input, $format = '%s', $layout = '%s');
+    public function error($input);
 }
