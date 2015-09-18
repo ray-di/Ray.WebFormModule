@@ -162,5 +162,6 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     public function __clone()
     {
         $this->filter = clone $this->filter;
+        $this->init();
     }
 }
