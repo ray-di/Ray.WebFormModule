@@ -43,5 +43,17 @@ class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($isValid);
         $error = $this->form->error('name');
         $this->assertSame('Name must be alphabetic only.', $error);
+        $html = (string) $this->form;
+
+        return $html;
+    }
+
+    /**
+     * @depends testError
+     */
+    public function tesetInputDataReamainedOnValidationFailure($html)
+    {
+        $expected = '<input id="name" type="text" name="name" value="@invalid@" />';
+        $this->assertContains($expected, $html);
     }
 }
