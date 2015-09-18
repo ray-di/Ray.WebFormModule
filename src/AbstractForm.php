@@ -131,6 +131,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         if ($this->antiCsrf && ! $this->antiCsrf->isValid($data)) {
             throw new CsrfViolationException;
         }
+        $this->fill($data);
         $isValid = $this->filter->apply($data);
 
         return $isValid;
