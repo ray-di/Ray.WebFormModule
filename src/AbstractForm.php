@@ -85,7 +85,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * @inheritdoc
      */
-    public function error($input, $format = '%s', $layout = '%s')
+    public function error($input)
     {
         if (! $this->errorMessages) {
             $failure = $this->filter->getFailures();
@@ -122,7 +122,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * Applies the filter to a subject.
      *
-     * @param array|object $subject The subject to be filtered.     * @param array $data
+     * @param array $data
      *
      * @return bool
      */
@@ -162,5 +162,6 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     public function __clone()
     {
         $this->filter = clone $this->filter;
+        $this->init();
     }
 }
