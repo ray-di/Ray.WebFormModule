@@ -22,13 +22,6 @@ final class AntiCsrf implements AntiCsrfInterface
     private $isCli;
 
     /**
-     * $_POST
-     *
-     * @var array
-     */
-    private $post;
-
-    /**
      * @var Session
      */
     private $session;

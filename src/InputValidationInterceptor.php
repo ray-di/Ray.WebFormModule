@@ -17,7 +17,8 @@ class InputValidationInterceptor extends AuraInputInterceptor
     protected $failureHandler;
 
     /**
-     * @param Reader $reader Annotation reader
+     * @param Reader                  $reader
+     * @param FailureHandlerInterface $handler
      *
      * @Named("handler=vnd_error")
      */

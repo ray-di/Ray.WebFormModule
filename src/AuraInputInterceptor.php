@@ -6,7 +6,6 @@
  */
 namespace Ray\WebFormModule;
 
-use Aura\Input\Form;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
@@ -59,7 +58,7 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     /**
-     * Return arguments as named argumentes.
+     * Return arguments as named arguments.
      *
      * @param MethodInvocation $invocation
      *
@@ -83,12 +82,11 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param array $submit
-     * @param Form  $form
+     * @param array        $submit
+     * @param AbstractForm $form
      *
      * @return bool
-     *
-     * @throws \Aura\Input\Exception\CsrfViolation
+     * @throws Exception\CsrfViolationException
      */
     public function isValid(array $submit, AbstractForm $form)
     {
@@ -100,10 +98,10 @@ class AuraInputInterceptor implements MethodInterceptor
     /**
      * Return form property
      *
-     * @param FormValidation $formValidation
-     * @param object         $object
+     * @param AbstractValidation $formValidation
+     * @param object             $object
      *
-     * @return AbstractForm
+     * @return mixed
      */
     private function getFormProperty(AbstractValidation $formValidation, $object)
     {
