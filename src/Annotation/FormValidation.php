@@ -18,7 +18,7 @@ final class FormValidation extends AbstractValidation
     public $antiCsrf = false;
 
     /**
-     * Method name on validation faild.
+     * Method name on validation failed.
      *
      * @var string
      */

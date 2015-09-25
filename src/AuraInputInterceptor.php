@@ -6,7 +6,6 @@
  */
 namespace Ray\WebFormModule;
 
-use Aura\Input\Form;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
@@ -48,7 +47,7 @@ class AuraInputInterceptor implements MethodInterceptor
         /* @var $formValidation FormValidation */
         $formValidation = $this->reader->getMethodAnnotation($invocation->getMethod(), AbstractValidation::class);
         $form = $this->getFormProperty($formValidation, $object);
-        $data = $object instanceof SubmitInterface ? $object->submit() : $this->getNamedArguments($invocation);
+        $data = $form instanceof SubmitInterface ? $object->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);
         if ($isValid === true) {
             // validation   success
@@ -59,7 +58,7 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     /**
-     * Return arguments as named argumentes.
+     * Return arguments as named arguments.
      *
      * @param MethodInvocation $invocation
      *
@@ -74,17 +73,20 @@ class AuraInputInterceptor implements MethodInterceptor
             $arg = array_shift($args);
             $submit[$param->getName()] = $arg;
         }
+        // has token ?
+        if (isset($_POST[AntiCsrf::TOKEN_KEY])) {
+            $submit += $_POST[AntiCsrf::TOKEN_KEY];
+        }
 
         return $submit;
     }
 
     /**
-     * @param array $submit
-     * @param Form  $form
+     * @param array        $submit
+     * @param AbstractForm $form
      *
      * @return bool
-     *
-     * @throws \Aura\Input\Exception\CsrfViolation
+     * @throws Exception\CsrfViolationException
      */
     public function isValid(array $submit, AbstractForm $form)
     {
@@ -96,10 +98,10 @@ class AuraInputInterceptor implements MethodInterceptor
     /**
      * Return form property
      *
-     * @param FormValidation $formValidation
-     * @param object         $object
+     * @param AbstractValidation $formValidation
+     * @param object             $object
      *
-     * @return AbstractForm
+     * @return mixed
      */
     private function getFormProperty(AbstractValidation $formValidation, $object)
     {

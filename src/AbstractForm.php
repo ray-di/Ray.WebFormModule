@@ -125,6 +125,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      * @param array $data
      *
      * @return bool
+     * @throws CsrfViolationException
      */
     public function apply(array $data)
     {
