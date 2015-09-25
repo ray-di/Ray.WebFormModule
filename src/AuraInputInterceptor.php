@@ -48,7 +48,7 @@ class AuraInputInterceptor implements MethodInterceptor
         /* @var $formValidation FormValidation */
         $formValidation = $this->reader->getMethodAnnotation($invocation->getMethod(), AbstractValidation::class);
         $form = $this->getFormProperty($formValidation, $object);
-        $data = $object instanceof SubmitInterface ? $object->submit() : $this->getNamedArguments($invocation);
+        $data = $form instanceof SubmitInterface ? $object->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);
         if ($isValid === true) {
             // validation   success
@@ -73,6 +73,10 @@ class AuraInputInterceptor implements MethodInterceptor
         foreach ($params as $param) {
             $arg = array_shift($args);
             $submit[$param->getName()] = $arg;
+        }
+        // has token ?
+        if (isset($_POST[AntiCsrf::TOKEN_KEY])) {
+            $submit += $_POST[AntiCsrf::TOKEN_KEY];
         }
 
         return $submit;
