@@ -75,7 +75,7 @@ class AuraInputInterceptor implements MethodInterceptor
         }
         // has token ?
         if (isset($_POST[AntiCsrf::TOKEN_KEY])) {
-            $submit += $_POST[AntiCsrf::TOKEN_KEY];
+            $submit[AntiCsrf::TOKEN_KEY] = $_POST[AntiCsrf::TOKEN_KEY];
         }
 
         return $submit;
