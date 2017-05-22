@@ -7,10 +7,13 @@
     ],
     "require": {
         "ray/di": "^2.0",
-        "foa/filter-input-bundle": "^1.1@dev",
-        "aura/filter": "^2.0@dev",
+        "aura/input": "^1.2",
+        "aura/filter": "^2.3",
         "aura/html": "^2.4",
-        "ray/aura-session-module": "~1.0"
+        "ray/aura-session-module": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7.13"
     },
     "license": "MIT",
     "autoload":{
@@ -20,8 +23,7 @@
     },
     "autoload-dev":{
         "psr-4":{
-            "Ray\\WebFormModule\\": "tests/",
-            "Ray\\WebFormModule\\": "tests/Fake"
+            "Ray\\WebFormModule\\": ["tests/", "tests/Fake"]
         }
     }
 }
