@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Ray.WebFormModule package
+ * This file is part of the Ray.WebFormModule package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -13,9 +13,9 @@ interface FormInterface
      *
      * @param string $input
      *
-     * @return string
-     *
      * @throws \Aura\Input\Exception\NoSuchInput
+     *
+     * @return string
      */
     public function input($input);
 

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the Ray.WebFormModule package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Ray\WebFormModule;
 
 use Aura\Input\Builder;
@@ -32,16 +36,6 @@ class AntiCsrfTest extends \PHPUnit_Framework_TestCase
         $this->antiCsrf = new AntiCsrf($this->newSession([]), false, [AntiCsrf::TOKEN_KEY => AntiCsrf::TEST_TOKEN]);
     }
 
-    protected function newSession(array $cookies = [])
-    {
-        return new Session(
-            new SegmentFactory,
-            new CsrfTokenFactory(new Randval(new Phpfunc())),
-            $this->phpfunc,
-            $cookies
-        );
-    }
-
     public function testNew()
     {
         $this->assertInstanceOf(AntiCsrf::class, $this->antiCsrf);
@@ -57,5 +51,15 @@ class AntiCsrfTest extends \PHPUnit_Framework_TestCase
     {
         $data = [AntiCsrf::TOKEN_KEY => $this->session->getCsrfToken()->getValue()];
         $this->assertTrue($this->antiCsrf->isValid($data));
+    }
+
+    protected function newSession(array $cookies = [])
+    {
+        return new Session(
+            new SegmentFactory,
+            new CsrfTokenFactory(new Randval(new Phpfunc())),
+            $this->phpfunc,
+            $cookies
+        );
     }
 }

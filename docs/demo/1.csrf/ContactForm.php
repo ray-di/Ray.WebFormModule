@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the Ray.WebFormModule package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Ray\WebFormModule;
 
 use Aura\Input\Filter;
@@ -7,6 +11,35 @@ use Aura\Input\Filter;
 class ContactForm extends AbstractAuraForm
 {
     use SetAntiCsrfTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        $form = $this->form();
+        // name
+        $form .= $this->helper->tag('div', ['class' => 'form-group']);
+        $form .= $this->helper->tag('label', ['for' => 'name']);
+        $form .= 'Name:';
+        $form .= $this->helper->tag('/label') . PHP_EOL;
+        $form .= $this->input('name');
+        $form .= $this->error('name');
+        $form .= $this->helper->tag('/div') . PHP_EOL;
+        // message
+        $form .= $this->helper->tag('div', ['class' => 'form-group']);
+        $form .= $this->helper->tag('label', ['for' => 'message']);
+        $form .= 'Message:';
+        $form .= $this->helper->tag('/label') . PHP_EOL;
+        $form .= $this->input('message');
+        $form .= $this->error('message');
+        $form .= $this->helper->tag('/div') . PHP_EOL;
+        // submit
+        $form .= $this->input('submit');
+        $form .= $this->helper->tag('/form');
+
+        return $form;
+    }
 
     /**
      * {@inheritdoc}
@@ -59,34 +92,5 @@ class ContactForm extends AbstractAuraForm
     public function submit()
     {
         return $_POST;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        $form = $this->form();
-        // name
-        $form .= $this->helper->tag('div', ['class' => 'form-group']);
-        $form .= $this->helper->tag('label', ['for' => 'name']);
-        $form .= 'Name:';
-        $form .= $this->helper->tag('/label') . PHP_EOL;
-        $form .= $this->input('name');
-        $form .= $this->error('name');
-        $form .= $this->helper->tag('/div') . PHP_EOL;
-        // message
-        $form .= $this->helper->tag('div', ['class' => 'form-group']);
-        $form .= $this->helper->tag('label', ['for' => 'message']);
-        $form .= 'Message:';
-        $form .= $this->helper->tag('/label') . PHP_EOL;
-        $form .= $this->input('message');
-        $form .= $this->error('message');
-        $form .= $this->helper->tag('/div') . PHP_EOL;
-        // submit
-        $form .= $this->input('submit');
-        $form .= $this->helper->tag('/form');
-
-        return $form;
     }
 }

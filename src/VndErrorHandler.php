@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Ray.WebFormModule package
+ * This file is part of the Ray.WebFormModule package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -31,7 +31,7 @@ final class VndErrorHandler implements FailureHandlerInterface
     {
         unset($formValidation);
         $vndError = $this->reader->getMethodAnnotation($invocation->getMethod(), VndError::class);
-        $error =  new FormValidationError($this->makeVndError($form, $vndError));
+        $error = new FormValidationError($this->makeVndError($form, $vndError));
         $e = new ValidationException('Validation failed.', 400, null, $error);
 
         throw $e;
@@ -40,7 +40,7 @@ final class VndErrorHandler implements FailureHandlerInterface
     private function makeVndError(AbstractForm $form, VndError $vndError = null)
     {
         $body = ['message' => 'Validation failed'];
-        $body['path'] = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+        $body['path'] = $_SERVER['PATH_INFO'] ?? '';
         $body['validation_messages'] = $form->getFailureMessages();
         $body = $vndError ? $this->optionalAttribute($vndError) + $body : $body;
 
