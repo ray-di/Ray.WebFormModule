@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the Ray.WebFormModule package
+ * This file is part of the Ray.WebFormModule package.
  *
- * @license http://opensource.org/licenses/bsd-license.php BSD
+ * @license http://opensource.org/licenses/MIT MIT
  */
 namespace Ray\WebFormModule;
 
@@ -58,6 +58,21 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     /**
+     * @param array        $submit
+     * @param AbstractForm $form
+     *
+     * @throws Exception\CsrfViolationException
+     *
+     * @return bool
+     */
+    public function isValid(array $submit, AbstractForm $form)
+    {
+        $isValid = $form->apply($submit);
+
+        return $isValid;
+    }
+
+    /**
      * Return arguments as named arguments.
      *
      * @param MethodInvocation $invocation
@@ -79,20 +94,6 @@ class AuraInputInterceptor implements MethodInterceptor
         }
 
         return $submit;
-    }
-
-    /**
-     * @param array        $submit
-     * @param AbstractForm $form
-     *
-     * @return bool
-     * @throws Exception\CsrfViolationException
-     */
-    public function isValid(array $submit, AbstractForm $form)
-    {
-        $isValid = $form->apply($submit);
-
-        return $isValid;
     }
 
     /**

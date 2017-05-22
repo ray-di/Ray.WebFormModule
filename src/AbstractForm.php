@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Ray.WebFormModule package
+ * This file is part of the Ray.WebFormModule package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -37,6 +37,16 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      */
     protected $antiCsrf;
 
+    public function __construct()
+    {
+    }
+
+    public function __clone()
+    {
+        $this->filter = clone $this->filter;
+        $this->init();
+    }
+
     /**
      * @param BuilderInterface     $builder
      * @param FilterFactory        $filterFactory
@@ -49,13 +59,9 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         FilterFactory $filterFactory,
         HelperLocatorFactory $helperFactory
     ) {
-        $this->builder  = $builder;
+        $this->builder = $builder;
         $this->filter = $filterFactory->newSubjectFilter();
         $this->helper = $helperFactory->newInstance();
-    }
-
-    public function __construct()
-    {
     }
 
     public function setAntiCsrf(AntiCsrfInterface $antiCsrf)
@@ -75,7 +81,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function input($input)
     {
@@ -83,7 +89,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function error($input)
     {
@@ -102,12 +108,12 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     }
 
     /**
-     * @param array $attr Attributes for the form tag.
-     *
-     * @return string
+     * @param array $attr attributes for the form tag
      *
      * @throws \Aura\Html\Exception\HelperNotFound
      * @throws \Aura\Input\Exception\NoSuchInput
+     *
+     * @return string
      */
     public function form($attr = [])
     {
@@ -124,8 +130,9 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      *
      * @param array $data
      *
-     * @return bool
      * @throws CsrfViolationException
+     *
+     * @return bool
      */
     public function apply(array $data)
     {
@@ -158,11 +165,5 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     public function getIterator()
     {
         return new \ArrayIterator($this->inputs);
-    }
-
-    public function __clone()
-    {
-        $this->filter = clone $this->filter;
-        $this->init();
     }
 }
