@@ -6,7 +6,7 @@
         "Ray.Di module"
     ],
     "require": {
-        "ray/di": "^2.0",
+        "ray/di": "^2.5",
         "aura/input": "^1.2",
         "aura/filter": "^2.3",
         "aura/html": "^2.4",
