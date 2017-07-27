@@ -8,7 +8,7 @@
     "require": {
         "ray/di": "^2.5",
         "aura/input": "^1.2",
-        "aura/filter": "^2.3",
+        "aura/filter": "^2.3|3.x-dev",
         "aura/html": "^2.4",
         "ray/aura-session-module": "^1.0"
     },
