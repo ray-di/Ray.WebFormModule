@@ -18,13 +18,13 @@ Ray.WebFormModuleはアスペクト指向でフォームのバリデーション
 
 ```php
 use Ray\Di\AbstractModule;
-use Ray\WebFormModule\WebFormModule;
+use Ray\WebFormModule\AuraInputModule;
 
 class AppModule extends AbstractModule
 {
     protected function configure()
     {
-        $this->install(new WebFormModule);
+        $this->install(new AuraInputModule);
     }
 }
 ```
@@ -168,7 +168,7 @@ class FakeVndErrorModule extends AbstractModule
 {
     protected function configure()
     {
-        $this->install(new WebFormModule);
+        $this->install(new AuraInputModule);
         $this->override(new FormVndErrorModule);
     }
 ``` 
