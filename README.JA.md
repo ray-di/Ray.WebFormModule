@@ -208,8 +208,3 @@ echo $e->error;
 ## Demo
 
     $ php -S docs/demo/1.csrf/web.php
-
-## Requirements
-
- * PHP 5.5+
- * hhvm

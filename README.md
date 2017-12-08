@@ -201,8 +201,3 @@ This optional module is handy for API application.
 ### Demo
 
     $ php -S docs/demo/1.csrf/web.php
-
-### Requirements
-
- * PHP 5.5+
- * hhvm
