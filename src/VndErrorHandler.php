@@ -32,9 +32,8 @@ final class VndErrorHandler implements FailureHandlerInterface
         unset($formValidation);
         $vndError = $this->reader->getMethodAnnotation($invocation->getMethod(), VndError::class);
         $error = new FormValidationError($this->makeVndError($form, $vndError));
-        $e = new ValidationException('Validation failed.', 400, null, $error);
 
-        throw $e;
+        throw new ValidationException('Validation failed.', 400, null, $error);
     }
 
     private function makeVndError(AbstractForm $form, VndError $vndError = null)

@@ -14,6 +14,7 @@ use Aura\Input\AntiCsrfInterface;
 use Aura\Input\BuilderInterface;
 use Aura\Input\Fieldset;
 use Ray\WebFormModule\Exception\CsrfViolationException;
+use Ray\WebFormModule\Exception\LogicException;
 
 abstract class AbstractForm extends Fieldset implements FormInterface
 {
@@ -45,6 +46,26 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     {
         $this->filter = clone $this->filter;
         $this->init();
+    }
+
+    /**
+     * Return form markup string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        try {
+            if (! $this instanceof ToStringInterface) {
+                throw new LogicException(ToStringInterface::class . ' is not implemented');
+            }
+
+            return $this->toString();
+        } catch (\Exception $e) {
+            trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
+
+            return '';
+        }
     }
 
     /**
@@ -140,9 +161,8 @@ abstract class AbstractForm extends Fieldset implements FormInterface
             throw new CsrfViolationException;
         }
         $this->fill($data);
-        $isValid = $this->filter->apply($data);
 
-        return $isValid;
+        return $this->filter->apply($data);
     }
 
     /**
@@ -152,9 +172,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      */
     public function getFailureMessages()
     {
-        $messages = $this->filter->getFailures()->getMessages();
-
-        return $messages;
+        return $this->filter->getFailures()->getMessages();
     }
 
     /**
