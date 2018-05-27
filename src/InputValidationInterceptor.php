@@ -12,11 +12,6 @@ use Ray\Di\Di\Named;
 class InputValidationInterceptor extends AuraInputInterceptor
 {
     /**
-     * @var FailureHandlerInterface
-     */
-    protected $failureHandler;
-
-    /**
      * @param Reader                  $reader
      * @param FailureHandlerInterface $handler
      *
@@ -24,7 +19,6 @@ class InputValidationInterceptor extends AuraInputInterceptor
      */
     public function __construct(Reader $reader, FailureHandlerInterface $handler)
     {
-        $this->reader = $reader;
-        $this->failureHandler = $handler;
+        parent::__construct($reader, $handler);
     }
 }
