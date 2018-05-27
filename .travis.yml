@@ -3,7 +3,7 @@ sudo: false
 php:
   - 7
   - 7.1
-  - hhvm
+  - 7.2
 cache:
   directories:
     - vendor
