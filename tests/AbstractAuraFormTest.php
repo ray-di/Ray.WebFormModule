@@ -60,4 +60,17 @@ class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
         $expected = '<input id="name" type="text" name="name" value="@invalid@" />';
         $this->assertContains($expected, $html);
     }
+
+    public function testNotToStringImplemented()
+    {
+        $errNo = $errStr = '';
+        set_error_handler(function (int $no, string $str) use (&$errNo, &$errStr) {
+            $errNo = $no;
+            $errStr = $str;
+        });
+        $form = new FakeErrorForm;
+        (string) $form;
+        $this->assertSame(256, $errNo);
+        restore_error_handler();
+    }
 }

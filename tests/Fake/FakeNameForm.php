@@ -4,7 +4,7 @@ namespace Ray\WebFormModule;
 
 use Aura\Html\Helper\Tag;
 
-class FakeNameForm extends AbstractForm
+class FakeNameForm extends AbstractForm implements ToStringInterface
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class FakeNameForm extends AbstractForm
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function toString() : string
     {
         $form = $this->form([
             'method' => 'post',
