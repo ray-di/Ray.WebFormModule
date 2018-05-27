@@ -45,7 +45,8 @@ class AuraInputInterceptor implements MethodInterceptor
     {
         $object = $invocation->getThis();
         /* @var $formValidation FormValidation */
-        $formValidation = $this->reader->getMethodAnnotation($invocation->getMethod(), AbstractValidation::class);
+        $method = $invocation->getMethod();
+        $formValidation = $this->reader->getMethodAnnotation($method, AbstractValidation::class);
         $form = $this->getFormProperty($formValidation, $object);
         $data = $form instanceof SubmitInterface ? $form->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);

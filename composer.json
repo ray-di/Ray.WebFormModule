@@ -6,11 +6,12 @@
         "Ray.Di module"
     ],
     "require": {
-        "ray/di": "^2.5",
+        "php": ">=7.0.0",
+        "ray/di": "^2.7",
         "aura/input": "^1.2",
         "aura/filter": "^2.3|3.x-dev",
-        "aura/html": "^2.4",
-        "ray/aura-session-module": "^1.0"
+        "aura/html": "^2.5",
+        "ray/aura-session-module": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7.13"
