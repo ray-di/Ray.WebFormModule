@@ -6,6 +6,7 @@
         "Ray.Di module"
     ],
     "require": {
+        "php": ">=7.0.0",
         "ray/di": "^2.5",
         "aura/input": "^1.2",
         "aura/filter": "^2.3|3.x-dev",
