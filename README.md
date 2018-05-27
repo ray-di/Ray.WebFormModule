@@ -12,7 +12,7 @@ An aspect oriented web form module powered by [Aura.Input](https://github.com/au
 
 ### Composer install
 
-    $ composer require ray/form-module
+    $ composer require web-form-module
  
 ### Module install
 
