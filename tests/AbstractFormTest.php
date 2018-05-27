@@ -12,7 +12,6 @@ use Aura\Session\Randval;
 use Aura\Session\SegmentFactory;
 use Aura\Session\Session;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Ray\Aop\ReflectionMethod;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\WebFormModule\Exception\CsrfViolationException;
 
