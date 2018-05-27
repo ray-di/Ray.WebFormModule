@@ -12,10 +12,9 @@ use Aura\Session\Randval;
 use Aura\Session\SegmentFactory;
 use Aura\Session\Session;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Ray\Aop\Arguments;
+use Ray\Aop\ReflectionMethod;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\WebFormModule\Exception\CsrfViolationException;
-use Ray\WebFormModule\Exception\ValidationException;
 
 class AbstractFormTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +46,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
         return new ReflectiveMethodInvocation(
             $controller,
             new \ReflectionMethod($controller, 'createAction'),
-            new Arguments($arguments),
+            $arguments,
             [
                 $interceptor
             ]
@@ -63,7 +62,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     public function testSubmit()
     {
-        $this->setExpectedException(ValidationException::class);
+        $this->expectException(\ReflectionException::class);
         $invocation = $this->getMethodInvocation(['na']);
         $invocation->proceed();
     }
