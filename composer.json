@@ -11,7 +11,6 @@
         "aura/filter": "^2.3|3.x-dev",
         "aura/html": "^2.5",
         "aura/input": "^1.2",
-        "doctrine/annotations": "^1.13 || ^2.0",
         "ray/aura-session-module": "^1.1",
         "ray/di": "^2.7"
     },

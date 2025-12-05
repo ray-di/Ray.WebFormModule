@@ -8,51 +8,24 @@ namespace Ray\WebFormModule\Annotation;
 
 use Attribute;
 
-/**
- * @Annotation
- * @Target("METHOD")
- */
 #[Attribute(Attribute::TARGET_METHOD)]
 final class VndError
 {
-    /**
-     * @var string
-     *
-     * REQUIRED
-     */
-    public $message;
+    public string $message;
+
+    /** @var array<string, string> */
+    public array $href;
+
+    public ?string $logref;
 
     /**
-     * @var array
-     *
-     * REQUIRED
-     */
-    public $href;
-
-    /**
-     * @var string
-     *
-     * OPTIONAL
-     */
-    public $logref;
-
-    /**
-     * @var string
-     *
-     * OPTIONAL
-     *
-     * help
-     *
      * @see http://www.w3.org/TR/html5/links.html#link-type-help
-     *
-     * about
      * @see http://tools.ietf.org/html/rfc6903#section-2
-     *
-     * describes
      * @see http://tools.ietf.org/html/rfc6892
      */
-    public $path;
+    public ?string $path;
 
+    /** @param array<string, string> $href */
     public function __construct(
         string $message = '',
         array $href = [],

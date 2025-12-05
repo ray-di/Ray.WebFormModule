@@ -6,7 +6,6 @@
  */
 namespace Ray\WebFormModule;
 
-use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\AbstractValidation;
@@ -18,22 +17,12 @@ use ReflectionMethod;
 class AuraInputInterceptor implements MethodInterceptor
 {
     /**
-     * @var Reader
-     */
-    protected $reader;
-
-    /**
      * @var FailureHandlerInterface
      */
     protected $failureHandler;
 
-    /**
-     * @param Reader                  $reader
-     * @param FailureHandlerInterface $handler
-     */
-    public function __construct(Reader $reader, FailureHandlerInterface $handler)
+    public function __construct(FailureHandlerInterface $handler)
     {
-        $this->reader = $reader;
         $this->failureHandler = $handler;
     }
 
@@ -47,7 +36,7 @@ class AuraInputInterceptor implements MethodInterceptor
         $object = $invocation->getThis();
         /* @var $formValidation FormValidation */
         $method = $invocation->getMethod();
-        $formValidation = $this->getValidationAnnotation($method);
+        $formValidation = $this->getValidationAttribute($method);
         $form = $this->getFormProperty($formValidation, $object);
         $data = $form instanceof SubmitInterface ? $form->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);
@@ -99,18 +88,16 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     /**
-     * Get validation annotation from PHP 8 attributes or Doctrine annotations
+     * Get validation attribute from PHP 8 attributes
      */
-    private function getValidationAnnotation(ReflectionMethod $method): ?AbstractValidation
+    private function getValidationAttribute(ReflectionMethod $method): AbstractValidation
     {
-        // Try PHP 8 attributes first
         $attributes = $method->getAttributes(AbstractValidation::class, \ReflectionAttribute::IS_INSTANCEOF);
-        if (! empty($attributes)) {
-            return $attributes[0]->newInstance();
+        if (empty($attributes)) {
+            throw new \LogicException('FormValidation or InputValidation attribute is required');
         }
 
-        // Fall back to Doctrine annotations
-        return $this->reader->getMethodAnnotation($method, AbstractValidation::class);
+        return $attributes[0]->newInstance();
     }
 
     /**
@@ -119,7 +106,7 @@ class AuraInputInterceptor implements MethodInterceptor
      * @param AbstractValidation $formValidation
      * @param object             $object
      *
-     * @return mixed
+     * @return AbstractForm
      */
     private function getFormProperty(AbstractValidation $formValidation, $object)
     {

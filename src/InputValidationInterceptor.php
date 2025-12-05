@@ -6,17 +6,12 @@
  */
 namespace Ray\WebFormModule;
 
-use Doctrine\Common\Annotations\Reader;
 use Ray\Di\Di\Named;
 
 class InputValidationInterceptor extends AuraInputInterceptor
 {
-    /**
-     * @param Reader                  $reader
-     * @param FailureHandlerInterface $handler
-     */
-    public function __construct(Reader $reader, #[Named('vnd_error')] FailureHandlerInterface $handler)
+    public function __construct(#[Named('vnd_error')] FailureHandlerInterface $handler)
     {
-        parent::__construct($reader, $handler);
+        parent::__construct($handler);
     }
 }

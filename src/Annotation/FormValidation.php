@@ -8,24 +8,13 @@ namespace Ray\WebFormModule\Annotation;
 
 use Attribute;
 
-/**
- * @Annotation
- * @Target("METHOD")
- */
 #[Attribute(Attribute::TARGET_METHOD)]
 final class FormValidation extends AbstractValidation
 {
-    /**
-     * @var bool
-     */
-    public $antiCsrf = false;
+    public bool $antiCsrf = false;
 
-    /**
-     * Method name on validation failed.
-     *
-     * @var string
-     */
-    public $onFailure;
+    /** Method name on validation failed */
+    public ?string $onFailure;
 
     public function __construct(
         string $form = 'form',

@@ -11,7 +11,6 @@ use Aura\Session\Phpfunc;
 use Aura\Session\Randval;
 use Aura\Session\SegmentFactory;
 use Aura\Session\Session;
-use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\WebFormModule\Exception\CsrfViolationException;
@@ -40,8 +39,7 @@ class AbstractFormTest extends TestCase
         $controller = new FakeController;
         $controller->setForm($fakeForm);
         // interceptor
-        $reader = new AnnotationReader;
-        $interceptor = new AuraInputInterceptor($reader, new VndErrorHandler($reader));
+        $interceptor = new AuraInputInterceptor(new VndErrorHandler);
 
         return new ReflectiveMethodInvocation(
             $controller,
