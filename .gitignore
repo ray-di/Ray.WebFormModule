@@ -11,3 +11,6 @@ build
 vendor/
 composer.phar
 composer.lock
+.phpcs-cache
+.phpunit.cache/
+tests/tmp/
