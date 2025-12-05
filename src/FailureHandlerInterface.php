@@ -1,9 +1,7 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use Ray\Aop\MethodInvocation;
@@ -11,5 +9,6 @@ use Ray\WebFormModule\Annotation\AbstractValidation;
 
 interface FailureHandlerInterface
 {
+    /** @return mixed */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form);
 }

@@ -1,9 +1,7 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use Aura\Filter\FilterFactory;
@@ -22,11 +20,11 @@ use Ray\WebFormModule\Annotation\InputValidation;
 class AuraInputModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure()
     {
-        $this->install(new AuraSessionModule);
+        $this->install(new AuraSessionModule());
         $this->bind(BuilderInterface::class)->to(Builder::class);
         $this->bind(FilterInterface::class)->to(Filter::class);
         $this->bind(AntiCsrfInterface::class)->to(AntiCsrf::class)->in(Scope::SINGLETON);

@@ -10,9 +10,11 @@ use Throwable;
 
 class ValidationException extends Exception
 {
+    /** @var FormValidationError|null */
     public $error;
 
-    public function __construct($message = '', $code = 0, Throwable|null $e = null, FormValidationError|null $error = null)
+    /** @param string $message */
+    public function __construct($message = '', int $code = 0, Throwable|null $e = null, FormValidationError|null $error = null)
     {
         parent::__construct($message, $code, $e);
 

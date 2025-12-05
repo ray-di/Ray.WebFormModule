@@ -1,9 +1,7 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use Aura\Filter\FilterFactory;
@@ -19,9 +17,9 @@ final class FormFactory
      */
     public function newInstance($class)
     {
-        /** @var $form AbstractForm */
-        $form = new $class;
-        $form->setBaseDependencies(new Builder, new FilterFactory, new HelperLocatorFactory);
+        /** @var AbstractForm $form */
+        $form = new $class();
+        $form->setBaseDependencies(new Builder(), new FilterFactory(), new HelperLocatorFactory());
         $form->postConstruct();
 
         return $form;

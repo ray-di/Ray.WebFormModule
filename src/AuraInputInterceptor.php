@@ -50,6 +50,8 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     /**
+     * @param array<string, mixed> $submit
+     *
      * @return bool
      *
      * @throws Exception\CsrfViolationException
@@ -62,7 +64,7 @@ class AuraInputInterceptor implements MethodInterceptor
     /**
      * Return arguments as named arguments.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     private function getNamedArguments(MethodInvocation $invocation)
     {

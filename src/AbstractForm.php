@@ -1,41 +1,42 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
+use ArrayIterator;
 use Aura\Filter\FilterFactory;
 use Aura\Filter\SubjectFilter;
+use Aura\Html\Exception\HelperNotFound;
 use Aura\Html\HelperLocator;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
 use Aura\Input\BuilderInterface;
+use Aura\Input\Exception\NoSuchInput;
 use Aura\Input\Fieldset;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\PostConstruct;
 use Ray\WebFormModule\Exception\CsrfViolationException;
 use Ray\WebFormModule\Exception\LogicException;
+use Throwable;
+
+use function trigger_error;
+
+use const E_USER_ERROR;
+use const PHP_EOL;
 
 abstract class AbstractForm extends Fieldset implements FormInterface
 {
-    /**
-     * @var SubjectFilter
-     */
+    /** @var SubjectFilter */
     protected $filter;
 
-    /**
-     * @var null | array
-     */
+    /** @var array<string, array<string>>|null */
     protected $errorMessages;
 
-    /**
-     * @var HelperLocator
-     */
+    /** @var HelperLocator */
     protected $helper;
 
-    /**
-     * @var AntiCsrfInterface
-     */
+    /** @var AntiCsrfInterface */
     protected $antiCsrf;
 
     public function __construct()
@@ -61,23 +62,18 @@ abstract class AbstractForm extends Fieldset implements FormInterface
             }
 
             return $this->toString();
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
             return '';
         }
     }
 
-    /**
-     * @param BuilderInterface     $builder
-     * @param FilterFactory        $filterFactory
-     * @param HelperLocatorFactory $helperFactory
-     */
-    #[\Ray\Di\Di\Inject]
+    #[Inject]
     public function setBaseDependencies(
         BuilderInterface $builder,
         FilterFactory $filterFactory,
-        HelperLocatorFactory $helperFactory
+        HelperLocatorFactory $helperFactory,
     ) {
         $this->builder = $builder;
         $this->filter = $filterFactory->newSubjectFilter();
@@ -89,17 +85,19 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         $this->antiCsrf = $antiCsrf;
     }
 
-    #[\Ray\Di\Di\PostConstruct]
+    #[PostConstruct]
     public function postConstruct()
     {
         $this->init();
-        if ($this->antiCsrf instanceof AntiCsrfInterface) {
-            $this->antiCsrf->setField($this);
+        if (! ($this->antiCsrf instanceof AntiCsrfInterface)) {
+            return;
         }
+
+        $this->antiCsrf->setField($this);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function input($input)
     {
@@ -107,7 +105,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function error($input)
     {
@@ -126,12 +124,12 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     }
 
     /**
-     * @param array $attr attributes for the form tag
-     *
-     * @throws \Aura\Html\Exception\HelperNotFound
-     * @throws \Aura\Input\Exception\NoSuchInput
+     * @param array<string, mixed> $attr attributes for the form tag
      *
      * @return string
+     *
+     * @throws HelperNotFound
+     * @throws NoSuchInput
      */
     public function form($attr = [])
     {
@@ -146,17 +144,18 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * Applies the filter to a subject.
      *
-     * @param array $data
-     *
-     * @throws CsrfViolationException
+     * @param array<string, mixed> $data
      *
      * @return bool
+     *
+     * @throws CsrfViolationException
      */
     public function apply(array $data)
     {
         if ($this->antiCsrf && ! $this->antiCsrf->isValid($data)) {
-            throw new CsrfViolationException;
+            throw new CsrfViolationException();
         }
+
         $this->fill($data);
 
         return $this->filter->apply($data);
@@ -165,7 +164,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * Returns all failure messages for all fields.
      *
-     * @return array
+     * @return array<string, array<string>>
      */
     public function getFailureMessages()
     {
@@ -175,10 +174,10 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * Returns all the fields collection
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->inputs);
+        return new ArrayIterator($this->inputs);
     }
 }

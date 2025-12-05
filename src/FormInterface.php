@@ -1,10 +1,10 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
+
+use Aura\Input\Exception\NoSuchInput;
 
 interface FormInterface
 {
@@ -13,9 +13,9 @@ interface FormInterface
      *
      * @param string $input
      *
-     * @throws \Aura\Input\Exception\NoSuchInput
-     *
      * @return string
+     *
+     * @throws NoSuchInput
      */
     public function input($input);
 

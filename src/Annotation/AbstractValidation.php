@@ -1,9 +1,7 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule\Annotation;
 
 use Attribute;
@@ -11,10 +9,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]
 class AbstractValidation
 {
-    public string $form = 'form';
-
-    public function __construct(string $form = 'form')
+    public function __construct(public string $form = 'form')
     {
-        $this->form = $form;
     }
 }

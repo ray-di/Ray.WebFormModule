@@ -1,16 +1,15 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use Ray\Di\Di\Named;
 
 class InputValidationInterceptor extends AuraInputInterceptor
 {
-    public function __construct(#[Named('vnd_error')] FailureHandlerInterface $handler)
+    public function __construct(#[Named('vnd_error')]
+    FailureHandlerInterface $handler,)
     {
         parent::__construct($handler);
     }

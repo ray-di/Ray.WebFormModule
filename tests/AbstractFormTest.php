@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of the Ray.WebFormModule package.
- */
-
 namespace Ray\WebFormModule;
 
 use Aura\Session\CsrfTokenFactory;
@@ -32,7 +28,11 @@ class AbstractFormTest extends TestCase
         $this->form = (new FormFactory())->newInstance(FakeMiniForm::class);
     }
 
-    /** @param $method */
+    /**
+     * @param array<int, mixed> $arguments
+     *
+     * @return ReflectiveMethodInvocation
+     */
     public function getMethodInvocation(array $arguments)
     {
         // form

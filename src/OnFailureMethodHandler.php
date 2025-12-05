@@ -1,9 +1,7 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use Ray\Aop\MethodInvocation;
@@ -11,12 +9,16 @@ use Ray\WebFormModule\Annotation\AbstractValidation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
+use function call_user_func_array;
+use function get_class;
+use function method_exists;
+
 final class OnFailureMethodHandler implements FailureHandlerInterface
 {
-    const FAILURE_SUFFIX = 'ValidationFailed';
+    public const FAILURE_SUFFIX = 'ValidationFailed';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
@@ -26,6 +28,7 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
         if (! $formValidation instanceof FormValidation) {
             throw new InvalidOnFailureMethod(get_class($invocation->getThis()));
         }
+
         $onFailureMethod = $formValidation->onFailure ?: $invocation->getMethod()->getName() . self::FAILURE_SUFFIX;
         if (! $formValidation instanceof FormValidation || ! method_exists($object, $onFailureMethod)) {
             throw new InvalidOnFailureMethod(get_class($invocation->getThis()));

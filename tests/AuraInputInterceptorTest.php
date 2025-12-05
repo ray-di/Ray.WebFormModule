@@ -1,14 +1,10 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;
-use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 use Ray\Di\InjectorInterface;
@@ -17,22 +13,18 @@ use Ray\WebFormModule\Exception\ValidationException;
 
 class AuraInputInterceptorTest extends TestCase
 {
-    /**
-     * @var InjectorInterface
-     */
+    /** @var InjectorInterface */
     private $injector;
 
-    /**
-     * @var FakeController
-     */
+    /** @var FakeController */
     private $controller;
 
     protected function setUp(): void
     {
-        $this->injector = new Injector(new class() extends AbstractModule {
+        $this->injector = new Injector(new class () extends AbstractModule {
             protected function configure()
             {
-                $this->install(new AuraInputModule);
+                $this->install(new AuraInputModule());
                 $this->bind(FormInterface::class)->annotatedWith('contact_form')->to(FakeForm::class);
             }
         });
@@ -83,6 +75,7 @@ class AuraInputInterceptorTest extends TestCase
 //        $invocation->proceed();
 //    }
 
+    /** @return void */
     public function testProceedFailed()
     {
         $result = $this->controller->createAction([]);
@@ -95,11 +88,12 @@ class AuraInputInterceptorTest extends TestCase
         $this->assertSame('201', $result);
     }
 
+    /** @return array<array<FakeInvalidController1|FakeInvalidController2>> */
     public function invalidControllerProvider()
     {
         return [
             [$this->injector->getInstance(FakeInvalidController1::class)],
-            [$this->injector->getInstance(FakeInvalidController2::class)]
+            [$this->injector->getInstance(FakeInvalidController2::class)],
         ];
     }
 
@@ -134,7 +128,7 @@ class AuraInputInterceptorTest extends TestCase
 
     public function testProceedWithVndErrorHandler()
     {
-        $injector = new Injector(new FakeVndErrorModule);
+        $injector = new Injector(new FakeVndErrorModule());
         /** @var FakeController $controller */
         $controller = $injector->getInstance(FakeController::class);
         try {
