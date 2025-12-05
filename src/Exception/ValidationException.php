@@ -1,20 +1,21 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule\Exception;
 
+use Exception;
 use Ray\WebFormModule\FormValidationError;
+use Throwable;
 
-class ValidationException extends \Exception
+class ValidationException extends Exception
 {
     public $error;
 
-    public function __construct($message = '', $code = 0, \Exception $e = null, FormValidationError $error = null)
+    public function __construct($message = '', $code = 0, Throwable|null $e = null, FormValidationError|null $error = null)
     {
         parent::__construct($message, $code, $e);
+
         $this->error = $error;
     }
 }

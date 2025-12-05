@@ -1,35 +1,30 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use Aura\Input\AntiCsrfInterface;
 use Aura\Input\Fieldset;
 use Aura\Session\Session;
 
+use function is_bool;
+
+use const PHP_SAPI;
+
 final class AntiCsrf implements AntiCsrfInterface
 {
-    const TEST_TOKEN = '1234';
+    public const TEST_TOKEN = '1234';
 
-    const TOKEN_KEY = '__csrf_token';
+    public const TOKEN_KEY = '__csrf_token';
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isCli;
 
-    /**
-     * @var Session
-     */
+    /** @var Session */
     private $session;
 
-    /**
-     * @param Session   $session
-     * @param bool|null $isCli
-     s     */
+    /** @param bool|null $isCli */
     public function __construct(Session $session, $isCli = null)
     {
         $this->session = $session;
@@ -43,7 +38,7 @@ final class AntiCsrf implements AntiCsrfInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @return bool
      */
@@ -53,16 +48,12 @@ final class AntiCsrf implements AntiCsrfInterface
             return true;
         }
 
-        return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] == $this->getToken();
+        return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] === $this->getToken();
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getToken()
     {
-        $value = $this->isCli ? self::TEST_TOKEN : $this->session->getCsrfToken()->getValue();
-
-        return $value;
+        return $this->isCli ? self::TEST_TOKEN : $this->session->getCsrfToken()->getValue();
     }
 }

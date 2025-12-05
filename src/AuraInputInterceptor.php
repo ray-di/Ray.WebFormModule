@@ -1,24 +1,25 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
+use LogicException;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\AbstractValidation;
-use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
+use ReflectionAttribute;
+use ReflectionClass;
 use ReflectionMethod;
+
+use function array_shift;
+use function property_exists;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
-    /**
-     * @var FailureHandlerInterface
-     */
+    /** @var FailureHandlerInterface */
     protected $failureHandler;
 
     public function __construct(FailureHandlerInterface $handler)
@@ -27,14 +28,14 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws InvalidArgumentException
      */
     public function invoke(MethodInvocation $invocation)
     {
         $object = $invocation->getThis();
-        /* @var $formValidation FormValidation */
+        /** @var FormValidation $formValidation */
         $method = $invocation->getMethod();
         $formValidation = $this->getValidationAttribute($method);
         $form = $this->getFormProperty($formValidation, $object);
@@ -49,24 +50,17 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param array        $submit
-     * @param AbstractForm $form
+     * @return bool
      *
      * @throws Exception\CsrfViolationException
-     *
-     * @return bool
      */
     public function isValid(array $submit, AbstractForm $form)
     {
-        $isValid = $form->apply($submit);
-
-        return $isValid;
+        return $form->apply($submit);
     }
 
     /**
      * Return arguments as named arguments.
-     *
-     * @param MethodInvocation $invocation
      *
      * @return array
      */
@@ -79,6 +73,7 @@ class AuraInputInterceptor implements MethodInterceptor
             $arg = array_shift($args);
             $submit[$param->getName()] = $arg;
         }
+
         // has token ?
         if (isset($_POST[AntiCsrf::TOKEN_KEY])) {
             $submit[AntiCsrf::TOKEN_KEY] = $_POST[AntiCsrf::TOKEN_KEY];
@@ -92,9 +87,9 @@ class AuraInputInterceptor implements MethodInterceptor
      */
     private function getValidationAttribute(ReflectionMethod $method): AbstractValidation
     {
-        $attributes = $method->getAttributes(AbstractValidation::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(AbstractValidation::class, ReflectionAttribute::IS_INSTANCEOF);
         if (empty($attributes)) {
-            throw new \LogicException('FormValidation or InputValidation attribute is required');
+            throw new LogicException('FormValidation or InputValidation attribute is required');
         }
 
         return $attributes[0]->newInstance();
@@ -103,8 +98,7 @@ class AuraInputInterceptor implements MethodInterceptor
     /**
      * Return form property
      *
-     * @param AbstractValidation $formValidation
-     * @param object             $object
+     * @param object $object
      *
      * @return AbstractForm
      */
@@ -113,8 +107,8 @@ class AuraInputInterceptor implements MethodInterceptor
         if (! property_exists($object, $formValidation->form)) {
             throw new InvalidFormPropertyException($formValidation->form);
         }
-        $prop = (new \ReflectionClass($object))->getProperty($formValidation->form);
-        $prop->setAccessible(true);
+
+        $prop = (new ReflectionClass($object))->getProperty($formValidation->form);
         $form = $prop->getValue($object);
         if (! $form instanceof AbstractForm) {
             throw new InvalidFormPropertyException($formValidation->form);
