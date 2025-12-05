@@ -6,14 +6,16 @@
  */
 namespace Ray\WebFormModule;
 
-class FormFactoryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FormFactoryTest extends TestCase
 {
     /**
      * @var FormFactory
      */
     private $factory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->factory = new FormFactory;

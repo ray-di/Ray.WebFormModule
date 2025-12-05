@@ -6,10 +6,13 @@
  */
 namespace Ray\WebFormModule\Annotation;
 
+use Attribute;
+
 /**
  * @Annotation
  * @Target("METHOD")
  */
+#[Attribute(Attribute::TARGET_METHOD)]
 final class VndError
 {
     /**
@@ -49,4 +52,16 @@ final class VndError
      * @see http://tools.ietf.org/html/rfc6892
      */
     public $path;
+
+    public function __construct(
+        string $message = '',
+        array $href = [],
+        ?string $logref = null,
+        ?string $path = null
+    ) {
+        $this->message = $message;
+        $this->href = $href;
+        $this->logref = $logref;
+        $this->path = $path;
+    }
 }

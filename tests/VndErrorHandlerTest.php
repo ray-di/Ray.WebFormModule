@@ -6,17 +6,18 @@
  */
 namespace Ray\WebFormModule;
 
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use Ray\WebFormModule\Exception\ValidationException;
 
-class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
+class VndErrorHandlerTest extends TestCase
 {
     /**
      * @var FakeController
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->controller = (new Injector(new FakeVndErrorModule, __DIR__ . '/tmp'))->getInstance(FakeController::class);
@@ -24,7 +25,7 @@ class VndErrorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testValidationException()
     {
-        $this->setExpectedException(ValidationException::class);
+        $this->expectException(ValidationException::class);
         $this->controller->createAction('');
     }
 

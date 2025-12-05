@@ -7,6 +7,7 @@
 namespace Ray\WebFormModule;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\TestCase;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
@@ -14,7 +15,7 @@ use Ray\Di\InjectorInterface;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
 use Ray\WebFormModule\Exception\ValidationException;
 
-class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
+class AuraInputInterceptorTest extends TestCase
 {
     /**
      * @var InjectorInterface
@@ -26,7 +27,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->injector = new Injector(new class() extends AbstractModule {
             protected function configure()
@@ -104,21 +105,21 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidFormPropertyByMissingProperty()
     {
-        $this->setExpectedException(InvalidFormPropertyException::class);
+        $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController1::class);
         $controller->createAction();
     }
 
     public function testInvalidFormPropertyByMissingProperty2()
     {
-        $this->setExpectedException(InvalidFormPropertyException::class);
+        $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController2::class);
         $controller->createAction();
     }
 
     public function testInvalidFormPropertyException()
     {
-        $this->setExpectedException(InvalidFormPropertyException::class);
+        $this->expectException(InvalidFormPropertyException::class);
         /** @var FakeInvalidController3 $controller */
         $controller = $this->injector->getInstance(FakeInvalidController3::class);
         $controller->createAction('');
@@ -126,18 +127,19 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidFormPropertyByInvalidInstance()
     {
-        $this->setExpectedException(InvalidFormPropertyException::class);
-        $this->setExpectedException(InvalidFormPropertyException::class);
+        $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController1::class);
         $controller->createAction('');
     }
 
     public function testProceedWithVndErrorHandler()
     {
+        $injector = new Injector(new FakeVndErrorModule);
         /** @var FakeController $controller */
-        $controller = $this->injector->getInstance(FakeController::class);
+        $controller = $injector->getInstance(FakeController::class);
         try {
             $controller->createAction('');
+            $this->fail('ValidationException expected');
         } catch (ValidationException $e) {
             $this->assertInstanceOf(FormValidationError::class, $e->error);
             $json = (string) $e->error;

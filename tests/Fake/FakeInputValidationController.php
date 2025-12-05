@@ -13,18 +13,13 @@ class FakeInputValidationController
      */
     protected $form;
 
-    /**
-     * @Inject
-     * @Named("contact_form")
-     */
-    public function setForm(FormInterface $form)
+    #[Inject]
+    public function setForm(#[Named('contact_form')] FormInterface $form)
     {
         $this->form  = $form;
     }
 
-    /**
-     * @InputValidation
-     */
+    #[InputValidation]
     public function createAction($name)
     {
     }

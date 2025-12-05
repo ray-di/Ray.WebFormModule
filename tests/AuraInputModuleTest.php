@@ -6,11 +6,12 @@
  */
 namespace Ray\WebFormModule;
 
+use PHPUnit\Framework\TestCase;
 use Ray\Aop\WeavedInterface;
 use Ray\Di\Injector;
 use Ray\WebFormModule\Exception\ValidationException;
 
-class AuraInputModuleTest extends \PHPUnit_Framework_TestCase
+class AuraInputModuleTest extends TestCase
 {
     public function testAuraInputModule()
     {
@@ -21,7 +22,7 @@ class AuraInputModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionOnFailure()
     {
-        $this->setExpectedException(ValidationException::class);
+        $this->expectException(ValidationException::class);
         $injector = new Injector(new FakeModule, __DIR__ . '/tmp');
         /** @var $controller FakeInputValidationController */
         $controller = $injector->getInstance(FakeInputValidationController::class);

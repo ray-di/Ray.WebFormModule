@@ -14,10 +14,8 @@ class InputValidationInterceptor extends AuraInputInterceptor
     /**
      * @param Reader                  $reader
      * @param FailureHandlerInterface $handler
-     *
-     * @Named("handler=vnd_error")
      */
-    public function __construct(Reader $reader, FailureHandlerInterface $handler)
+    public function __construct(Reader $reader, #[Named('vnd_error')] FailureHandlerInterface $handler)
     {
         parent::__construct($reader, $handler);
     }

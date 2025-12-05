@@ -6,14 +6,16 @@
  */
 namespace Ray\WebFormModule;
 
-class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class AbstractAuraFormTest extends TestCase
 {
     /**
      * @var AbstractForm
      */
     private $form;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->form = (new FormFactory)->newInstance(FakeForm::class);
@@ -58,7 +60,7 @@ class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
     public function tesetInputDataReamainedOnValidationFailure($html)
     {
         $expected = '<input id="name" type="text" name="name" value="@invalid@" />';
-        $this->assertContains($expected, $html);
+        $this->assertStringContainsString($expected, $html);
     }
 
     public function testNotToStringImplemented()

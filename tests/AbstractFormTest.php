@@ -12,17 +12,18 @@ use Aura\Session\Randval;
 use Aura\Session\SegmentFactory;
 use Aura\Session\Session;
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\TestCase;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\WebFormModule\Exception\CsrfViolationException;
 
-class AbstractFormTest extends \PHPUnit_Framework_TestCase
+class AbstractFormTest extends TestCase
 {
     /**
      * @var AbstractForm
      */
     private $form;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->form = (new FormFactory)->newInstance(FakeMiniForm::class);
@@ -61,7 +62,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     public function testSubmit()
     {
-        $this->expectException(\ReflectionException::class);
+        $this->expectException(\AssertionError::class);
         $invocation = $this->getMethodInvocation(['na']);
         $invocation->proceed();
     }
@@ -89,7 +90,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     public function testAntiCsrfViolation()
     {
-        $this->setExpectedException(CsrfViolationException::class);
+        $this->expectException(CsrfViolationException::class);
         $session = new Session(
             new SegmentFactory,
             new CsrfTokenFactory(new Randval(new Phpfunc)),

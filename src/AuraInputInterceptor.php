@@ -13,6 +13,7 @@ use Ray\WebFormModule\Annotation\AbstractValidation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
+use ReflectionMethod;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
@@ -46,7 +47,7 @@ class AuraInputInterceptor implements MethodInterceptor
         $object = $invocation->getThis();
         /* @var $formValidation FormValidation */
         $method = $invocation->getMethod();
-        $formValidation = $this->reader->getMethodAnnotation($method, AbstractValidation::class);
+        $formValidation = $this->getValidationAnnotation($method);
         $form = $this->getFormProperty($formValidation, $object);
         $data = $form instanceof SubmitInterface ? $form->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);
@@ -95,6 +96,21 @@ class AuraInputInterceptor implements MethodInterceptor
         }
 
         return $submit;
+    }
+
+    /**
+     * Get validation annotation from PHP 8 attributes or Doctrine annotations
+     */
+    private function getValidationAnnotation(ReflectionMethod $method): ?AbstractValidation
+    {
+        // Try PHP 8 attributes first
+        $attributes = $method->getAttributes(AbstractValidation::class, \ReflectionAttribute::IS_INSTANCEOF);
+        if (! empty($attributes)) {
+            return $attributes[0]->newInstance();
+        }
+
+        // Fall back to Doctrine annotations
+        return $this->reader->getMethodAnnotation($method, AbstractValidation::class);
     }
 
     /**
