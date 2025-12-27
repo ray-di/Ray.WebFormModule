@@ -72,9 +72,8 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      * @param BuilderInterface     $builder
      * @param FilterFactory        $filterFactory
      * @param HelperLocatorFactory $helperFactory
-     *
-     * @\Ray\Di\Di\Inject
      */
+    #[\Ray\Di\Di\Inject]
     public function setBaseDependencies(
         BuilderInterface $builder,
         FilterFactory $filterFactory,
@@ -90,9 +89,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         $this->antiCsrf = $antiCsrf;
     }
 
-    /**
-     * @\Ray\Di\Di\PostConstruct
-     */
+    #[\Ray\Di\Di\PostConstruct]
     public function postConstruct()
     {
         $this->init();
