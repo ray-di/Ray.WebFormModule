@@ -95,18 +95,14 @@ class MyController
      */
     protected $contactForm;
 
-    /**
-     * @Inject
-     * @Named("contact_form")
-     */
+     #[Inject]
+     #[Named("contact_form")]
     public function setForm(FormInterface $form)
     {
         $this->contactForm = $form;
     }
 
-    /**
-     * @FormValidation(form="contactForm", onFailure="badRequestAction")
-     */
+     #[FormValidation(form: "contactForm", onFailure: "badRequestAction")]
     public function createAction()
     {
         // validation success
@@ -151,9 +147,7 @@ use Ray\WebFormModule\Annotation\InputValidation;
 
 class Foo
 {
-    /**
-     * @InputValidation(form="form1")
-     */
+     #[InputValidation(form: "form1")]
     public function createAction($name)
     {
       // ...
@@ -193,14 +187,8 @@ echo $e->error;
 `@VndError`アノテーションで`vnd.error+json`に必要な情報を加えることができます。
 
 ```php
-    /**
-     * @FormValidation(form="contactForm")
-     * @VndError(
-     *   message="foo validation failed",
-     *   logref="a1000", path="/path/to/error",
-     *   href={"_self"="/path/to/error", "help"="/path/to/help"}
-     * )
-     */
+    #[FormValidation(form: "contactForm")]
+    #[VndError(message: "foo validation failed", logref: "a1000", path: "/path/to/error", href: ["_self" => "/path/to/error", "help" => "/path/to/help"])]
 ```
 
 このオプションのモジュールはAPIアプリケーションの時に有用です。
