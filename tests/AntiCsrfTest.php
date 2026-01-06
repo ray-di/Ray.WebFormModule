@@ -14,8 +14,9 @@ use Aura\Session\Phpfunc;
 use Aura\Session\Randval;
 use Aura\Session\SegmentFactory;
 use Aura\Session\Session;
+use PHPUnit\Framework\TestCase;
 
-class AntiCsrfTest extends \PHPUnit_Framework_TestCase
+class AntiCsrfTest extends TestCase
 {
     private $phpfunc;
 
@@ -29,7 +30,7 @@ class AntiCsrfTest extends \PHPUnit_Framework_TestCase
      */
     private $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->phpfunc = new FakePhpfunc;
         $this->session = $this->newSession();

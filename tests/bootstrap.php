@@ -4,11 +4,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-use Doctrine\Common\Annotations\AnnotationRegistry;
-
-/* @var $loader \Composer\Autoload\ClassLoader */
-$loader = require dirname(__DIR__) . '/vendor/autoload.php';
-AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 $handler = new \Ray\WebFormModule\FakeSessionHandler();
 session_set_save_handler(

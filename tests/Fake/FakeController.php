@@ -13,20 +13,14 @@ class FakeController
      */
     protected $form;
 
-    /**
-     * @Inject
-     * @Named("contact_form")
-     */
+    #[Inject]
+    #[Named('contact_form')]
     public function setForm(FormInterface $form)
     {
         $this->form = $form;
     }
 
-    /**
-     * @FormValidation
-     *
-     * = is same as @ FormValidation(form="form", onFailure="createActionValidationFailed")
-     */
+    #[FormValidation]
     public function createAction($name)
     {
         return '201';

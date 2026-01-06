@@ -13,9 +13,7 @@ class FakeInvalidController3
         $this->form = $form;
     }
 
-    /**
-     * @FormValidation(onFailure="missing_method")
-     */
+    #[FormValidation(onFailure: "missing_method")]
     public function createAction($name)
     {
     }

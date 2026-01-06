@@ -6,14 +6,16 @@
  */
 namespace Ray\WebFormModule;
 
-class AbstractAuraFormTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class AbstractAuraFormTest extends TestCase
 {
     /**
      * @var AbstractForm
      */
     private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->form = (new FormFactory)->newInstance(FakeForm::class);

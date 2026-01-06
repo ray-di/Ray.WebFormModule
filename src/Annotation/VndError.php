@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule\Annotation;
 
 use Attribute;
@@ -12,40 +13,17 @@ use Attribute;
 final class VndError
 {
     /**
-     * @var string
-     *
-     * REQUIRED
-     */
-    public $message;
-
-    /**
-     * @var array
-     *
-     * REQUIRED
-     */
-    public $href;
-
-    /**
-     * @var string
-     *
-     * OPTIONAL
-     */
-    public $logref;
-
-    /**
-     * @var string
-     *
-     * OPTIONAL
-     *
-     * help
+     * @param array<string, mixed> $href
      *
      * @see http://www.w3.org/TR/html5/links.html#link-type-help
-     *
-     * about
      * @see http://tools.ietf.org/html/rfc6903#section-2
-     *
-     * describes
      * @see http://tools.ietf.org/html/rfc6892
      */
-    public $path;
+    public function __construct(
+        public string $message,
+        public array $href,
+        public string|null $logref = null,
+        public string|null $path = null
+    ) {
+    }
 }

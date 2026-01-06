@@ -6,9 +6,7 @@ use Ray\WebFormModule\Annotation\FormValidation;
 
 class FakeInvalidController1
 {
-    /**
-     * @FormValidation(form="missing")
-     */
+    #[FormValidation(form: "missing")]
     public function createAction()
     {
     }

@@ -11,18 +11,20 @@ use Aura\Session\Phpfunc;
 use Aura\Session\Randval;
 use Aura\Session\SegmentFactory;
 use Aura\Session\Session;
-use Doctrine\Common\Annotations\AnnotationReader;
+use Koriym\Attributes\AttributeReader;
+use PHPUnit\Framework\TestCase;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\WebFormModule\Exception\CsrfViolationException;
+use Ray\WebFormModule\Exception\ValidationException;
 
-class AbstractFormTest extends \PHPUnit_Framework_TestCase
+class AbstractFormTest extends TestCase
 {
     /**
      * @var AbstractForm
      */
     private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->form = (new FormFactory)->newInstance(FakeMiniForm::class);
@@ -39,12 +41,12 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
         $controller = new FakeController;
         $controller->setForm($fakeForm);
         // interceptor
-        $reader = new AnnotationReader;
+        $reader = new AttributeReader;
         $interceptor = new AuraInputInterceptor($reader, new VndErrorHandler($reader));
 
         return new ReflectiveMethodInvocation(
             $controller,
-            new \ReflectionMethod($controller, 'createAction'),
+            'createAction',
             $arguments,
             [
                 $interceptor
@@ -61,7 +63,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     public function testSubmit()
     {
-        $this->expectException(\ReflectionException::class);
+        $this->expectException(ValidationException::class);
         $invocation = $this->getMethodInvocation(['na']);
         $invocation->proceed();
     }
@@ -89,7 +91,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     public function testAntiCsrfViolation()
     {
-        $this->setExpectedException(CsrfViolationException::class);
+        $this->expectException(CsrfViolationException::class);
         $session = new Session(
             new SegmentFactory,
             new CsrfTokenFactory(new Randval(new Phpfunc)),

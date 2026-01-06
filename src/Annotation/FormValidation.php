@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule\Annotation;
 
 use Attribute;
@@ -11,15 +12,11 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]
 final class FormValidation extends AbstractValidation
 {
-    /**
-     * @var bool
-     */
-    public $antiCsrf = false;
-
-    /**
-     * Method name on validation failed.
-     *
-     * @var string
-     */
-    public $onFailure;
+    public function __construct(
+        string $form = 'form',
+        public bool $antiCsrf = false,
+        public string|null $onFailure = null
+    ) {
+        parent::__construct($form);
+    }
 }
