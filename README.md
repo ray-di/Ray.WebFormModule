@@ -114,6 +114,7 @@ class MyController
     public function createAction()
     {
         // validation success
+        // More detail for `vnd.error+json` can be added with `#[VndError]`.
     }
 
     public function badRequestAction()

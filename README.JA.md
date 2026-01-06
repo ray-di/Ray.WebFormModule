@@ -184,7 +184,7 @@ echo $e->error;
 //}
 ```
 
-`@VndError`アノテーションで`vnd.error+json`に必要な情報を加えることができます。
+`#[VndError]`属性で`vnd.error+json`に必要な情報を加えることができます。
 
 ```php
     #[FormValidation(form: "contactForm")]
