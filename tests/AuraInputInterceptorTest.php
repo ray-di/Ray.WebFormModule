@@ -93,13 +93,13 @@ class AuraInputInterceptorTest extends TestCase
         $this->assertSame('201', $result);
     }
 
-    public function invalidControllerProvider()
-    {
-        return [
-            [$this->injector->getInstance(FakeInvalidController1::class)],
-            [$this->injector->getInstance(FakeInvalidController2::class)]
-        ];
-    }
+//    public function invalidControllerProvider()
+//    {
+//        return [
+//            [$this->injector->getInstance(FakeInvalidController1::class)],
+//            [$this->injector->getInstance(FakeInvalidController2::class)]
+//        ];
+//    }
 
     public function testInvalidFormPropertyByMissingProperty()
     {
