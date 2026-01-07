@@ -126,7 +126,6 @@ class AuraInputInterceptorTest extends TestCase
     public function testInvalidFormPropertyByInvalidInstance()
     {
         $this->expectException(InvalidFormPropertyException::class);
-        $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController1::class);
         $controller->createAction('');
     }
