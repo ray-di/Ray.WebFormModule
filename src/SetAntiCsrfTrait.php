@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace Ray\WebFormModule;
 
 use Aura\Input\AntiCsrfInterface;
+use Ray\Di\Di\Inject;
 
 trait SetAntiCsrfTrait
 {
-    /** @param AntiCsrfInterface $antiCsrf */
-    #[\Ray\Di\Di\Inject]
-    public function setAntiCsrf(AntiCsrfInterface $antiCsrf)
+    #[Inject]
+    public function setAntiCsrf(AntiCsrfInterface $antiCsrf): void
     {
         $this->antiCsrf = $antiCsrf;
     }

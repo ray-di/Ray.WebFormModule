@@ -18,8 +18,7 @@ use Ray\WebFormModule\Exception\ValidationException;
 
 final class VndErrorHandler implements FailureHandlerInterface
 {
-    /** @var Reader */
-    private $reader;
+    private Reader $reader;
 
     public function __construct(Reader $reader)
     {
@@ -39,7 +38,7 @@ final class VndErrorHandler implements FailureHandlerInterface
     private function makeVndError(AbstractForm $form, VndError $vndError = null)
     {
         $body = ['message' => 'Validation failed'];
-        $body['path'] = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+        $body['path'] = $_SERVER['PATH_INFO'] ?? '';
         $body['validation_messages'] = $form->getFailureMessages();
         $body = $vndError ? $this->optionalAttribute($vndError) + $body : $body;
 
@@ -52,9 +51,11 @@ final class VndErrorHandler implements FailureHandlerInterface
         if ($vndError->message) {
             $body['message'] = $vndError->message;
         }
+
         if ($vndError->path) {
             $body['path'] = $vndError->path;
         }
+
         if ($vndError->logref) {
             $body['logref'] = $vndError->logref;
         }

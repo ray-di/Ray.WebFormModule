@@ -15,20 +15,11 @@ interface FormInterface
     /**
      * Return input element html
      *
-     * @param string $input
-     *
      * @return string
      * @throws \Aura\Input\Exception\NoSuchInput
-     *
      */
-    public function input($input);
+    public function input(string $input);
 
-    /**
-     * Return error message
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    public function error($input);
+    /** Return error message */
+    public function error(string $input): string;
 }

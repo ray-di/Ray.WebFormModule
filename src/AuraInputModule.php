@@ -36,9 +36,8 @@ class AuraInputModule extends AbstractModule
         $this->bind(FilterInterface::class)->to(Filter::class);
         $this->bind(AntiCsrfInterface::class)->to(AntiCsrf::class)->in(Scope::SINGLETON);
         $this->bind(FailureHandlerInterface::class)->to(OnFailureMethodHandler::class);
-        $this->bind(FailureHandlerInterface::class)->annotatedWith('vnd_error')->to(VndErrorHandler::class)->in(
-            Scope::SINGLETON
-        );
+        $this->bind(FailureHandlerInterface::class)
+            ->annotatedWith('vnd_error')->to(VndErrorHandler::class)->in(Scope::SINGLETON);
         $this->bind(HelperLocatorFactory::class);
         $this->bind(FilterFactory::class);
         $this->bindInterceptor(

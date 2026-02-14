@@ -17,19 +17,17 @@ use Ray\WebFormModule\Annotation\AbstractValidation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
+use ReflectionClass;
+
+use function array_shift;
+use function property_exists;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
-    /** @var Reader */
-    protected $reader;
+    protected Reader $reader;
 
-    /** @var FailureHandlerInterface */
-    protected $failureHandler;
+    protected FailureHandlerInterface $failureHandler;
 
-    /**
-     * @param Reader                  $reader
-     * @param FailureHandlerInterface $handler
-     */
     public function __construct(Reader $reader, FailureHandlerInterface $handler)
     {
         $this->reader = $reader;
@@ -51,7 +49,7 @@ class AuraInputInterceptor implements MethodInterceptor
         $data = $form instanceof SubmitInterface ? $form->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);
         if ($isValid === true) {
-            // validation   success
+            // validation success
             return $invocation->proceed();
         }
 
@@ -66,7 +64,7 @@ class AuraInputInterceptor implements MethodInterceptor
      * @throws Exception\CsrfViolationException
      *
      */
-    public function isValid(array $submit, AbstractForm $form)
+    public function isValid(array $submit, AbstractForm $form): bool
     {
         return $form->apply($submit);
     }
@@ -78,7 +76,7 @@ class AuraInputInterceptor implements MethodInterceptor
      *
      * @return array
      */
-    private function getNamedArguments(MethodInvocation $invocation)
+    private function getNamedArguments(MethodInvocation $invocation): array
     {
         $submit = [];
         $params = $invocation->getMethod()->getParameters();
@@ -87,7 +85,8 @@ class AuraInputInterceptor implements MethodInterceptor
             $arg = array_shift($args);
             $submit[$param->getName()] = $arg;
         }
-        // has token ?
+
+        // has token?
         if (isset($_POST[AntiCsrf::TOKEN_KEY])) {
             $submit[AntiCsrf::TOKEN_KEY] = $_POST[AntiCsrf::TOKEN_KEY];
         }
@@ -108,7 +107,8 @@ class AuraInputInterceptor implements MethodInterceptor
         if (! property_exists($object, $formValidation->form)) {
             throw new InvalidFormPropertyException($formValidation->form);
         }
-        $prop = (new \ReflectionClass($object))->getProperty($formValidation->form);
+
+        $prop = (new ReflectionClass($object))->getProperty($formValidation->form);
         $prop->setAccessible(true);
         $form = $prop->getValue($object);
         if (! $form instanceof AbstractForm) {

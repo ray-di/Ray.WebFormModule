@@ -16,12 +16,7 @@ use Aura\Input\Builder;
 
 final class FormFactory
 {
-    /**
-     * @param string $class
-     *
-     * @return AbstractForm
-     */
-    public function newInstance($class)
+    public function newInstance(string $class): AbstractForm
     {
         /** @var $form AbstractForm */
         $form = new $class;

@@ -10,10 +10,14 @@ declare(strict_types=1);
 
 namespace Ray\WebFormModule;
 
+use function json_encode;
+
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+
 class FormValidationError
 {
-    /** @var array */
-    private $value;
+    private array $value;
 
     public function __construct(array $value)
     {
