@@ -7,8 +7,10 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
+use ArrayIterator;
 use Aura\Filter\FilterFactory;
 use Aura\Filter\SubjectFilter;
 use Aura\Html\HelperLocator;
@@ -16,29 +18,23 @@ use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
 use Aura\Input\BuilderInterface;
 use Aura\Input\Fieldset;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\PostConstruct;
 use Ray\WebFormModule\Exception\CsrfViolationException;
 use Ray\WebFormModule\Exception\LogicException;
 
 abstract class AbstractForm extends Fieldset implements FormInterface
 {
-    /**
-     * @var SubjectFilter
-     */
+    /** @var SubjectFilter */
     protected $filter;
 
-    /**
-     * @var null | array
-     */
+    /** @var null|array */
     protected $errorMessages;
 
-    /**
-     * @var HelperLocator
-     */
+    /** @var HelperLocator */
     protected $helper;
 
-    /**
-     * @var AntiCsrfInterface
-     */
+    /** @var AntiCsrfInterface */
     protected $antiCsrf;
 
     public function __construct()
@@ -76,7 +72,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      * @param FilterFactory        $filterFactory
      * @param HelperLocatorFactory $helperFactory
      */
-    #[\Ray\Di\Di\Inject]
+    #[Inject]
     public function setBaseDependencies(
         BuilderInterface $builder,
         FilterFactory $filterFactory,
@@ -92,7 +88,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         $this->antiCsrf = $antiCsrf;
     }
 
-    #[\Ray\Di\Di\PostConstruct]
+    #[PostConstruct]
     public function postConstruct()
     {
         $this->init();
@@ -101,17 +97,13 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function input($input)
     {
         return $this->helper->input($this->get($input));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function error($input)
     {
         if (! $this->errorMessages) {
@@ -131,10 +123,10 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * @param array $attr attributes for the form tag
      *
-     * @throws \Aura\Html\Exception\HelperNotFound
+     * @return string
      * @throws \Aura\Input\Exception\NoSuchInput
      *
-     * @return string
+     * @throws \Aura\Html\Exception\HelperNotFound
      */
     public function form($attr = [])
     {
@@ -151,9 +143,8 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      *
      * @param array $data
      *
-     * @throws CsrfViolationException
-     *
      * @return bool
+     * @throws CsrfViolationException
      */
     public function apply(array $data)
     {
@@ -178,10 +169,10 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * Returns all the fields collection
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->inputs);
+        return new ArrayIterator($this->inputs);
     }
 }

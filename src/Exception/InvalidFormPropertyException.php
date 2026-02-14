@@ -7,8 +7,11 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule\Exception;
 
-class InvalidFormPropertyException extends \LogicException
+use LogicException;
+
+class InvalidFormPropertyException extends LogicException
 {
 }

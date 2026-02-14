@@ -7,6 +7,7 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
 interface FormInterface
@@ -16,9 +17,9 @@ interface FormInterface
      *
      * @param string $input
      *
+     * @return string
      * @throws \Aura\Input\Exception\NoSuchInput
      *
-     * @return string
      */
     public function input($input);
 

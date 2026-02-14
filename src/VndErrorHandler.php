@@ -18,9 +18,7 @@ use Ray\WebFormModule\Exception\ValidationException;
 
 final class VndErrorHandler implements FailureHandlerInterface
 {
-    /**
-     * @var Reader
-     */
+    /** @var Reader */
     private $reader;
 
     public function __construct(Reader $reader)
@@ -28,9 +26,7 @@ final class VndErrorHandler implements FailureHandlerInterface
         $this->reader = $reader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
         unset($formValidation);

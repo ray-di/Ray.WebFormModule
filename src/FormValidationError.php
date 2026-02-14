@@ -7,13 +7,12 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
 class FormValidationError
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $value;
 
     public function __construct(array $value)

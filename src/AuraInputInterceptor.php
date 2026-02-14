@@ -7,6 +7,7 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
 use Doctrine\Common\Annotations\Reader;
@@ -19,14 +20,10 @@ use Ray\WebFormModule\Exception\InvalidFormPropertyException;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
-    /**
-     * @var Reader
-     */
+    /** @var Reader */
     protected $reader;
 
-    /**
-     * @var FailureHandlerInterface
-     */
+    /** @var FailureHandlerInterface */
     protected $failureHandler;
 
     /**
@@ -65,15 +62,13 @@ class AuraInputInterceptor implements MethodInterceptor
      * @param array        $submit
      * @param AbstractForm $form
      *
+     * @return bool
      * @throws Exception\CsrfViolationException
      *
-     * @return bool
      */
     public function isValid(array $submit, AbstractForm $form)
     {
-        $isValid = $form->apply($submit);
-
-        return $isValid;
+        return $form->apply($submit);
     }
 
     /**

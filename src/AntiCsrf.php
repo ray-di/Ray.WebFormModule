@@ -7,6 +7,7 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
 use Aura\Input\AntiCsrfInterface;
@@ -19,20 +20,16 @@ final class AntiCsrf implements AntiCsrfInterface
 
     const TOKEN_KEY = '__csrf_token';
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isCli;
 
-    /**
-     * @var Session
-     */
+    /** @var Session */
     private $session;
 
     /**
      * @param Session   $session
      * @param bool|null $isCli
-     s     */
+     * s     */
     public function __construct(Session $session, $isCli = null)
     {
         $this->session = $session;
@@ -42,7 +39,7 @@ final class AntiCsrf implements AntiCsrfInterface
     public function setField(Fieldset $fieldset)
     {
         $fieldset->setField(self::TOKEN_KEY, 'hidden')
-                 ->setAttribs(['value' => $this->getToken()]);
+            ->setAttribs(['value' => $this->getToken()]);
     }
 
     /**
@@ -59,9 +56,7 @@ final class AntiCsrf implements AntiCsrfInterface
         return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] == $this->getToken();
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getToken()
     {
         $value = $this->isCli ? self::TEST_TOKEN : $this->session->getCsrfToken()->getValue();

@@ -7,6 +7,7 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
 use Ray\Aop\MethodInvocation;
@@ -18,9 +19,7 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
 {
     const FAILURE_SUFFIX = 'ValidationFailed';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
         unset($form);

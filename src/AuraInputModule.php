@@ -7,6 +7,7 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
 use Aura\Filter\FilterFactory;
@@ -26,9 +27,7 @@ use Ray\WebFormModule\Annotation\InputValidation;
 
 class AuraInputModule extends AbstractModule
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this->install(new AuraSessionModule);
@@ -37,7 +36,9 @@ class AuraInputModule extends AbstractModule
         $this->bind(FilterInterface::class)->to(Filter::class);
         $this->bind(AntiCsrfInterface::class)->to(AntiCsrf::class)->in(Scope::SINGLETON);
         $this->bind(FailureHandlerInterface::class)->to(OnFailureMethodHandler::class);
-        $this->bind(FailureHandlerInterface::class)->annotatedWith('vnd_error')->to(VndErrorHandler::class)->in(Scope::SINGLETON);
+        $this->bind(FailureHandlerInterface::class)->annotatedWith('vnd_error')->to(VndErrorHandler::class)->in(
+            Scope::SINGLETON
+        );
         $this->bind(HelperLocatorFactory::class);
         $this->bind(FilterFactory::class);
         $this->bindInterceptor(

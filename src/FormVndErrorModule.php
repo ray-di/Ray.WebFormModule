@@ -7,15 +7,14 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
 use Ray\Di\AbstractModule;
 
 class FormVndErrorModule extends AbstractModule
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this->bind(FailureHandlerInterface::class)->to(VndErrorHandler::class);
