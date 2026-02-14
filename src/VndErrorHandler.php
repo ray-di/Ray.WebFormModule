@@ -12,27 +12,34 @@ namespace Ray\WebFormModule;
 
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInvocation;
+use Ray\Aop\ReflectionMethod;
 use Ray\WebFormModule\Annotation\AbstractValidation;
 use Ray\WebFormModule\Annotation\VndError;
 use Ray\WebFormModule\Exception\ValidationException;
 
 final class VndErrorHandler implements FailureHandlerInterface
 {
-    private Reader $reader;
-
-    public function __construct(Reader $reader)
-    {
-        $this->reader = $reader;
-    }
-
     /** {@inheritdoc} */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
         unset($formValidation);
-        $vndError = $this->reader->getMethodAnnotation($invocation->getMethod(), VndError::class);
+        $vndError = $this->getVndErrorAttribute($invocation->getMethod());
         $error = new FormValidationError($this->makeVndError($form, $vndError));
 
         throw new ValidationException('Validation failed.', 400, null, $error);
+    }
+
+    private function getVndErrorAttribute(ReflectionMethod $method): VndError|null
+    {
+        $attributes = $method->getAttributes(VndError::class);
+        if ($attributes === []) {
+            return null;
+        }
+
+        $instance = $attributes[0]->newInstance();
+        assert($instance instanceof VndError);
+
+        return $instance;
     }
 
     private function makeVndError(AbstractForm $form, VndError $vndError = null)

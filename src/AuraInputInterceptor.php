@@ -10,27 +10,24 @@ declare(strict_types=1);
 
 namespace Ray\WebFormModule;
 
-use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\AbstractValidation;
-use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
+use ReflectionAttribute;
 use ReflectionClass;
+use ReflectionMethod;
 
 use function array_shift;
 use function property_exists;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
-    protected Reader $reader;
-
     protected FailureHandlerInterface $failureHandler;
 
-    public function __construct(Reader $reader, FailureHandlerInterface $handler)
+    public function __construct(FailureHandlerInterface $handler)
     {
-        $this->reader = $reader;
         $this->failureHandler = $handler;
     }
 
@@ -42,18 +39,32 @@ class AuraInputInterceptor implements MethodInterceptor
     public function invoke(MethodInvocation $invocation)
     {
         $object = $invocation->getThis();
-        /* @var $formValidation FormValidation */
-        $method = $invocation->getMethod();
-        $formValidation = $this->reader->getMethodAnnotation($method, AbstractValidation::class);
+        $formValidation = $this->getValidationAttribute($invocation->getMethod());
+        if ($formValidation === null) {
+            throw new InvalidArgumentException('The method must be attributed with #[FormValidation] or #[InputValidation]');
+        }
+
         $form = $this->getFormProperty($formValidation, $object);
         $data = $form instanceof SubmitInterface ? $form->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);
         if ($isValid === true) {
-            // validation success
             return $invocation->proceed();
         }
 
         return $this->failureHandler->handle($formValidation, $invocation, $form);
+    }
+
+    private function getValidationAttribute(ReflectionMethod $method): AbstractValidation|null
+    {
+        $attributes = $method->getAttributes(AbstractValidation::class, ReflectionAttribute::IS_INSTANCEOF);
+        if ($attributes === []) {
+            return null;
+        }
+
+        $instance = $attributes[0]->newInstance();
+        assert($instance instanceof AbstractValidation);
+
+        return $instance;
     }
 
     /**

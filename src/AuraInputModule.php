@@ -17,8 +17,6 @@ use Aura\Input\Builder;
 use Aura\Input\BuilderInterface;
 use Aura\Input\Filter;
 use Aura\Input\FilterInterface;
-use Doctrine\Common\Annotations\Reader;
-use Koriym\Attributes\AttributeReader;
 use Ray\AuraSessionModule\AuraSessionModule;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
@@ -31,7 +29,6 @@ class AuraInputModule extends AbstractModule
     protected function configure()
     {
         $this->install(new AuraSessionModule);
-        $this->bind(Reader::class)->to(AttributeReader::class)->in(Scope::SINGLETON);
         $this->bind(BuilderInterface::class)->to(Builder::class);
         $this->bind(FilterInterface::class)->to(Filter::class);
         $this->bind(AntiCsrfInterface::class)->to(AntiCsrf::class)->in(Scope::SINGLETON);
