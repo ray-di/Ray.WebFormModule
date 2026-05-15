@@ -10,6 +10,6 @@ declare(strict_types=1);
 
 namespace Ray\WebFormModule\Exception;
 
-class RuntimeException extends \LogicException implements ExceptionInterface
+class RuntimeException extends LogicException
 {
 }

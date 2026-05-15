@@ -15,8 +15,7 @@ class FakeControllerVndError
     protected $form1;
 
     #[Inject]
-    #[Named('contact_form')]
-    public function setForm(FormInterface $form)
+    public function setForm(#[Named('contact_form')] FormInterface $form)
     {
         $this->form1 = $form;
     }

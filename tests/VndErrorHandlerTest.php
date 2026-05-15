@@ -59,6 +59,10 @@ class VndErrorHandlerTest extends TestCase
     "message": "foo validation failed",
     "path": "/path/to/error",
     "logref": "a1000",
+    "href": {
+        "_self": "/path/to/error",
+        "help": "/path/to/help"
+    },
     "validation_messages": {
         "name": [
             "Name must be alphabetic only."

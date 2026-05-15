@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Ray\WebFormModule;
 
-use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInvocation;
 use Ray\Aop\ReflectionMethod;
 use Ray\WebFormModule\Annotation\AbstractValidation;
@@ -65,6 +64,10 @@ final class VndErrorHandler implements FailureHandlerInterface
 
         if ($vndError->logref) {
             $body['logref'] = $vndError->logref;
+        }
+
+        if ($vndError->href) {
+            $body['href'] = $vndError->href;
         }
 
         return $body;
