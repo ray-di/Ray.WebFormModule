@@ -25,10 +25,14 @@ use function trigger_error;
 use const E_USER_ERROR;
 use const PHP_EOL;
 
+/** @psalm-suppress PropertyNotSetInConstructor */
 abstract class AbstractForm extends Fieldset implements FormInterface
 {
-    /** @var SubjectFilter */
-    protected $filter;
+    /**
+     * @var SubjectFilter
+     * @psalm-suppress NonInvariantDocblockPropertyType
+     */
+    protected $filter; // @phpstan-ignore-line
 
     /** @var array<string, array<string>>|null */
     protected $errorMessages;
@@ -36,7 +40,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /** @var HelperLocator */
     protected $helper;
 
-    /** @var AntiCsrfInterface */
+    /** @var AntiCsrfInterface|null */
     protected $antiCsrf;
 
     public function __construct()
@@ -65,7 +69,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         } catch (Throwable $e) {
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
-            return '';
+            return ''; // @codeCoverageIgnore @phpstan-ignore deadCode.unreachable
         }
     }
 
@@ -74,22 +78,23 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         BuilderInterface $builder,
         FilterFactory $filterFactory,
         HelperLocatorFactory $helperFactory,
-    ) {
-        $this->builder = $builder;
+    ): void {
+        /** @psalm-suppress PropertyTypeCoercion */
+        $this->builder = $builder; // @phpstan-ignore-line
         $this->filter = $filterFactory->newSubjectFilter();
         $this->helper = $helperFactory->newInstance();
     }
 
-    public function setAntiCsrf(AntiCsrfInterface $antiCsrf)
+    public function setAntiCsrf(AntiCsrfInterface $antiCsrf): void
     {
         $this->antiCsrf = $antiCsrf;
     }
 
     #[PostConstruct]
-    public function postConstruct()
+    public function postConstruct(): void
     {
         $this->init();
-        if (! ($this->antiCsrf instanceof AntiCsrfInterface)) {
+        if ($this->antiCsrf === null) {
             return;
         }
 
@@ -101,7 +106,13 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      */
     public function input($input)
     {
-        return $this->helper->input($this->get($input));
+        /**
+         * @var string $result
+         * @psalm-suppress UndefinedMagicMethod
+         */
+        $result = $this->helper->input($this->get($input)); // @phpstan-ignore-line
+
+        return $result;
     }
 
     /**
@@ -109,10 +120,18 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      */
     public function error($input)
     {
-        if (! $this->errorMessages) {
+        if ($this->errorMessages === null) {
             $failure = $this->filter->getFailures();
-            if ($failure) {
-                $this->errorMessages = $failure->getMessages();
+            /**
+             * @psalm-suppress RedundantConditionGivenDocblockType - getFailures() can return null at runtime
+             * @phpstan-ignore notIdentical.alwaysTrue
+             */
+            if ($failure !== null) {
+                /** @var array<string, array<string>> $messages */
+                $messages = $failure->getMessages();
+                $this->errorMessages = $messages;
+            } else {
+                $this->errorMessages = [];
             }
         }
 
@@ -133,9 +152,14 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      */
     public function form($attr = [])
     {
-        $form = $this->helper->form($attr);
+        /**
+         * @var string $form
+         * @psalm-suppress UndefinedMagicMethod
+         */
+        $form = $this->helper->form($attr); // @phpstan-ignore-line
         if (isset($this->inputs['__csrf_token'])) {
-            $form .= $this->helper->input($this->get('__csrf_token'));
+            /** @psalm-suppress UndefinedMagicMethod */
+            $form .= $this->helper->input($this->get('__csrf_token')); // @phpstan-ignore-line
         }
 
         return $form;
@@ -152,7 +176,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      */
     public function apply(array $data)
     {
-        if ($this->antiCsrf && ! $this->antiCsrf->isValid($data)) {
+        if ($this->antiCsrf !== null && ! $this->antiCsrf->isValid($data)) {
             throw new CsrfViolationException();
         }
 
@@ -168,15 +192,18 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      */
     public function getFailureMessages()
     {
-        return $this->filter->getFailures()->getMessages();
+        /** @var array<string, array<string>> $messages */
+        $messages = $this->filter->getFailures()->getMessages();
+
+        return $messages;
     }
 
     /**
      * Returns all the fields collection
      *
-     * @return ArrayIterator
+     * @return ArrayIterator<array-key, mixed>
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->inputs);
     }

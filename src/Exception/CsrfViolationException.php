@@ -6,6 +6,6 @@ namespace Ray\WebFormModule\Exception;
 
 use Aura\Input\Exception\CsrfViolation;
 
-class CsrfViolationException extends CsrfViolation
+final class CsrfViolationException extends CsrfViolation
 {
 }

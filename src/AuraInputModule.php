@@ -17,7 +17,7 @@ use Ray\Di\Scope;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Annotation\InputValidation;
 
-class AuraInputModule extends AbstractModule
+final class AuraInputModule extends AbstractModule
 {
     /**
      * {@inheritDoc}

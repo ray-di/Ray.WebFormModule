@@ -20,13 +20,13 @@ class VndErrorHandlerTest extends TestCase
         $this->controller = (new Injector(new FakeVndErrorModule(), __DIR__ . '/tmp'))->getInstance(FakeController::class);
     }
 
-    public function testValidationException()
+    public function testValidationException(): void
     {
         $this->expectException(ValidationException::class);
         $this->controller->createAction('');
     }
 
-    public function testValidationExceptionError()
+    public function testValidationExceptionError(): void
     {
         try {
             $this->controller->createAction('');
@@ -44,7 +44,7 @@ class VndErrorHandlerTest extends TestCase
         }
     }
 
-    public function testVndErrorAnnotation()
+    public function testVndErrorAnnotation(): void
     {
         /** @var FakeControllerVndError $controller */
         $controller = (new Injector(new FakeVndErrorModule()))->getInstance(FakeControllerVndError::class);
@@ -56,6 +56,10 @@ class VndErrorHandlerTest extends TestCase
     "message": "foo validation failed",
     "path": "/path/to/error",
     "logref": "a1000",
+    "href": {
+        "_self": "/path/to/error",
+        "help": "/path/to/help"
+    },
     "validation_messages": {
         "name": [
             "Name must be alphabetic only."

@@ -88,7 +88,7 @@ class MyForm extends AbstractForm
 ```
 ### Controller
 
-We annotate the methods which web form validation is required with `@FormValidation`. We can specify form object property name with `name` and failiure method name with `@onFailure`.
+We annotate the methods which web form validation is required with `#[FormValidation]`. We can specify form object property name with `form` and failure method name with `onFailure`.
 
 ```php
 use Ray\Di\Di\Inject;
@@ -103,18 +103,13 @@ class MyController
      */
     protected $contactForm;
 
-    /**
-     * @Inject
-     * @Named("contact_form")
-     */
-    public function setForm(FormInterface $form)
+    #[Inject]
+    public function setForm(#[Named("contact_form")] FormInterface $form)
     {
         $this->contactForm = $form;
     }
 
-    /**
-     * @FormValidation(form="contactForm", onFailure="badRequestAction")
-     */
+    #[FormValidation(form: "contactForm", onFailure: "badRequestAction")]
     public function createAction()
     {
         // validation success
@@ -183,17 +178,11 @@ echo $e->error;
 //}
 ```
 
-More detail for `vnd.error+json`can be add with `@VndError` annotation. 
+More detail for `vnd.error+json` can be added with the `#[VndError]` attribute.
 
 ```php
-    /**
-     * @FormValidation(form="contactForm")
-     * @VndError(
-     *   message="foo validation failed",
-     *   logref="a1000", path="/path/to/error",
-     *   href={"_self"="/path/to/error", "help"="/path/to/help"}
-     * )
-     */
+    #[FormValidation(form: "contactForm")]
+    #[VndError(message: "foo validation failed", logref: "a1000", path: "/path/to/error", href: ["_self" => "/path/to/error", "help" => "/path/to/help"])]
 ```
 
 This optional module is handy for API application. 

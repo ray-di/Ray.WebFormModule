@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Ray\WebFormModule;
 
 use Aura\Session\CsrfTokenFactory;
-use Aura\Session\Phpfunc;
 use Aura\Session\Randval;
 use Aura\Session\SegmentFactory;
 use Aura\Session\Session;
@@ -29,11 +28,11 @@ class AbstractFormTest extends TestCase
     }
 
     /**
-     * @param array<int, mixed> $arguments
+     * @param list<mixed> $arguments
      *
-     * @return ReflectiveMethodInvocation
+     * @return ReflectiveMethodInvocation<FakeController>
      */
-    public function getMethodInvocation(array $arguments)
+    public function getMethodInvocation(array $arguments): ReflectiveMethodInvocation
     {
         // form
         $fakeForm = (new FormFactory())->newInstance(FakeMiniForm::class);
@@ -51,45 +50,45 @@ class AbstractFormTest extends TestCase
         );
     }
 
-    public function testApply()
+    public function testApply(): void
     {
         $data = ['name' => 'aaa'];
         $isValid = $this->form->apply($data);
         $this->assertTrue($isValid);
     }
 
-    public function testSubmit()
+    public function testSubmit(): void
     {
         $this->expectException(Exception\ValidationException::class);
         $invocation = $this->getMethodInvocation(['na']);
         $invocation->proceed();
     }
 
-    public function testErrorReturnEmpty()
+    public function testErrorReturnEmpty(): void
     {
         $result = $this->form->error('name');
         $expected = '';
         $this->assertSame($expected, $result);
     }
 
-    public function testClone()
+    public function testClone(): void
     {
         $form = clone $this->form;
         $this->assertNotSame(spl_object_hash($form), spl_object_hash($this->form));
     }
 
-    public function testGetItelator()
+    public function testGetItelator(): void
     {
         $itelator = $this->form->getIterator();
         $this->assertInstanceOf(Iterator::class, $itelator);
     }
 
-    public function testAntiCsrfViolation()
+    public function testAntiCsrfViolation(): void
     {
         $this->expectException(CsrfViolationException::class);
         $session = new Session(
             new SegmentFactory(),
-            new CsrfTokenFactory(new Randval(new Phpfunc())),
+            new CsrfTokenFactory(new Randval()),
             new FakePhpfunc(),
             []
         );

@@ -6,7 +6,7 @@ namespace Ray\WebFormModule;
 
 use Ray\Di\Di\Named;
 
-class InputValidationInterceptor extends AuraInputInterceptor
+final class InputValidationInterceptor extends AuraInputInterceptor
 {
     public function __construct(#[Named('vnd_error')]
     FailureHandlerInterface $handler,)

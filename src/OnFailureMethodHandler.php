@@ -19,6 +19,8 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @param MethodInvocation<object> $invocation
      */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
@@ -29,11 +31,16 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
             throw new InvalidOnFailureMethod(get_class($invocation->getThis()));
         }
 
-        $onFailureMethod = $formValidation->onFailure ?: $invocation->getMethod()->getName() . self::FAILURE_SUFFIX;
-        if (! $formValidation instanceof FormValidation || ! method_exists($object, $onFailureMethod)) {
+        $onFailureMethod = $formValidation->onFailure !== null && $formValidation->onFailure !== ''
+            ? $formValidation->onFailure
+            : $invocation->getMethod()->getName() . self::FAILURE_SUFFIX;
+        if (! method_exists($object, $onFailureMethod)) {
             throw new InvalidOnFailureMethod(get_class($invocation->getThis()));
         }
 
-        return call_user_func_array([$invocation->getThis(), $onFailureMethod], $args);
+        /** @var callable $callback */
+        $callback = [$invocation->getThis(), $onFailureMethod];
+
+        return call_user_func_array($callback, $args);
     }
 }

@@ -9,6 +9,10 @@ use Ray\WebFormModule\Annotation\AbstractValidation;
 
 interface FailureHandlerInterface
 {
-    /** @return mixed */
+    /**
+     * @param MethodInvocation<object> $invocation
+     *
+     * @return mixed
+     */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form);
 }

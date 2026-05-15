@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Ray\WebFormModule\Exception;
 
-use LogicException;
-
-class InvalidOnFailureMethod extends LogicException
+final class InvalidOnFailureMethod extends LogicException
 {
 }

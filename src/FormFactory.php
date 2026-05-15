@@ -11,13 +11,14 @@ use Aura\Input\Builder;
 final class FormFactory
 {
     /**
-     * @param string $class
+     * @param class-string<AbstractForm> $class
      *
      * @return AbstractForm
+     *
+     * @psalm-suppress UnsafeInstantiation
      */
-    public function newInstance($class)
+    public function newInstance(string $class)
     {
-        /** @var AbstractForm $form */
         $form = new $class();
         $form->setBaseDependencies(new Builder(), new FilterFactory(), new HelperLocatorFactory());
         $form->postConstruct();

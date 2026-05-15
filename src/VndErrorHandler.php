@@ -14,6 +14,8 @@ final class VndErrorHandler implements FailureHandlerInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @param MethodInvocation<object> $invocation
      */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
@@ -52,16 +54,20 @@ final class VndErrorHandler implements FailureHandlerInterface
     private function optionalAttribute(VndError $vndError): array
     {
         $body = [];
-        if ($vndError->message) {
+        if ($vndError->message !== '') {
             $body['message'] = $vndError->message;
         }
 
-        if ($vndError->path) {
+        if ($vndError->path !== null && $vndError->path !== '') {
             $body['path'] = $vndError->path;
         }
 
-        if ($vndError->logref) {
+        if ($vndError->logref !== null && $vndError->logref !== '') {
             $body['logref'] = $vndError->logref;
+        }
+
+        if ($vndError->href !== []) {
+            $body['href'] = $vndError->href;
         }
 
         return $body;

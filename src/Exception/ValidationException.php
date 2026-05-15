@@ -8,7 +8,7 @@ use Exception;
 use Ray\WebFormModule\FormValidationError;
 use Throwable;
 
-class ValidationException extends Exception
+final class ValidationException extends Exception
 {
     /** @var FormValidationError|null */
     public $error;

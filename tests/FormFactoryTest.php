@@ -18,7 +18,7 @@ class FormFactoryTest extends TestCase
         $this->factory = new FormFactory();
     }
 
-    public function testNewInstance()
+    public function testNewInstance(): void
     {
         $form = $this->factory->newInstance(FakeMiniForm::class);
         $this->assertInstanceOf(AbstractForm::class, $form);

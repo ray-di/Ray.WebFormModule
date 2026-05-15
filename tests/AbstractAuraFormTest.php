@@ -23,13 +23,13 @@ class AbstractAuraFormTest extends TestCase
         $this->form = (new FormFactory())->newInstance(FakeForm::class);
     }
 
-    public function testForm()
+    public function testForm(): void
     {
         $formHtml = $this->form->form();
         $this->assertSame('<form method="post" enctype="multipart/form-data">', $formHtml);
     }
 
-    public function testAntiCsrfForm()
+    public function testAntiCsrfForm(): void
     {
         $this->form->setAntiCsrf(new FakeAntiCsrf());
         $this->form->postConstruct();
@@ -37,14 +37,13 @@ class AbstractAuraFormTest extends TestCase
         $this->assertSame('<form method="post" enctype="multipart/form-data"><input type="hidden" name="__csrf_token" value="goodvalue" />' . PHP_EOL, $formHtml);
     }
 
-    public function testInput()
+    public function testInput(): void
     {
         $name = $this->form->input('name');
         $this->assertSame('<input id="name" type="text" name="name" />' . PHP_EOL, (string) $name);
     }
 
-    /** @return string */
-    public function testError()
+    public function testError(): string
     {
         $this->form->fill([]);
         $data = ['name' => '@invalid@'];
@@ -56,23 +55,21 @@ class AbstractAuraFormTest extends TestCase
         return (string) $this->form;
     }
 
-    /**
-     * @param string $html
-     *
-     * @depends testError
-     */
-    public function tesetInputDataReamainedOnValidationFailure($html)
+    /** @depends testError */
+    public function tesetInputDataReamainedOnValidationFailure(string $html): void
     {
         $expected = '<input id="name" type="text" name="name" value="@invalid@" />';
         $this->assertStringContainsString($expected, $html);
     }
 
-    public function testNotToStringImplemented()
+    public function testNotToStringImplemented(): void
     {
         $errNo = $errStr = '';
-        set_error_handler(static function (int $no, string $str) use (&$errNo, &$errStr) {
+        set_error_handler(static function (int $no, string $str) use (&$errNo, &$errStr): bool {
             $errNo = $no;
             $errStr = $str;
+
+            return true;
         });
         $form = new FakeErrorForm();
         (string) $form;

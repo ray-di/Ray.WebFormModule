@@ -11,14 +11,14 @@ use Ray\WebFormModule\Exception\ValidationException;
 
 class AuraInputModuleTest extends TestCase
 {
-    public function testAuraInputModule()
+    public function testAuraInputModule(): void
     {
         $injector = new Injector(new FakeModule(), __DIR__ . '/tmp');
         $controller = $injector->getInstance(FakeController::class);
         $this->assertInstanceOf(WeavedInterface::class, $controller);
     }
 
-    public function testExceptionOnFailure()
+    public function testExceptionOnFailure(): void
     {
         $this->expectException(ValidationException::class);
         $injector = new Injector(new FakeModule(), __DIR__ . '/tmp');

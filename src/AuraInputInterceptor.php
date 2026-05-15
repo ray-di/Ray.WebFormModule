@@ -15,6 +15,7 @@ use ReflectionClass;
 use ReflectionMethod;
 
 use function array_shift;
+use function is_array;
 use function property_exists;
 
 class AuraInputInterceptor implements MethodInterceptor
@@ -35,11 +36,12 @@ class AuraInputInterceptor implements MethodInterceptor
     public function invoke(MethodInvocation $invocation)
     {
         $object = $invocation->getThis();
-        /** @var FormValidation $formValidation */
         $method = $invocation->getMethod();
         $formValidation = $this->getValidationAttribute($method);
         $form = $this->getFormProperty($formValidation, $object);
-        $data = $form instanceof SubmitInterface ? $form->submit() : $this->getNamedArguments($invocation);
+        $submit = $form instanceof SubmitInterface ? $form->submit() : $this->getNamedArguments($invocation);
+        /** @var array<string, mixed> $data */
+        $data = is_array($submit) ? $submit : (array) $submit;
         $isValid = $this->isValid($data, $form);
         if ($isValid === true) {
             // validation   success
@@ -64,6 +66,8 @@ class AuraInputInterceptor implements MethodInterceptor
     /**
      * Return arguments as named arguments.
      *
+     * @param MethodInvocation<object> $invocation
+     *
      * @return array<string, mixed>
      */
     private function getNamedArguments(MethodInvocation $invocation)
@@ -72,7 +76,9 @@ class AuraInputInterceptor implements MethodInterceptor
         $params = $invocation->getMethod()->getParameters();
         $args = $invocation->getArguments()->getArrayCopy();
         foreach ($params as $param) {
+            /** @var mixed $arg */
             $arg = array_shift($args);
+            /** @psalm-suppress MixedAssignment */
             $submit[$param->getName()] = $arg;
         }
 

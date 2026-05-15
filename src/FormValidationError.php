@@ -9,7 +9,7 @@ use function json_encode;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 
-class FormValidationError
+final class FormValidationError
 {
     /** @var array<string, mixed> */
     private $value;
@@ -22,6 +22,6 @@ class FormValidationError
 
     public function __toString(): string
     {
-        return json_encode($this->value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        return (string) json_encode($this->value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 }

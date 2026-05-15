@@ -38,7 +38,7 @@ final class AntiCsrf implements AntiCsrfInterface
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param array<array-key, mixed> $data
      *
      * @return bool
      */

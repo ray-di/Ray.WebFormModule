@@ -6,7 +6,7 @@ namespace Ray\WebFormModule;
 
 use Ray\Di\AbstractModule;
 
-class FormVndErrorModule extends AbstractModule
+final class FormVndErrorModule extends AbstractModule
 {
     /**
      * {@inheritDoc}

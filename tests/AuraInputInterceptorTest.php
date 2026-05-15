@@ -75,21 +75,21 @@ class AuraInputInterceptorTest extends TestCase
 //        $invocation->proceed();
 //    }
 
-    /** @return void */
-    public function testProceedFailed()
+    /** Test proceed failed. */
+    public function testProceedFailed(): void
     {
         $result = $this->controller->createAction([]);
         $this->assertSame('400', $result);
     }
 
-    public function testProceed()
+    public function testProceed(): void
     {
         $result = $this->controller->createAction('BEAR');
         $this->assertSame('201', $result);
     }
 
     /** @return array<array<FakeInvalidController1|FakeInvalidController2>> */
-    public function invalidControllerProvider()
+    public function invalidControllerProvider(): array
     {
         return [
             [$this->injector->getInstance(FakeInvalidController1::class)],
@@ -97,21 +97,21 @@ class AuraInputInterceptorTest extends TestCase
         ];
     }
 
-    public function testInvalidFormPropertyByMissingProperty()
+    public function testInvalidFormPropertyByMissingProperty(): void
     {
         $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController1::class);
         $controller->createAction();
     }
 
-    public function testInvalidFormPropertyByMissingProperty2()
+    public function testInvalidFormPropertyByMissingProperty2(): void
     {
         $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController2::class);
         $controller->createAction();
     }
 
-    public function testInvalidFormPropertyException()
+    public function testInvalidFormPropertyException(): void
     {
         $this->expectException(InvalidFormPropertyException::class);
         /** @var FakeInvalidController3 $controller */
@@ -119,14 +119,14 @@ class AuraInputInterceptorTest extends TestCase
         $controller->createAction('');
     }
 
-    public function testInvalidFormPropertyByInvalidInstance()
+    public function testInvalidFormPropertyByInvalidInstance(): void
     {
         $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController1::class);
-        $controller->createAction('');
+        $controller->createAction();
     }
 
-    public function testProceedWithVndErrorHandler()
+    public function testProceedWithVndErrorHandler(): void
     {
         $injector = new Injector(new FakeVndErrorModule());
         /** @var FakeController $controller */
