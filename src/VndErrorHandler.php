@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace Ray\WebFormModule;
 
 use Ray\Aop\MethodInvocation;
-use Ray\Aop\ReflectionMethod;
 use Ray\WebFormModule\Annotation\AbstractValidation;
 use Ray\WebFormModule\Annotation\VndError;
 use Ray\WebFormModule\Exception\ValidationException;
+use ReflectionMethod;
 
 final class VndErrorHandler implements FailureHandlerInterface
 {

@@ -37,50 +37,6 @@ class AuraInputInterceptorTest extends TestCase
         $this->controller = $this->injector->getInstance(FakeController::class);
     }
 
-//    /**
-//     * @param $method
-//     */
-//    public function getMethodInvocation(string $method, array $submit, FailureHandlerInterface $handler = null)
-//    {
-//        $handler = $handler ?: new OnFailureMethodHandler;
-//        $object = $this->getController($submit);
-//
-//        $invocation =  new ReflectiveMethodInvocation(
-//            $object,
-//            $method,
-//            $submit,
-//            [
-//                new AuraInputInterceptor(new AnnotationReader, $handler)
-//            ]
-//        );
-//
-//        return $invocation;
-//    }
-//
-//    public function getController(array $submit)
-//    {
-//        $controller = new FakeController;
-//        /** @var $fakeForm FakeForm */
-//        $fakeForm = (new FormFactory)->newInstance(FakeForm::class);
-//        $fakeForm->setSubmit($submit);
-//        $controller->setForm($fakeForm);
-//
-//        return $controller;
-//    }
-//
-//    public function proceed($controller)
-//    {
-//        $invocation = new ReflectiveMethodInvocation(
-//            $controller,
-//            new \ReflectionMethod($controller, 'createAction'),
-//            [],
-//            [
-//                new AuraInputInterceptor(new AnnotationReader, new OnFailureMethodHandler)
-//            ]
-//        );
-//        $invocation->proceed();
-//    }
-
     public function testProceedFailed()
     {
         $result = $this->controller->createAction([]);
@@ -92,14 +48,6 @@ class AuraInputInterceptorTest extends TestCase
         $result = $this->controller->createAction('BEAR');
         $this->assertSame('201', $result);
     }
-
-//    public function invalidControllerProvider()
-//    {
-//        return [
-//            [$this->injector->getInstance(FakeInvalidController1::class)],
-//            [$this->injector->getInstance(FakeInvalidController2::class)]
-//        ];
-//    }
 
     public function testInvalidFormPropertyByMissingProperty()
     {

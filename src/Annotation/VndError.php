@@ -23,8 +23,8 @@ final class VndError
      * @see http://tools.ietf.org/html/rfc6892
      */
     public function __construct(
-        public string $message,
-        public array $href,
+        public string $message = '',
+        public array $href = [],
         public string|null $logref = null,
         public string|null $path = null
     ) {
