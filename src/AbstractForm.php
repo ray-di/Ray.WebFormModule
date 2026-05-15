@@ -31,13 +31,12 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /** @var SubjectFilter */
     protected $filter;
 
-    /** @var array|null */
-    protected $errorMessages;
+    /** @var array<string, list<string>>|null */
+    protected ?array $errorMessages = null;
 
     protected HelperLocator $helper;
 
-    /** @var AntiCsrfInterface */
-    protected $antiCsrf;
+    protected ?AntiCsrfInterface $antiCsrf = null;
 
     public function __construct()
     {

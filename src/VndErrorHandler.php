@@ -41,7 +41,7 @@ final class VndErrorHandler implements FailureHandlerInterface
         return $instance;
     }
 
-    private function makeVndError(AbstractForm $form, VndError $vndError = null)
+    private function makeVndError(AbstractForm $form, ?VndError $vndError = null)
     {
         $body = ['message' => 'Validation failed'];
         $body['path'] = $_SERVER['PATH_INFO'] ?? '';
