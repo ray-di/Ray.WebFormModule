@@ -8,9 +8,7 @@ class FakeInvalidInstanceController
 {
     private $form;
 
-    /**
-     * @FormValidation
-     */
+    #[FormValidation]
     public function createAction()
     {
     }

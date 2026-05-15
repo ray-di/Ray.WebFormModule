@@ -6,15 +6,14 @@
  */
 namespace Ray\WebFormModule;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Ray\Aop\ReflectiveMethodInvocation;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 use Ray\Di\InjectorInterface;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
 use Ray\WebFormModule\Exception\ValidationException;
 
-class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
+class AuraInputInterceptorTest extends TestCase
 {
     /**
      * @var InjectorInterface
@@ -26,7 +25,7 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
      */
     private $controller;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->injector = new Injector(new class() extends AbstractModule {
             protected function configure()
@@ -37,50 +36,6 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
         });
         $this->controller = $this->injector->getInstance(FakeController::class);
     }
-
-//    /**
-//     * @param $method
-//     */
-//    public function getMethodInvocation(string $method, array $submit, FailureHandlerInterface $handler = null)
-//    {
-//        $handler = $handler ?: new OnFailureMethodHandler;
-//        $object = $this->getController($submit);
-//
-//        $invocation =  new ReflectiveMethodInvocation(
-//            $object,
-//            $method,
-//            $submit,
-//            [
-//                new AuraInputInterceptor(new AnnotationReader, $handler)
-//            ]
-//        );
-//
-//        return $invocation;
-//    }
-//
-//    public function getController(array $submit)
-//    {
-//        $controller = new FakeController;
-//        /** @var $fakeForm FakeForm */
-//        $fakeForm = (new FormFactory)->newInstance(FakeForm::class);
-//        $fakeForm->setSubmit($submit);
-//        $controller->setForm($fakeForm);
-//
-//        return $controller;
-//    }
-//
-//    public function proceed($controller)
-//    {
-//        $invocation = new ReflectiveMethodInvocation(
-//            $controller,
-//            new \ReflectionMethod($controller, 'createAction'),
-//            [],
-//            [
-//                new AuraInputInterceptor(new AnnotationReader, new OnFailureMethodHandler)
-//            ]
-//        );
-//        $invocation->proceed();
-//    }
 
     public function testProceedFailed()
     {
@@ -94,31 +49,23 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('201', $result);
     }
 
-    public function invalidControllerProvider()
-    {
-        return [
-            [$this->injector->getInstance(FakeInvalidController1::class)],
-            [$this->injector->getInstance(FakeInvalidController2::class)]
-        ];
-    }
-
     public function testInvalidFormPropertyByMissingProperty()
     {
-        $this->setExpectedException(InvalidFormPropertyException::class);
+        $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController1::class);
         $controller->createAction();
     }
 
     public function testInvalidFormPropertyByMissingProperty2()
     {
-        $this->setExpectedException(InvalidFormPropertyException::class);
+        $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController2::class);
         $controller->createAction();
     }
 
     public function testInvalidFormPropertyException()
     {
-        $this->setExpectedException(InvalidFormPropertyException::class);
+        $this->expectException(InvalidFormPropertyException::class);
         /** @var FakeInvalidController3 $controller */
         $controller = $this->injector->getInstance(FakeInvalidController3::class);
         $controller->createAction('');
@@ -126,24 +73,29 @@ class AuraInputInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidFormPropertyByInvalidInstance()
     {
-        $this->setExpectedException(InvalidFormPropertyException::class);
-        $this->setExpectedException(InvalidFormPropertyException::class);
+        $this->expectException(InvalidFormPropertyException::class);
         $controller = $this->injector->getInstance(FakeInvalidController1::class);
         $controller->createAction('');
     }
 
     public function testProceedWithVndErrorHandler()
     {
-        /** @var FakeController $controller */
-        $controller = $this->injector->getInstance(FakeController::class);
+        /** @var FakeControllerVndError $controller */
+        $controller = $this->injector->getInstance(FakeControllerVndError::class);
         try {
             $controller->createAction('');
+            $this->fail('ValidationException should be thrown');
         } catch (ValidationException $e) {
             $this->assertInstanceOf(FormValidationError::class, $e->error);
             $json = (string) $e->error;
             $this->assertSame('{
-    "message": "Validation failed",
-    "path": "",
+    "message": "foo validation failed",
+    "path": "/path/to/error",
+    "logref": "a1000",
+    "href": {
+        "_self": "/path/to/error",
+        "help": "/path/to/help"
+    },
     "validation_messages": {
         "name": [
             "Name must be alphabetic only."

@@ -1,38 +1,33 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * This file is part of the Ray.WebFormModule package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule;
 
-use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\AbstractValidation;
-use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidArgumentException;
 use Ray\WebFormModule\Exception\InvalidFormPropertyException;
+use ReflectionAttribute;
+use ReflectionClass;
+use ReflectionMethod;
+
+use function array_shift;
+use function property_exists;
 
 class AuraInputInterceptor implements MethodInterceptor
 {
-    /**
-     * @var Reader
-     */
-    protected $reader;
+    protected FailureHandlerInterface $failureHandler;
 
-    /**
-     * @var FailureHandlerInterface
-     */
-    protected $failureHandler;
-
-    /**
-     * @param Reader                  $reader
-     * @param FailureHandlerInterface $handler
-     */
-    public function __construct(Reader $reader, FailureHandlerInterface $handler)
+    public function __construct(FailureHandlerInterface $handler)
     {
-        $this->reader = $reader;
         $this->failureHandler = $handler;
     }
 
@@ -44,33 +39,45 @@ class AuraInputInterceptor implements MethodInterceptor
     public function invoke(MethodInvocation $invocation)
     {
         $object = $invocation->getThis();
-        /* @var $formValidation FormValidation */
-        $method = $invocation->getMethod();
-        $formValidation = $this->reader->getMethodAnnotation($method, AbstractValidation::class);
+        $formValidation = $this->getValidationAttribute($invocation->getMethod());
+        if ($formValidation === null) {
+            throw new InvalidArgumentException('The method must be attributed with #[FormValidation] or #[InputValidation]');
+        }
+
         $form = $this->getFormProperty($formValidation, $object);
         $data = $form instanceof SubmitInterface ? $form->submit() : $this->getNamedArguments($invocation);
         $isValid = $this->isValid($data, $form);
         if ($isValid === true) {
-            // validation   success
             return $invocation->proceed();
         }
 
         return $this->failureHandler->handle($formValidation, $invocation, $form);
     }
 
+    private function getValidationAttribute(ReflectionMethod $method): AbstractValidation|null
+    {
+        $attributes = $method->getAttributes(AbstractValidation::class, ReflectionAttribute::IS_INSTANCEOF);
+        if ($attributes === []) {
+            return null;
+        }
+
+        $instance = $attributes[0]->newInstance();
+        assert($instance instanceof AbstractValidation);
+
+        return $instance;
+    }
+
     /**
      * @param array        $submit
      * @param AbstractForm $form
      *
+     * @return bool
      * @throws Exception\CsrfViolationException
      *
-     * @return bool
      */
-    public function isValid(array $submit, AbstractForm $form)
+    public function isValid(array $submit, AbstractForm $form): bool
     {
-        $isValid = $form->apply($submit);
-
-        return $isValid;
+        return $form->apply($submit);
     }
 
     /**
@@ -80,7 +87,7 @@ class AuraInputInterceptor implements MethodInterceptor
      *
      * @return array
      */
-    private function getNamedArguments(MethodInvocation $invocation)
+    private function getNamedArguments(MethodInvocation $invocation): array
     {
         $submit = [];
         $params = $invocation->getMethod()->getParameters();
@@ -89,7 +96,8 @@ class AuraInputInterceptor implements MethodInterceptor
             $arg = array_shift($args);
             $submit[$param->getName()] = $arg;
         }
-        // has token ?
+
+        // has token?
         if (isset($_POST[AntiCsrf::TOKEN_KEY])) {
             $submit[AntiCsrf::TOKEN_KEY] = $_POST[AntiCsrf::TOKEN_KEY];
         }
@@ -110,7 +118,8 @@ class AuraInputInterceptor implements MethodInterceptor
         if (! property_exists($object, $formValidation->form)) {
             throw new InvalidFormPropertyException($formValidation->form);
         }
-        $prop = (new \ReflectionClass($object))->getProperty($formValidation->form);
+
+        $prop = (new ReflectionClass($object))->getProperty($formValidation->form);
         $prop->setAccessible(true);
         $form = $prop->getValue($object);
         if (! $form instanceof AbstractForm) {

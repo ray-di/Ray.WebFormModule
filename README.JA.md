@@ -79,7 +79,7 @@ public function createAction($id, $name, $body)
 
 ### Controller
 
-コントローラークラスにフォームをインジェクトします。フォームのバリデーションを行うメソッドを`@FormValidation`で
+コントローラークラスにフォームをインジェクトします。フォームのバリデーションを行うメソッドを`#[FormValidation]`で
 アノテートします。この時フォームのプロパティ名を`form`で、バリデーションが失敗したときのメソッドを`onFailure`で指定します。
 
 ```php
@@ -95,18 +95,13 @@ class MyController
      */
     protected $contactForm;
 
-    /**
-     * @Inject
-     * @Named("contact_form")
-     */
-    public function setForm(FormInterface $form)
+    #[Inject]
+    public function setForm(#[Named("contact_form")] FormInterface $form)
     {
         $this->contactForm = $form;
     }
 
-    /**
-     * @FormValidation(form="contactForm", onFailure="badRequestAction")
-     */
+    #[FormValidation(form: "contactForm", onFailure: "badRequestAction")]
     public function createAction()
     {
         // validation success
@@ -144,16 +139,14 @@ class MyForm extends AbstractAuraForm
 
 ## Validation Exception
 
-`@FormValidation`の代わりに`@InputValidation`とアノテートするとバリデーションが失敗したときに`Ray\WebFormModule\Exception\ValidationException`が投げられるよになります。この場合はHTML表現は使われません。Web APIアプリケーションなどに便利です。
+`#[FormValidation]`の代わりに`#[InputValidation]`とアノテートするとバリデーションが失敗したときに`Ray\WebFormModule\Exception\ValidationException`が投げられるよになります。この場合はHTML表現は使われません。Web APIアプリケーションなどに便利です。
 
 ```php
 use Ray\WebFormModule\Annotation\InputValidation;
 
 class Foo
 {
-    /**
-     * @InputValidation(form="form1")
-     */
+    #[InputValidation(form: "form1")]
     public function createAction($name)
     {
       // ...
@@ -190,17 +183,11 @@ echo $e->error;
 //}
 ```
 
-`@VndError`アノテーションで`vnd.error+json`に必要な情報を加えることができます。
+`#[VndError]`属性で`vnd.error+json`に必要な情報を加えることができます。
 
 ```php
-    /**
-     * @FormValidation(form="contactForm")
-     * @VndError(
-     *   message="foo validation failed",
-     *   logref="a1000", path="/path/to/error",
-     *   href={"_self"="/path/to/error", "help"="/path/to/help"}
-     * )
-     */
+    #[FormValidation(form: "contactForm")]
+    #[VndError(message: "foo validation failed", logref: "a1000", path: "/path/to/error", href: ["_self" => "/path/to/error", "help" => "/path/to/help"])]
 ```
 
 このオプションのモジュールはAPIアプリケーションの時に有用です。

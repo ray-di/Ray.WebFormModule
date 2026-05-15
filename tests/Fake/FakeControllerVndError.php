@@ -14,24 +14,14 @@ class FakeControllerVndError
      */
     protected $form1;
 
-    /**
-     * @Inject
-     * @Named("contact_form")
-     */
-    public function setForm(FormInterface $form)
+    #[Inject]
+    public function setForm(#[Named('contact_form')] FormInterface $form)
     {
         $this->form1 = $form;
     }
 
-    /**
-     * @InputValidation(form="form1")
-     * @VndError(
-     *   message="foo validation failed",
-     *   logref="a1000",
-     *   path="/path/to/error",
-     *   href={"_self"="/path/to/error", "help"="/path/to/help"}
-     * )
-     */
+    #[InputValidation(form: 'form1')]
+    #[VndError(message: 'foo validation failed', href: ['_self' => '/path/to/error', 'help' => '/path/to/help'], logref: 'a1000', path: '/path/to/error')]
     public function createAction($name)
     {
     }

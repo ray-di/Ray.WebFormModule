@@ -1,19 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * This file is part of the Ray.WebFormModule package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace Ray\WebFormModule\Annotation;
 
-/**
- * @Annotation
- * @Target("METHOD")
- */
-class AbstractValidation
+abstract class AbstractValidation
 {
-    /**
-     * @var string
-     */
-    public $form = 'form';
+    public function __construct(public string $form = 'form')
+    {
+    }
 }
