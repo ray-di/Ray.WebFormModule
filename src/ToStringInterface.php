@@ -7,11 +7,10 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-
 namespace Ray\WebFormModule;
 
 /** Return form markup string */
 interface ToStringInterface
 {
-    public function toString(): string;
+    public function toString() : string;
 }

@@ -7,7 +7,6 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-
 namespace Ray\WebFormModule;
 
 interface SubmitInterface
@@ -15,7 +14,7 @@ interface SubmitInterface
     /**
      * Return subject value
      *
-     * @return array|object
+     * @return array<string, mixed>|object
      */
     public function submit();
 }

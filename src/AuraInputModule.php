@@ -7,7 +7,6 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-
 namespace Ray\WebFormModule;
 
 use Aura\Filter\FilterFactory;
@@ -23,6 +22,9 @@ use Ray\Di\Scope;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Annotation\InputValidation;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AuraInputModule extends AbstractModule
 {
     /** {@inheritdoc} */

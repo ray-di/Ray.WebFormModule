@@ -7,15 +7,12 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-
 namespace Ray\WebFormModule;
 
 use Aura\Input\AntiCsrfInterface;
 use Aura\Input\Fieldset;
 use Aura\Session\Session;
-
 use function is_bool;
-
 use const PHP_SAPI;
 
 final class AntiCsrf implements AntiCsrfInterface
@@ -34,14 +31,14 @@ final class AntiCsrf implements AntiCsrfInterface
         $this->isCli = is_bool($isCli) ? $isCli : PHP_SAPI === 'cli';
     }
 
-    public function setField(Fieldset $fieldset): void
+    public function setField(Fieldset $fieldset) : void
     {
         $fieldset->setField(self::TOKEN_KEY, 'hidden')
             ->setAttribs(['value' => $this->getToken()]);
     }
 
-    /** @param array $data */
-    public function isValid(array $data): bool
+    /** @param array<string, mixed> $data */
+    public function isValid(array $data) : bool
     {
         if ($this->isCli) {
             return true;
@@ -50,7 +47,7 @@ final class AntiCsrf implements AntiCsrfInterface
         return isset($data[self::TOKEN_KEY]) && $data[self::TOKEN_KEY] === $this->getToken();
     }
 
-    private function getToken(): string
+    private function getToken() : string
     {
         return $this->isCli ? self::TEST_TOKEN : $this->session->getCsrfToken()->getValue();
     }

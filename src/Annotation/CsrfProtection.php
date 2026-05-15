@@ -12,12 +12,6 @@ namespace Ray\WebFormModule\Annotation;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-final class FormValidation extends AbstractValidation
+final class CsrfProtection
 {
-    public function __construct(
-        string $form = 'form',
-        public string|null $onFailure = null
-    ) {
-        parent::__construct($form);
-    }
 }

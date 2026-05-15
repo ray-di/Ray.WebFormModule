@@ -6,16 +6,16 @@ This file is part of the Ray.WebFormModule package.
 @license http://opensource.org/licenses/MIT MIT
 EOF;
 
-return \PhpCsFixer\Config::create()
+return (new \PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules(array(
         '@PSR2' => true,
-        'header_comment' => ['header' => $header, 'commentType' => 'PHPDoc', 'separate' => 'none'],
+        'header_comment' => ['header' => $header, 'comment_type' => 'PHPDoc', 'separate' => 'none'],
         'array_syntax' => ['syntax' => 'short'],
-        'binary_operator_spaces' => ['align_equals' => false, 'align_double_arrow' => false],
+        'binary_operator_spaces' => ['default' => 'single_space'],
         'blank_line_after_opening_tag' => true,
         'blank_line_after_namespace' => false,
-        'blank_line_before_return' => true,
+        'blank_line_before_statement' => ['statements' => ['return']],
         'cast_spaces' => true,
 //        'class_keyword_remove' => true,
         'combine_consecutive_unsets' => true,
@@ -24,41 +24,40 @@ return \PhpCsFixer\Config::create()
         'declare_strict_types' => false,
         'dir_constant' => true,
         'ereg_to_preg' => true,
-        'function_typehint_space' => true,
+        'type_declaration_spaces' => true,
         'general_phpdoc_annotation_remove' => true,
-        'hash_to_slash_comment' => true,
+        'single_line_comment_style' => ['comment_types' => ['hash']],
         'heredoc_to_nowdoc' => true,
         'include' => true,
         'indentation_type' => true,
-        'is_null' => ['use_yoda_style' => false],
+        'is_null' => true,
         'linebreak_after_opening_tag' => true,
         'lowercase_cast' => true,
 //        'mb_str_functions' => true,
-        'method_separation' => true,
+        'class_attributes_separation' => ['elements' => ['method' => 'one', 'trait_import' => 'none']],
         'modernize_types_casting' => true,
         'native_function_casing' => true,
 //        'native_function_invocation' => true,
-        'new_with_braces' => false, //
+        'new_with_parentheses' => false, //
         'no_alias_functions' => true,
         'no_blank_lines_after_class_opening' => true,
         'no_blank_lines_after_phpdoc' => true,
-        'no_blank_lines_before_namespace' => true,
+        'blank_lines_before_namespace' => ['min_line_breaks' => 1, 'max_line_breaks' => 1],
         'no_empty_comment' => true,
         'no_empty_phpdoc' => true,
         'no_empty_statement' => true,
-        'no_extra_consecutive_blank_lines' => ['break', 'continue', 'curly_brace_block', 'extra', 'parenthesis_brace_block', 'return', 'square_brace_block', 'throw', 'use', 'useTrait'],
+        'no_extra_blank_lines' => ['tokens' => ['break', 'continue', 'curly_brace_block', 'extra', 'parenthesis_brace_block', 'return', 'square_brace_block', 'throw', 'use']],
         'no_leading_import_slash' => true,
         'no_leading_namespace_whitespace' => true,
         'no_mixed_echo_print' => ['use' => 'echo'],
         'no_multiline_whitespace_around_double_arrow' => true,
-        'no_multiline_whitespace_before_semicolons' => true,
+        'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
         'no_php4_constructor' => false,
         'no_short_bool_cast' => true,
-        'no_short_echo_tag' => false,
+        'echo_tag_syntax' => false,
         'no_singleline_whitespace_before_semicolons' => true,
         'no_spaces_around_offset' => true,
-        'no_trailing_comma_in_list_call' => true,
-        'no_trailing_comma_in_singleline_array' => true,
+        'no_trailing_comma_in_singleline' => true,
         'no_trailing_whitespace' => true,
         'no_trailing_whitespace_in_comment' => true,
         'no_unneeded_control_parentheses' => true,
@@ -82,9 +81,9 @@ return \PhpCsFixer\Config::create()
         'phpdoc_align' => true,
         'phpdoc_annotation_without_dot' => true,
         'phpdoc_indent' => true,
-        'phpdoc_inline_tag' => true,
+        'phpdoc_inline_tag_normalizer' => true,
         'phpdoc_no_access' => true,
-        'phpdoc_no_alias_tag' => ['property-read' => 'property', 'property-write' => 'property', 'type' => 'var'],
+        'phpdoc_no_alias_tag' => ['replacements' => ['property-read' => 'property', 'property-write' => 'property', 'type' => 'var']],
         'phpdoc_no_empty_return' => true,
         'phpdoc_no_package' => true,
 //        'phpdoc_no_useless_inheritdoc' => true,
@@ -101,8 +100,7 @@ return \PhpCsFixer\Config::create()
         'pow_to_exponentiation' => true,
 //        'pre_increment' => true,
         'protected_to_private' => true,
-        'psr0' => true,
-        'psr4' => true,
+        'psr_autoloading' => true,
         'random_api_migration' => true,
         'return_type_declaration' =>  ['space_before' => 'one'],
         'self_accessor' => true,
@@ -125,8 +123,10 @@ return \PhpCsFixer\Config::create()
     ->setFinder(
         PhpCsFixer\Finder::create()
             ->exclude('tests/Fake')
+            ->exclude('tests/tmp')
             ->exclude('src-data')
             ->exclude('src-deprecated')
+            ->exclude('docs/demo/tmp')
             ->in(__DIR__)
     )->setLineEnding("\n")
     ->setUsingCache(false);

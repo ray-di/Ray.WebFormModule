@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Ray.WebFormModule package.
  *
@@ -8,6 +9,7 @@ namespace Ray\WebFormModule;
 
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+use Ray\WebFormModule\Annotation\CsrfProtection;
 use Ray\WebFormModule\Annotation\FormValidation;
 
 class Controller
@@ -21,6 +23,7 @@ class Controller
 
     /**
      * @Inject
+     *
      * @Named("contact_form")
      */
     public function setForm(FormInterface $form)
@@ -35,9 +38,8 @@ class Controller
         return $this;
     }
 
-    /**
-     * @FormValidation(form="form", onFailure="badRequestAction")
-     */
+    #[FormValidation(form: 'form', onFailure: 'badRequestAction')]
+    #[CsrfProtection]
     public function createUser($post)
     {
         $this->response['code'] = 201;

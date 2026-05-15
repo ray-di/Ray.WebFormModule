@@ -1,8 +1,8 @@
 # Ray.WebFormModule
 
+[![Continuous Integration](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/continuous-integration.yml)
+[![Coding Standards](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/coding-standards.yml)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
-[![Code Coverage](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
-[![Build Status](https://travis-ci.org/ray-di/Ray.WebFormModule.svg?branch=1.x)](https://travis-ci.org/ray-di/Ray.WebFormModule)
 
 An aspect oriented web form module powered by [Aura.Input](https://github.com/auraphp/Aura.Input) and [Ray.Di](https://github.com/ray-di/Ray.Di).
 
@@ -12,7 +12,7 @@ An aspect oriented web form module powered by [Aura.Input](https://github.com/au
 
 ### Composer install
 
-    $ composer require web-form-module
+    $ composer require ray/web-form-module
  
 ### Module install
 
@@ -139,11 +139,24 @@ or render input element basis.
 ## CSRF Protections
 
 ```php
+use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\Annotation\CsrfProtection;
+use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 
-class MyController 
+class MyForm extends AbstractAuraForm
 {
     use SetAntiCsrfTrait;
+}
+
+class MyController
+{
+    #[FormValidation(form: "contactForm")]
+    #[CsrfProtection]
+    public function createAction()
+    {
+    }
+}
 ```
 You can provide your custom `AntiCsrf` class. See more detail at [Aura.Input](https://github.com/auraphp/Aura.Input#applying-csrf-protections)
 

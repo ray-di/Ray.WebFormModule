@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Ray.WebFormModule package.
  *
@@ -15,7 +16,7 @@ class FormFactoryTest extends TestCase
      */
     private $factory;
 
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
         $this->factory = new FormFactory;

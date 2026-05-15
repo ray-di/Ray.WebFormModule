@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Ray.WebFormModule package.
  *
@@ -25,13 +26,14 @@ class AuraInputInterceptorTest extends TestCase
      */
     private $controller;
 
-    public function setUp(): void
+    public function setUp() : void
     {
         $this->injector = new Injector(new class() extends AbstractModule {
             protected function configure()
             {
                 $this->install(new AuraInputModule);
                 $this->bind(FormInterface::class)->annotatedWith('contact_form')->to(FakeForm::class);
+                $this->bind(FormInterface::class)->annotatedWith('mini_form')->to(FakeMiniForm::class);
             }
         });
         $this->controller = $this->injector->getInstance(FakeController::class);
@@ -47,6 +49,18 @@ class AuraInputInterceptorTest extends TestCase
     {
         $result = $this->controller->createAction('BEAR');
         $this->assertSame('201', $result);
+    }
+
+    public function testCsrfProtectionAttributeEnablesAntiCsrf()
+    {
+        /** @var FakeCsrfController $controller */
+        $controller = $this->injector->getInstance(FakeCsrfController::class);
+        $this->assertStringNotContainsString(AntiCsrf::TOKEN_KEY, $controller->formHtml());
+
+        $result = $controller->createAction('BEAR');
+
+        $this->assertSame('201', $result);
+        $this->assertStringContainsString(AntiCsrf::TOKEN_KEY, $controller->formHtml());
     }
 
     public function testInvalidFormPropertyByMissingProperty()

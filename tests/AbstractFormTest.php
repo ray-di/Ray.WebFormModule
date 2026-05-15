@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Ray.WebFormModule package.
  *
@@ -23,7 +24,7 @@ class AbstractFormTest extends TestCase
      */
     private $form;
 
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
         $this->form = (new FormFactory)->newInstance(FakeMiniForm::class);

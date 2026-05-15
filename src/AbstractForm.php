@@ -7,31 +7,36 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-
 namespace Ray\WebFormModule;
 
 use ArrayIterator;
+use function assert;
 use Aura\Filter\FilterFactory;
 use Aura\Filter\SubjectFilter;
 use Aura\Html\HelperLocator;
 use Aura\Html\HelperLocatorFactory;
 use Aura\Input\AntiCsrfInterface;
+use Aura\Input\Builder;
 use Aura\Input\BuilderInterface;
 use Aura\Input\Fieldset;
 use Exception;
+use function is_string;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\PostConstruct;
 use Ray\WebFormModule\Exception\CsrfViolationException;
 use Ray\WebFormModule\Exception\LogicException;
-
+use Stringable;
 use function trigger_error;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractForm extends Fieldset implements FormInterface
 {
     /** @var SubjectFilter */
     protected $filter;
 
-    /** @var array<string, list<string>>|null */
+    /** @var array<string, array<int, string>>|null */
     protected ?array $errorMessages = null;
 
     protected HelperLocator $helper;
@@ -50,10 +55,8 @@ abstract class AbstractForm extends Fieldset implements FormInterface
 
     /**
      * Return form markup string
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
         try {
             if (! $this instanceof ToStringInterface) {
@@ -65,7 +68,8 @@ abstract class AbstractForm extends Fieldset implements FormInterface
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
         }
 
-        return '';
+        // Reachable when a custom error handler intercepts E_USER_ERROR without halting.
+        return ''; // @phpstan-ignore deadCode.unreachable
     }
 
     /**
@@ -78,40 +82,59 @@ abstract class AbstractForm extends Fieldset implements FormInterface
         BuilderInterface $builder,
         FilterFactory $filterFactory,
         HelperLocatorFactory $helperFactory
-    ): void {
+    ) : void {
+        assert($builder instanceof Builder);
         $this->builder = $builder;
         $this->filter = $filterFactory->newSubjectFilter();
         $this->helper = $helperFactory->newInstance();
     }
 
-    public function setAntiCsrf(AntiCsrfInterface $antiCsrf): void
+    public function setAntiCsrf(AntiCsrfInterface $antiCsrf) : void
     {
         $this->antiCsrf = $antiCsrf;
     }
 
+    public function enableAntiCsrf(AntiCsrfInterface $antiCsrf) : void
+    {
+        $this->antiCsrf = $antiCsrf;
+        if (isset($this->inputs[AntiCsrf::TOKEN_KEY])) {
+            return;
+        }
+
+        $this->antiCsrf->setField($this);
+    }
+
     #[PostConstruct]
-    public function postConstruct(): void
+    public function postConstruct() : void
     {
         $this->init();
         if ($this->antiCsrf instanceof AntiCsrfInterface) {
-            $this->antiCsrf->setField($this);
+            $this->enableAntiCsrf($this->antiCsrf);
         }
     }
 
     /** {@inheritdoc} */
-    public function input($input)
+    public function input(string $input) : string
     {
-        return $this->helper->input($this->get($input));
+        $inputHtml = $this->helper->input($this->get($input));
+        assert(is_string($inputHtml) || $inputHtml instanceof Stringable);
+
+        return (string) $inputHtml;
     }
 
     /** {@inheritdoc} */
-    public function error(string $input): string
+    public function error(string $input) : string
     {
-        if (! $this->errorMessages) {
+        if ($this->errorMessages === null) {
+            /** @var \Aura\Filter\Failure\FailureCollection|null $failure */
             $failure = $this->filter->getFailures();
-            if ($failure) {
-                $this->errorMessages = $failure->getMessages();
+            if ($failure === null) {
+                return '';
             }
+
+            /** @var array<string, array<int, string>> $messages */
+            $messages = $failure->getMessages();
+            $this->errorMessages = $messages;
         }
 
         if (isset($this->errorMessages[$input])) {
@@ -122,16 +145,19 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     }
 
     /**
-     * @param array $attr attributes for the form tag
+     * @param array<string, mixed> $attr attributes for the form tag
      *
      * @throws \Aura\Input\Exception\NoSuchInput
      * @throws \Aura\Html\Exception\HelperNotFound
      */
-    public function form(array $attr = []): string
+    public function form(array $attr = []) : string
     {
+        /** @var string $form */
         $form = $this->helper->form($attr);
         if (isset($this->inputs['__csrf_token'])) {
-            $form .= $this->helper->input($this->get('__csrf_token'));
+            /** @var string $input */
+            $input = $this->helper->input($this->get('__csrf_token'));
+            $form .= $input;
         }
 
         return $form;
@@ -140,14 +166,14 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * Applies the filter to a subject.
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CsrfViolationException
      */
-    public function apply(array $data): bool
+    public function apply(array $data) : bool
     {
         if ($this->antiCsrf && ! $this->antiCsrf->isValid($data)) {
-            throw new CsrfViolationException;
+            throw new CsrfViolationException();
         }
 
         $this->fill($data);
@@ -158,15 +184,22 @@ abstract class AbstractForm extends Fieldset implements FormInterface
     /**
      * Returns all failure messages for all fields.
      *
-     * @return list<string>
+     * @return array<string, array<int, string>>
      */
-    public function getFailureMessages(): array
+    public function getFailureMessages() : array
     {
-        return $this->filter->getFailures()->getMessages();
+        /** @var array<string, array<int, string>> $messages */
+        $messages = $this->filter->getFailures()->getMessages();
+
+        return $messages;
     }
 
-    /** Returns all the fields collection */
-    public function getIterator(): ArrayIterator
+    /**
+     * Returns all the fields collection
+     *
+     * @return ArrayIterator<string, mixed>
+     */
+    public function getIterator() : ArrayIterator
     {
         return new ArrayIterator($this->inputs);
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Ray.WebFormModule package.
  *
@@ -30,7 +31,7 @@ class AntiCsrfTest extends TestCase
      */
     private $session;
 
-    protected function setUp(): void
+    protected function setUp() : void
     {
         $this->phpfunc = new FakePhpfunc;
         $this->session = $this->newSession();

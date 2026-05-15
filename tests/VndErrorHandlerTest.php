@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Ray.WebFormModule package.
  *
@@ -17,7 +18,7 @@ class VndErrorHandlerTest extends TestCase
      */
     private $controller;
 
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
         $this->controller = (new Injector(new FakeVndErrorModule, __DIR__ . '/tmp'))->getInstance(FakeController::class);

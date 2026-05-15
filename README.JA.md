@@ -1,8 +1,8 @@
 # Ray.WebFormModule
 
+[![Continuous Integration](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/continuous-integration.yml)
+[![Coding Standards](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/coding-standards.yml)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
-[![Code Coverage](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
-[![Build Status](https://travis-ci.org/ray-di/Ray.WebFormModule.svg?branch=1.x)](https://travis-ci.org/ray-di/Ray.WebFormModule)
 
 Ray.WebFormModuleはアスペクト指向でフォームのバリデーションを行うモジュールです。
 フォームライブラリには[Aura.Input](https://github.com/auraphp/Aura.Input)を使い、
@@ -127,11 +127,24 @@ class MyController
 CSRF対策を行うためにはフォームにCSRFオブジェクトをセットします。
 
 ```php
+use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\Annotation\CsrfProtection;
+use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 
 class MyForm extends AbstractAuraForm
 {
     use SetAntiCsrfTrait;
+}
+
+class MyController
+{
+    #[FormValidation(form: "contactForm")]
+    #[CsrfProtection]
+    public function createAction()
+    {
+    }
+}
 ```
 
 セキュリティレベルを高めるためにはユーザーの認証を含んだカスタムCsrfクラスを作成してフォームクラスにセットします。

@@ -7,22 +7,26 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-
 namespace Ray\WebFormModule;
 
+use function call_user_func_array;
+use function method_exists;
 use Ray\Aop\MethodInvocation;
 use Ray\WebFormModule\Annotation\AbstractValidation;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Exception\InvalidOnFailureMethod;
 
-use function call_user_func_array;
-use function method_exists;
-
 final class OnFailureMethodHandler implements FailureHandlerInterface
 {
     public const FAILURE_SUFFIX = 'ValidationFailed';
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     *
+     * @param AbstractValidation       $formValidation
+     * @param MethodInvocation<object> $invocation
+     * @param AbstractForm             $form
+     */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
         unset($form);
@@ -37,6 +41,9 @@ final class OnFailureMethodHandler implements FailureHandlerInterface
             throw new InvalidOnFailureMethod(get_class($invocation->getThis()));
         }
 
-        return call_user_func_array([$invocation->getThis(), $onFailureMethod], $args);
+        /** @var callable $callable */
+        $callable = [$object, $onFailureMethod];
+
+        return call_user_func_array($callable, $args);
     }
 }

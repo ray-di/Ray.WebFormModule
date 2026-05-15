@@ -7,7 +7,6 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-
 namespace Ray\WebFormModule\Exception;
 
 class InvalidOnFailureMethod extends LogicException

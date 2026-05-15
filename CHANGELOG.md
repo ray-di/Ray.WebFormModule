@@ -1,0 +1,56 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - unreleased
+
+### Changed
+
+- **BC break**: Minimum PHP version raised to `8.0`.
+- **BC break**: Migrated from Doctrine Annotations to PHP 8 Attributes. All
+  validation metadata (`@FormValidation`, `@InputValidation`, `@VndError`) is
+  now expressed with `#[FormValidation]`, `#[InputValidation]`, `#[VndError]`.
+- CSRF protection for validation methods is declared with the separate
+  `#[CsrfProtection]` attribute instead of a boolean option on
+  `#[FormValidation]`.
+- **BC break**: `AuraInputInterceptor`, `InputValidationInterceptor` and
+  `VndErrorHandler` no longer accept a `Doctrine\Common\Annotations\Reader`
+  in their constructors. Validation attributes are read directly via
+  `ReflectionMethod::getAttributes()`.
+- **BC break**: `FormInterface::input()` and `FormInterface::error()` now declare
+  parameter and return types (`string $input`, `: string` respectively).
+  Implementations must update their signatures.
+- Added property type declarations and return types across the codebase to
+  align with PHP 8 typing.
+- Bumped dependencies: `ray/di` `^2.16`, `ray/aop` `^2.14`,
+  `phpunit/phpunit` `^9.5`.
+
+### Fixed
+
+- `Exception\RuntimeException` now correctly extends `\RuntimeException`
+  instead of `\LogicException`.
+- `AntiCsrf::isValid()` uses strict comparison for the CSRF token.
+- Eliminated PHP 8.4 deprecation warnings for implicit nullable parameters in
+  `ValidationException::__construct()` and `VndErrorHandler::makeVndError()`.
+
+### Added
+
+- GitHub Actions workflows for tests and coding standards.
+- `CHANGELOG.md`.
+- `#[CsrfProtection]` attribute for composing CSRF checks with form/input
+  validation attributes.
+
+### Removed
+
+- `doctrine/annotations` dependency.
+- Travis CI configuration; replaced with GitHub Actions.
+
+## [0.6.0] - 2018-05-27
+
+See git history for changes prior to 1.0.0.
+
+[1.0.0]: https://github.com/ray-di/Ray.WebFormModule/compare/0.6.0...1.0.0
+[0.6.0]: https://github.com/ray-di/Ray.WebFormModule/releases/tag/0.6.0

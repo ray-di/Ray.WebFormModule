@@ -7,7 +7,6 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-
 namespace Ray\WebFormModule;
 
 use Ray\Aop\MethodInvocation;
@@ -18,7 +17,13 @@ use ReflectionMethod;
 
 final class VndErrorHandler implements FailureHandlerInterface
 {
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     *
+     * @param AbstractValidation       $formValidation
+     * @param MethodInvocation<object> $invocation
+     * @param AbstractForm             $form
+     */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
         unset($formValidation);
@@ -28,30 +33,34 @@ final class VndErrorHandler implements FailureHandlerInterface
         throw new ValidationException('Validation failed.', 400, null, $error);
     }
 
-    private function getVndErrorAttribute(ReflectionMethod $method): VndError|null
+    private function getVndErrorAttribute(ReflectionMethod $method) : VndError|null
     {
         $attributes = $method->getAttributes(VndError::class);
         if ($attributes === []) {
             return null;
         }
 
-        $instance = $attributes[0]->newInstance();
-        assert($instance instanceof VndError);
-
-        return $instance;
+        return $attributes[0]->newInstance();
     }
 
-    private function makeVndError(AbstractForm $form, ?VndError $vndError = null)
+    /**
+     * @return array<string, mixed>
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private function makeVndError(AbstractForm $form, ?VndError $vndError = null) : array
     {
         $body = ['message' => 'Validation failed'];
         $body['path'] = $_SERVER['PATH_INFO'] ?? '';
         $body['validation_messages'] = $form->getFailureMessages();
-        $body = $vndError ? $this->optionalAttribute($vndError) + $body : $body;
 
-        return $body;
+        return $vndError ? $this->optionalAttribute($vndError) + $body : $body;
     }
 
-    private function optionalAttribute(VndError $vndError)
+    /**
+     * @return array<string, mixed>
+     */
+    private function optionalAttribute(VndError $vndError) : array
     {
         $body = [];
         if ($vndError->message) {
