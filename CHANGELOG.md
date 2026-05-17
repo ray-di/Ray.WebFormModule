@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - unreleased
+## [1.0.0] - 2026-05-17
 
 ### Changed
 
-- **BC break**: Minimum PHP version raised to `8.0`.
+- Minimum PHP version raised to `8.0`.
 - **BC break**: Migrated from Doctrine Annotations to PHP 8 Attributes. All
   validation metadata (`@FormValidation`, `@InputValidation`, `@VndError`) is
   now expressed with `#[FormValidation]`, `#[InputValidation]`, `#[VndError]`.
