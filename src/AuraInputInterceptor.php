@@ -2,16 +2,9 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
 namespace Ray\WebFormModule;
 
-use function array_shift;
 use Aura\Input\AntiCsrfInterface;
-use function property_exists;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Di\Di\Inject;
@@ -23,13 +16,13 @@ use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
+use function array_shift;
+use function property_exists;
+
+/** @SuppressWarnings(PHPMD.CouplingBetweenObjects) */
 class AuraInputInterceptor implements MethodInterceptor
 {
     protected FailureHandlerInterface $failureHandler;
-
     private AntiCsrfInterface|null $antiCsrf = null;
 
     public function __construct(FailureHandlerInterface $handler)
@@ -38,13 +31,13 @@ class AuraInputInterceptor implements MethodInterceptor
     }
 
     #[Inject]
-    public function setAntiCsrf(AntiCsrfInterface $antiCsrf) : void
+    public function setAntiCsrf(AntiCsrfInterface $antiCsrf): void
     {
         $this->antiCsrf = $antiCsrf;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param MethodInvocation<object> $invocation
      *
@@ -76,15 +69,13 @@ class AuraInputInterceptor implements MethodInterceptor
      *
      * @throws Exception\CsrfViolationException
      */
-    public function isValid(array $submit, AbstractForm $form) : bool
+    public function isValid(array $submit, AbstractForm $form): bool
     {
         return $form->apply($submit);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    private function enableCsrfProtection(ReflectionMethod $method, AbstractForm $form) : void
+    /** @throws InvalidArgumentException */
+    private function enableCsrfProtection(ReflectionMethod $method, AbstractForm $form): void
     {
         if ($method->getAttributes(CsrfProtection::class) === []) {
             return;
@@ -97,7 +88,7 @@ class AuraInputInterceptor implements MethodInterceptor
         $form->enableAntiCsrf($this->antiCsrf);
     }
 
-    private function getValidationAttribute(ReflectionMethod $method) : AbstractValidation|null
+    private function getValidationAttribute(ReflectionMethod $method): AbstractValidation|null
     {
         $attributes = $method->getAttributes(AbstractValidation::class, ReflectionAttribute::IS_INSTANCEOF);
         if ($attributes === []) {
@@ -116,7 +107,7 @@ class AuraInputInterceptor implements MethodInterceptor
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    private function getNamedArguments(MethodInvocation $invocation) : array
+    private function getNamedArguments(MethodInvocation $invocation): array
     {
         $submit = [];
         $params = $invocation->getMethod()->getParameters();
@@ -133,7 +124,7 @@ class AuraInputInterceptor implements MethodInterceptor
         return $submit;
     }
 
-    private function getFormProperty(AbstractValidation $formValidation, object $object) : AbstractForm
+    private function getFormProperty(AbstractValidation $formValidation, object $object): AbstractForm
     {
         if (! property_exists($object, $formValidation->form)) {
             throw new InvalidFormPropertyException($formValidation->form);

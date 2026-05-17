@@ -1,10 +1,7 @@
 <?php
 
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use PHPUnit\Framework\TestCase;
@@ -16,22 +13,18 @@ use Ray\WebFormModule\Exception\ValidationException;
 
 class AuraInputInterceptorTest extends TestCase
 {
-    /**
-     * @var InjectorInterface
-     */
+    /** @var InjectorInterface */
     private $injector;
 
-    /**
-     * @var FakeController
-     */
+    /** @var FakeController */
     private $controller;
 
-    public function setUp() : void
+    public function setUp(): void
     {
-        $this->injector = new Injector(new class() extends AbstractModule {
+        $this->injector = new Injector(new class () extends AbstractModule {
             protected function configure()
             {
-                $this->install(new AuraInputModule);
+                $this->install(new AuraInputModule());
                 $this->bind(FormInterface::class)->annotatedWith('contact_form')->to(FakeForm::class);
                 $this->bind(FormInterface::class)->annotatedWith('mini_form')->to(FakeMiniForm::class);
             }

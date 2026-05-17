@@ -17,9 +17,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "friendsofphp/php-cs-fixer": "^3.0",
+        "doctrine/coding-standard": "^14.0",
         "phpstan/phpstan": "^1.10",
-        "squizlabs/php_codesniffer": "^3.7",
+        "squizlabs/php_codesniffer": "^4.0",
         "vimeo/psalm": "^5.0 || ^6.0",
         "phpmd/phpmd": "^2.13",
         "maglnet/composer-require-checker": "^4.0"
@@ -39,8 +39,8 @@
         "test": ["@cs", "phpunit"],
         "tests": ["@cs", "@sa", "@test"],
         "coverage": ["php -dzend_extension=xdebug.so ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
-        "cs": ["php-cs-fixer fix -v --dry-run --sequential", "phpcs --standard=./phpcs.xml src"],
-        "cs-fix": ["php-cs-fixer fix -v --sequential", "phpcbf src"],
+        "cs": "phpcs",
+        "cs-fix": "phpcbf",
         "phpstan": "phpstan analyse -c phpstan.neon --no-progress",
         "psalm": "psalm --show-info=false",
         "phpmd": "phpmd src text ./phpmd.xml",
@@ -49,7 +49,8 @@
     },
     "config": {
         "allow-plugins": {
-            "aura/installer-default": true
+            "aura/installer-default": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     }
 }

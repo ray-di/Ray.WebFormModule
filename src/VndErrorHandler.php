@@ -2,11 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
 namespace Ray\WebFormModule;
 
 use Ray\Aop\MethodInvocation;
@@ -18,11 +13,9 @@ use ReflectionMethod;
 final class VndErrorHandler implements FailureHandlerInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
-     * @param AbstractValidation       $formValidation
      * @param MethodInvocation<object> $invocation
-     * @param AbstractForm             $form
      */
     public function handle(AbstractValidation $formValidation, MethodInvocation $invocation, AbstractForm $form)
     {
@@ -33,7 +26,7 @@ final class VndErrorHandler implements FailureHandlerInterface
         throw new ValidationException('Validation failed.', 400, null, $error);
     }
 
-    private function getVndErrorAttribute(ReflectionMethod $method) : VndError|null
+    private function getVndErrorAttribute(ReflectionMethod $method): VndError|null
     {
         $attributes = $method->getAttributes(VndError::class);
         if ($attributes === []) {
@@ -48,7 +41,7 @@ final class VndErrorHandler implements FailureHandlerInterface
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    private function makeVndError(AbstractForm $form, ?VndError $vndError = null) : array
+    private function makeVndError(AbstractForm $form, VndError|null $vndError = null): array
     {
         $body = ['message' => 'Validation failed'];
         $body['path'] = $_SERVER['PATH_INFO'] ?? '';
@@ -57,10 +50,8 @@ final class VndErrorHandler implements FailureHandlerInterface
         return $vndError ? $this->optionalAttribute($vndError) + $body : $body;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function optionalAttribute(VndError $vndError) : array
+    /** @return array<string, mixed> */
+    private function optionalAttribute(VndError $vndError): array
     {
         $body = [];
         if ($vndError->message) {

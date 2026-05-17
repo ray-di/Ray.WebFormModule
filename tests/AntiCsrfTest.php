@@ -1,10 +1,7 @@
 <?php
 
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use Aura\Input\Builder;
@@ -19,21 +16,13 @@ use PHPUnit\Framework\TestCase;
 
 class AntiCsrfTest extends TestCase
 {
-    private $phpfunc;
+    private FakePhpfunc $phpfunc;
+    private AntiCsrf $antiCsrf;
+    private Session $session;
 
-    /**
-     * @var AntiCsrf
-     */
-    private $antiCsrf;
-
-    /**
-     * @var Session
-     */
-    private $session;
-
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->phpfunc = new FakePhpfunc;
+        $this->phpfunc = new FakePhpfunc();
         $this->session = $this->newSession();
         $this->antiCsrf = new AntiCsrf($this->newSession([]), false, [AntiCsrf::TOKEN_KEY => AntiCsrf::TEST_TOKEN]);
     }
@@ -45,7 +34,7 @@ class AntiCsrfTest extends TestCase
 
     public function testSetField()
     {
-        $result = $this->antiCsrf->setField(new Fieldset(new Builder, new Filter));
+        $result = $this->antiCsrf->setField(new Fieldset(new Builder(), new Filter()));
         $this->assertNull($result);
     }
 
@@ -55,13 +44,14 @@ class AntiCsrfTest extends TestCase
         $this->assertTrue($this->antiCsrf->isValid($data));
     }
 
-    protected function newSession(array $cookies = [])
+    /** @param array<string, string> $cookies */
+    protected function newSession(array $cookies = []): Session
     {
         return new Session(
-            new SegmentFactory,
+            new SegmentFactory(),
             new CsrfTokenFactory(new Randval(new Phpfunc())),
             $this->phpfunc,
-            $cookies
+            $cookies,
         );
     }
 }
