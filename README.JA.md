@@ -124,7 +124,9 @@ class MyController
 
 ### CSRF Protections
 
-CSRF対策を行うためにはフォームにCSRFオブジェクトをセットします。
+CSRF対策は **opt-in** です。`SetAntiCsrfTrait` を使うフォームには `AntiCsrfInterface` が注入されますが、
+トークンの検証は `#[CsrfProtection]` 属性が付いたメソッドでのみ行われます。
+`#[CsrfProtection]` が無いメソッドでは、フォーム側に AntiCsrf がセットされていても CSRF チェックは実行されません。
 
 ```php
 use Ray\WebFormModule\AbstractAuraForm;
@@ -149,6 +151,22 @@ class MyController
 
 セキュリティレベルを高めるためにはユーザーの認証を含んだカスタムCsrfクラスを作成してフォームクラスにセットします。
 詳しくはAura.Inputの[Applying CSRF Protections](https://github.com/auraphp/Aura.Input#applying-csrf-protections)をご覧ください。
+
+## 0.x からのマイグレーション
+
+1.0 で Doctrine Annotations を廃止し、PHP 8 Attributes に完全移行しました。
+型宣言も強化されています。主な書き換え:
+
+| Before (0.x)                                                       | After (1.0)                                                               |
+|--------------------------------------------------------------------|---------------------------------------------------------------------------|
+| `@FormValidation(form="f", onFailure="badRequest")`                | `#[FormValidation(form: 'f', onFailure: 'badRequest')]`                   |
+| `@FormValidation(form="f", antiCsrf=true)`                         | `#[FormValidation(form: 'f')]` + `#[CsrfProtection]`                      |
+| `@InputValidation(form="f")`                                       | `#[InputValidation(form: 'f')]`                                           |
+| `@VndError(message="...", logref="...")`                           | `#[VndError(message: '...', logref: '...')]`                              |
+| `new AuraInputInterceptor($injector, $reader)`                     | `new AuraInputInterceptor($injector)` (`Reader` 引数は不要)                 |
+| `public function input($input)` / `public function error($input)`  | `public function input(string $input): string` / `error(string $input): string` |
+
+破壊的変更の完全なリストは [CHANGELOG.md](CHANGELOG.md) を参照してください。
 
 ## Validation Exception
 

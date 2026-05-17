@@ -138,6 +138,11 @@ or render input element basis.
 ```
 ## CSRF Protections
 
+CSRF protection is **opt-in**. A form that uses `SetAntiCsrfTrait` is wired
+with an `AntiCsrfInterface`, but the token is only verified when the
+validated method is annotated with `#[CsrfProtection]`. Methods without
+`#[CsrfProtection]` perform no CSRF check even if the form supports it.
+
 ```php
 use Ray\WebFormModule\AbstractAuraForm;
 use Ray\WebFormModule\Annotation\CsrfProtection;
@@ -159,6 +164,22 @@ class MyController
 }
 ```
 You can provide your custom `AntiCsrf` class. See more detail at [Aura.Input](https://github.com/auraphp/Aura.Input#applying-csrf-protections)
+
+## Migration from 0.x
+
+Version 1.0 drops Doctrine Annotations in favour of native PHP 8 Attributes
+and tightens type declarations. The most common rewrites:
+
+| Before (0.x)                                                       | After (1.0)                                                               |
+|--------------------------------------------------------------------|---------------------------------------------------------------------------|
+| `@FormValidation(form="f", onFailure="badRequest")`                | `#[FormValidation(form: 'f', onFailure: 'badRequest')]`                   |
+| `@FormValidation(form="f", antiCsrf=true)`                         | `#[FormValidation(form: 'f')]` + `#[CsrfProtection]`                      |
+| `@InputValidation(form="f")`                                       | `#[InputValidation(form: 'f')]`                                           |
+| `@VndError(message="...", logref="...")`                           | `#[VndError(message: '...', logref: '...')]`                              |
+| `new AuraInputInterceptor($injector, $reader)`                     | `new AuraInputInterceptor($injector)` (no `Reader` argument)              |
+| `public function input($input)` / `public function error($input)`  | `public function input(string $input): string` / `error(string $input): string` |
+
+See [CHANGELOG.md](CHANGELOG.md) for the full list of breaking changes.
 
 ## Validation Exception
 

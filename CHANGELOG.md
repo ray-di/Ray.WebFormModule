@@ -13,9 +13,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BC break**: Migrated from Doctrine Annotations to PHP 8 Attributes. All
   validation metadata (`@FormValidation`, `@InputValidation`, `@VndError`) is
   now expressed with `#[FormValidation]`, `#[InputValidation]`, `#[VndError]`.
-- CSRF protection for validation methods is declared with the separate
-  `#[CsrfProtection]` attribute instead of a boolean option on
-  `#[FormValidation]`.
+- **BC break**: CSRF protection for validation methods is now declared with
+  the separate `#[CsrfProtection]` attribute. The previous `antiCsrf=true`
+  boolean option on `@FormValidation` has been removed. CSRF checks are now
+  opt-in: methods without `#[CsrfProtection]` perform no CSRF verification
+  even if the form has an `AntiCsrf` object set.
+
+  Before:
+
+  ```php
+  /**
+   * @FormValidation(form="contactForm", antiCsrf=true)
+   */
+  public function createAction() {}
+  ```
+
+  After:
+
+  ```php
+  #[FormValidation(form: 'contactForm')]
+  #[CsrfProtection]
+  public function createAction() {}
+  ```
 - **BC break**: `AuraInputInterceptor`, `InputValidationInterceptor` and
   `VndErrorHandler` no longer accept a `Doctrine\Common\Annotations\Reader`
   in their constructors. Validation attributes are read directly via
@@ -23,6 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BC break**: `FormInterface::input()` and `FormInterface::error()` now declare
   parameter and return types (`string $input`, `: string` respectively).
   Implementations must update their signatures.
+- **BC break**: `ValidationException::__construct()` now declares parameter
+  types (`string $message`, `int $code`, `Throwable|null $e`,
+  `FormValidationError|null $error`). The `$error` property is now typed as
+  `FormValidationError|null` via constructor property promotion.
 - Added property type declarations and return types across the codebase to
   align with PHP 8 typing.
 - Bumped dependencies: `ray/di` `^2.16`, `ray/aop` `^2.14`,
