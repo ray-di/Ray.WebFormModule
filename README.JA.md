@@ -168,6 +168,15 @@ class MyController
 
 破壊的変更の完全なリストは [CHANGELOG.md](CHANGELOG.md) を参照してください。
 
+### Claude Code による自動マイグレーション
+
+リポジトリ同梱の Claude Code skill
+[`.claude/skills/migrate-to-1.0/SKILL.md`](.claude/skills/migrate-to-1.0/SKILL.md)
+が上記の書き換え (アノテーション → アトリビュート、`antiCsrf=true` の
+`#[CsrfProtection]` 分割、`Reader` 引数削除、`FormInterface` 署名更新) を
+AI アシスタントに案内します。利用側プロジェクトの `.claude/skills/` に
+ディレクトリをコピーして `/migrate-to-1.0` で起動してください。
+
 ## Validation Exception
 
 `#[FormValidation]`の代わりに`#[InputValidation]`とアノテートするとバリデーションが失敗したときに`Ray\WebFormModule\Exception\ValidationException`が投げられるよになります。この場合はHTML表現は使われません。Web APIアプリケーションなどに便利です。

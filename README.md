@@ -181,6 +181,16 @@ and tightens type declarations. The most common rewrites:
 
 See [CHANGELOG.md](CHANGELOG.md) for the full list of breaking changes.
 
+### Automated migration with Claude Code
+
+The repository ships a Claude Code skill at
+[`.claude/skills/migrate-to-1.0/SKILL.md`](.claude/skills/migrate-to-1.0/SKILL.md)
+that walks an AI assistant through the rewrites above (annotations →
+attributes, `antiCsrf=true` split into `#[CsrfProtection]`, `Reader`
+argument removal, `FormInterface` signature updates). Copy the directory
+into your consuming project's `.claude/skills/` and invoke it via
+`/migrate-to-1.0`.
+
 ## Validation Exception
 
 When we install `Ray\WebFormModule\FormVndErrorModule` as following,
