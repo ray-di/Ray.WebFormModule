@@ -136,7 +136,7 @@ or render input element basis.
   echo $form->input('name'); // <input id="name" type="text" name="name" size="20" maxlength="20" />
   echo $form->error('name'); // "Name must be alphabetic only." or blank.
 ```
-## CSRF Protections
+### CSRF Protections
 
 CSRF protection is **opt-in**. A form that uses `SetAntiCsrfTrait` is wired
 with an `AntiCsrfInterface`, but the token is only verified when the
@@ -232,6 +232,6 @@ More detail for `vnd.error+json` can be added with the `#[VndError]` attribute.
 
 This optional module is handy for API application. 
    
-### Demo
+## Demo
 
     $ php -S docs/demo/1.csrf/web.php
