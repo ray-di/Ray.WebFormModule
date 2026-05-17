@@ -1,24 +1,21 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use PHPUnit\Framework\TestCase;
 
 class FormFactoryTest extends TestCase
 {
-    /**
-     * @var FormFactory
-     */
+    /** @var FormFactory */
     private $factory;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->factory = new FormFactory;
+
+        $this->factory = new FormFactory();
     }
 
     public function testNewInstance()

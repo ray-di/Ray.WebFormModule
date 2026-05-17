@@ -7,6 +7,6 @@ namespace Ray\WebFormModule\Annotation;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-final class InputValidation extends AbstractValidation
+final class CsrfProtection
 {
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="4"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
+>
+    <projectFiles>
+        <directory name="src" />
+    </projectFiles>
+    <issueHandlers>
+        <!-- The Override attribute requires PHP 8.3+, but this package targets PHP 8.0+. -->
+        <MissingOverrideAttribute errorLevel="suppress" />
+        <!-- Aura\Html\HelperLocator exposes helpers via __get/__call magic methods. -->
+        <UndefinedMagicMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Aura\Html\HelperLocator::input" />
+                <referencedMethod name="Aura\Html\HelperLocator::form" />
+            </errorLevel>
+        </UndefinedMagicMethod>
+        <!-- AntiCsrfInterface::isValid declares array<array-key, mixed>; our implementation accepts the same shape via array<string, mixed>. -->
+        <MoreSpecificImplementedParamType>
+            <errorLevel type="suppress">
+                <file name="src/AntiCsrf.php" />
+            </errorLevel>
+        </MoreSpecificImplementedParamType>
+    </issueHandlers>
+</psalm>

@@ -2,12 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
-
 namespace Ray\WebFormModule;
 
 use Aura\Input\AntiCsrfInterface;
@@ -26,11 +20,8 @@ final class AntiCsrf implements AntiCsrfInterface
 
     private bool $isCli;
 
-    private Session $session;
-
-    public function __construct(Session $session, bool|null $isCli = null)
+    public function __construct(private Session $session, bool|null $isCli = null)
     {
-        $this->session = $session;
         $this->isCli = is_bool($isCli) ? $isCli : PHP_SAPI === 'cli';
     }
 
@@ -40,7 +31,7 @@ final class AntiCsrf implements AntiCsrfInterface
             ->setAttribs(['value' => $this->getToken()]);
     }
 
-    /** @param array $data */
+    /** @param array<string, mixed> $data */
     public function isValid(array $data): bool
     {
         if ($this->isCli) {

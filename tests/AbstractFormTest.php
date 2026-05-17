@@ -1,9 +1,7 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use Aura\Session\CsrfTokenFactory;
@@ -11,33 +9,34 @@ use Aura\Session\Phpfunc;
 use Aura\Session\Randval;
 use Aura\Session\SegmentFactory;
 use Aura\Session\Session;
+use Iterator;
 use PHPUnit\Framework\TestCase;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\WebFormModule\Exception\CsrfViolationException;
 use Ray\WebFormModule\Exception\ValidationException;
+use ReflectionProperty;
+
+use function spl_object_hash;
 
 class AbstractFormTest extends TestCase
 {
-    /**
-     * @var AbstractForm
-     */
+    /** @var AbstractForm */
     private $form;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->form = (new FormFactory)->newInstance(FakeMiniForm::class);
+
+        $this->form = (new FormFactory())->newInstance(FakeMiniForm::class);
     }
 
-    /**
-     * @param $method
-     */
-    public function getMethodInvocation(array $arguments)
+    /** @param array<int, mixed> $arguments */
+    public function getMethodInvocation(array $arguments): ReflectiveMethodInvocation
     {
         // form
-        $fakeForm = (new FormFactory)->newInstance(FakeMiniForm::class);
+        $fakeForm = (new FormFactory())->newInstance(FakeMiniForm::class);
         // controller
-        $controller = new FakeController;
+        $controller = new FakeController();
         $controller->setForm($fakeForm);
         // interceptor
         $interceptor = new AuraInputInterceptor(new VndErrorHandler());
@@ -46,9 +45,7 @@ class AbstractFormTest extends TestCase
             $controller,
             'createAction',
             $arguments,
-            [
-                $interceptor
-            ]
+            [$interceptor],
         );
     }
 
@@ -76,25 +73,25 @@ class AbstractFormTest extends TestCase
     public function testClone()
     {
         $form = clone $this->form;
-        (new \ReflectionProperty($form, 'filter'))->setAccessible(true);
-        (new \ReflectionProperty($this->form, 'filter'))->setAccessible(true);
+        (new ReflectionProperty($form, 'filter'))->setAccessible(true);
+        (new ReflectionProperty($this->form, 'filter'))->setAccessible(true);
         $this->assertNotSame(spl_object_hash($form), spl_object_hash($this->form));
     }
 
     public function testGetItelator()
     {
         $itelator = $this->form->getIterator();
-        $this->assertInstanceOf(\Iterator::class, $itelator);
+        $this->assertInstanceOf(Iterator::class, $itelator);
     }
 
     public function testAntiCsrfViolation()
     {
         $this->expectException(CsrfViolationException::class);
         $session = new Session(
-            new SegmentFactory,
-            new CsrfTokenFactory(new Randval(new Phpfunc)),
-            new FakePhpfunc,
-            []
+            new SegmentFactory(),
+            new CsrfTokenFactory(new Randval(new Phpfunc())),
+            new FakePhpfunc(),
+            [],
         );
         $this->form->setAntiCsrf(new AntiCsrf($session, false));
         $this->form->apply([]);

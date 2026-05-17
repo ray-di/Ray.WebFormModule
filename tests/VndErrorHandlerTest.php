@@ -1,9 +1,7 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use PHPUnit\Framework\TestCase;
@@ -12,15 +10,14 @@ use Ray\WebFormModule\Exception\ValidationException;
 
 class VndErrorHandlerTest extends TestCase
 {
-    /**
-     * @var FakeController
-     */
+    /** @var FakeController */
     private $controller;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->controller = (new Injector(new FakeVndErrorModule, __DIR__ . '/tmp'))->getInstance(FakeController::class);
+
+        $this->controller = (new Injector(new FakeVndErrorModule(), __DIR__ . '/tmp'))->getInstance(FakeController::class);
     }
 
     public function testValidationException()
@@ -49,8 +46,8 @@ class VndErrorHandlerTest extends TestCase
 
     public function testVndErrorAnnotation()
     {
-        /** @var $controller FakeControllerVndError */
-        $controller = (new Injector(new FakeVndErrorModule))->getInstance(FakeControllerVndError::class);
+        /** @var FakeControllerVndError $controller */
+        $controller = (new Injector(new FakeVndErrorModule()))->getInstance(FakeControllerVndError::class);
         try {
             $controller->createAction('');
         } catch (ValidationException $e) {

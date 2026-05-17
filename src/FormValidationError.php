@@ -2,12 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
-
 namespace Ray\WebFormModule;
 
 use function json_encode;
@@ -17,15 +11,13 @@ use const JSON_UNESCAPED_SLASHES;
 
 class FormValidationError
 {
-    private array $value;
-
-    public function __construct(array $value)
+    /** @param array<string, mixed> $value */
+    public function __construct(private array $value)
     {
-        $this->value = $value;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return json_encode($this->value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        return (string) json_encode($this->value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 }

@@ -2,12 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
-
 namespace Ray\WebFormModule;
 
 use Aura\Filter\FilterFactory;
@@ -23,12 +17,13 @@ use Ray\Di\Scope;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\Annotation\InputValidation;
 
+/** @SuppressWarnings(PHPMD.CouplingBetweenObjects) */
 class AuraInputModule extends AbstractModule
 {
-    /** {@inheritdoc} */
+    /** {@inheritDoc} */
     protected function configure()
     {
-        $this->install(new AuraSessionModule);
+        $this->install(new AuraSessionModule());
         $this->bind(BuilderInterface::class)->to(Builder::class);
         $this->bind(FilterInterface::class)->to(Filter::class);
         $this->bind(AntiCsrfInterface::class)->to(AntiCsrf::class)->in(Scope::SINGLETON);
@@ -40,12 +35,12 @@ class AuraInputModule extends AbstractModule
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith(InputValidation::class),
-            [InputValidationInterceptor::class]
+            [InputValidationInterceptor::class],
         );
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith(FormValidation::class),
-            [AuraInputInterceptor::class]
+            [AuraInputInterceptor::class],
         );
     }
 }

@@ -1,9 +1,5 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
 use Ray\Di\Injector;
 use Ray\WebFormModule\Controller;
 use Ray\WebFormModule\MyModule;

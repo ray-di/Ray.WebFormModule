@@ -2,12 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
-
 namespace Ray\WebFormModule\Annotation;
 
 use Attribute;
@@ -17,8 +11,7 @@ final class FormValidation extends AbstractValidation
 {
     public function __construct(
         string $form = 'form',
-        public bool $antiCsrf = false,
-        public string|null $onFailure = null
+        public string|null $onFailure = null,
     ) {
         parent::__construct($form);
     }

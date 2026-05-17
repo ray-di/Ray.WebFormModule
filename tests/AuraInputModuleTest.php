@@ -1,9 +1,7 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
+declare(strict_types=1);
+
 namespace Ray\WebFormModule;
 
 use PHPUnit\Framework\TestCase;
@@ -15,7 +13,7 @@ class AuraInputModuleTest extends TestCase
 {
     public function testAuraInputModule()
     {
-        $injector = new Injector(new FakeModule, __DIR__ . '/tmp');
+        $injector = new Injector(new FakeModule(), __DIR__ . '/tmp');
         $controller = $injector->getInstance(FakeController::class);
         $this->assertInstanceOf(WeavedInterface::class, $controller);
     }
@@ -23,8 +21,8 @@ class AuraInputModuleTest extends TestCase
     public function testExceptionOnFailure()
     {
         $this->expectException(ValidationException::class);
-        $injector = new Injector(new FakeModule, __DIR__ . '/tmp');
-        /** @var $controller FakeInputValidationController */
+        $injector = new Injector(new FakeModule(), __DIR__ . '/tmp');
+        /** @var FakeInputValidationController $controller */
         $controller = $injector->getInstance(FakeInputValidationController::class);
         $controller->createAction('');
     }

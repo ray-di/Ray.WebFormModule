@@ -1,0 +1,23 @@
+parameters:
+  level: max
+  reportUnmatchedIgnoredErrors: false
+  paths:
+    - src
+  ignoreErrors:
+    # PHPMD annotations (@SuppressWarnings(PHPMD.X)) are not PHPStan tags.
+    -
+      identifier: phpDoc.parseError
+      message: '#@SuppressWarnings#'
+    # Aura\Html\HelperLocator exposes helpers via __get/__call magic methods.
+    -
+      identifier: method.notFound
+      message: '#Aura\\Html\\HelperLocator::(input|form)#'
+      path: src/AbstractForm.php
+    # SetAntiCsrfTrait is part of the public API for consumers to compose.
+    -
+      identifier: trait.unused
+      path: src/SetAntiCsrfTrait.php
+    # AbstractForm narrows Fieldset::$filter (FilterInterface) to SubjectFilter for typed filter access.
+    -
+      identifier: property.phpDocType
+      message: '#AbstractForm::\$filter#'

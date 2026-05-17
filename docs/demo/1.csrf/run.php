@@ -1,9 +1,5 @@
 <?php
-/**
- * This file is part of the Ray.WebFormModule package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+
 $loader = require dirname(__DIR__) . '/autoload.php';
 $loader->addPsr4('Ray\WebFormModule\\', __DIR__);
 use Aura\Input\Exception\CsrfViolation;

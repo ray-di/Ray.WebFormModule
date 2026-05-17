@@ -14,3 +14,4 @@ composer.lock
 tests/tmp/*
 !tests/tmp/.placefolder
 .phpunit.result.cache
+.phpcs-cache

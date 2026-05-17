@@ -1,8 +1,8 @@
 # Ray.WebFormModule
 
+[![Continuous Integration](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/continuous-integration.yml)
+[![Coding Standards](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/ray-di/Ray.WebFormModule/actions/workflows/coding-standards.yml)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
-[![Code Coverage](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/ray-di/Ray.WebFormModule/?branch=1.x)
-[![Build Status](https://travis-ci.org/ray-di/Ray.WebFormModule.svg?branch=1.x)](https://travis-ci.org/ray-di/Ray.WebFormModule)
 
 Ray.WebFormModuleはアスペクト指向でフォームのバリデーションを行うモジュールです。
 フォームライブラリには[Aura.Input](https://github.com/auraphp/Aura.Input)を使い、
@@ -124,18 +124,58 @@ class MyController
 
 ### CSRF Protections
 
-CSRF対策を行うためにはフォームにCSRFオブジェクトをセットします。
+CSRF対策は **opt-in** です。`SetAntiCsrfTrait` を使うフォームには `AntiCsrfInterface` が注入されますが、
+トークンの検証は `#[CsrfProtection]` 属性が付いたメソッドでのみ行われます。
+`#[CsrfProtection]` が無いメソッドでは、フォーム側に AntiCsrf がセットされていても CSRF チェックは実行されません。
 
 ```php
+use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\Annotation\CsrfProtection;
+use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 
 class MyForm extends AbstractAuraForm
 {
     use SetAntiCsrfTrait;
+}
+
+class MyController
+{
+    #[FormValidation(form: "contactForm")]
+    #[CsrfProtection]
+    public function createAction()
+    {
+    }
+}
 ```
 
 セキュリティレベルを高めるためにはユーザーの認証を含んだカスタムCsrfクラスを作成してフォームクラスにセットします。
 詳しくはAura.Inputの[Applying CSRF Protections](https://github.com/auraphp/Aura.Input#applying-csrf-protections)をご覧ください。
+
+## 0.x からのマイグレーション
+
+1.0 で Doctrine Annotations を廃止し、PHP 8 Attributes に完全移行しました。
+型宣言も強化されています。主な書き換え:
+
+| Before (0.x)                                                       | After (1.0)                                                               |
+|--------------------------------------------------------------------|---------------------------------------------------------------------------|
+| `@FormValidation(form="f", onFailure="badRequest")`                | `#[FormValidation(form: 'f', onFailure: 'badRequest')]`                   |
+| `@FormValidation(form="f", antiCsrf=true)`                         | `#[FormValidation(form: 'f')]` + `#[CsrfProtection]`                      |
+| `@InputValidation(form="f")`                                       | `#[InputValidation(form: 'f')]`                                           |
+| `@VndError(message="...", logref="...")`                           | `#[VndError(message: '...', logref: '...')]`                              |
+| `new AuraInputInterceptor($injector, $reader)`                     | `new AuraInputInterceptor($injector)` (`Reader` 引数は不要)                 |
+| `public function input($input)` / `public function error($input)`  | `public function input(string $input): string` / `error(string $input): string` |
+
+破壊的変更の完全なリストは [CHANGELOG.md](CHANGELOG.md) を参照してください。
+
+### Claude Code による自動マイグレーション
+
+リポジトリ同梱の Claude Code skill
+[`.claude/skills/migrate-to-1.0/SKILL.md`](.claude/skills/migrate-to-1.0/SKILL.md)
+が上記の書き換え (アノテーション → アトリビュート、`antiCsrf=true` の
+`#[CsrfProtection]` 分割、`Reader` 引数削除、`FormInterface` 署名更新) を
+AI アシスタントに案内します。利用側プロジェクトの `.claude/skills/` に
+ディレクトリをコピーして `/migrate-to-1.0` で起動してください。
 
 ## Validation Exception
 
