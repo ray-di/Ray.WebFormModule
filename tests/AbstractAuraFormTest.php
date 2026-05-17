@@ -56,10 +56,10 @@ class AbstractAuraFormTest extends TestCase
     }
 
     /** @depends testError */
-    public function tesetInputDataReamainedOnValidationFailure(string $html): void
+    public function testInputDataRemainedOnValidationFailure(string $html): void
     {
         $expected = '<input id="name" type="text" name="name" value="@invalid@" />';
-        $this->assertContains($expected, $html);
+        $this->assertStringContainsString($expected, $html);
     }
 
     public function testNotToStringImplemented()
