@@ -181,6 +181,7 @@ abstract class AbstractForm extends Fieldset implements FormInterface
      */
     public function getFailureMessages(): array
     {
+        /** @var FailureCollection|null $failure */
         $failure = $this->filter->getFailures();
         if ($failure === null) {
             return [];
