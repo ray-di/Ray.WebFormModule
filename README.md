@@ -18,16 +18,20 @@ An aspect oriented web form module powered by [Aura.Input](https://github.com/au
 
 ```php
 use Ray\Di\AbstractModule;
-use Ray\WebFormModule\AuraInputModule;
+use Ray\WebFormModule\WebFormModule;
 
 class AppModule extends AbstractModule
 {
     protected function configure()
     {
-        $this->install(new AuraInputModule);
+        $this->install(new WebFormModule());
     }
 }
 ```
+
+> The legacy `Ray\WebFormModule\AuraInputModule` class is still available as a thin
+> subclass of `WebFormModule` for backwards compatibility. New code should prefer
+> `WebFormModule`.
 ## Usage
 
 ### Form class
@@ -202,8 +206,8 @@ class FakeVndErrorModule extends AbstractModule
 {
     protected function configure()
     {
-        $this->install(new AuraInputModule);
-        $this->override(new FormVndErrorModule);
+        $this->install(new WebFormModule());
+        $this->override(new FormVndErrorModule());
     }
 ``` 
 A `Ray\WebFormModule\Exception\ValidationException` will be thrown.
