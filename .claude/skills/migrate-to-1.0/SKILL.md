@@ -82,7 +82,9 @@ becomes
 Also add `use Ray\WebFormModule\Annotation\CsrfProtection;`.
 
 If `antiCsrf=false` (or omitted), drop the option without adding
-`#[CsrfProtection]` — methods without the attribute perform no CSRF check.
+`#[CsrfProtection]`. The method itself then performs no attribute-driven
+CSRF check; the form may still enforce CSRF if it uses `SetAntiCsrfTrait`
+(see "Out of scope" below).
 
 ### 1c. `@InputValidation` and `@VndError`
 

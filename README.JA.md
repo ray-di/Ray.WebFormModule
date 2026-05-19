@@ -142,8 +142,9 @@ CSRF対策は **opt-in** で、独立した 2 つの経路のいずれかで有�
 行われません。両方を併用しても害はありませんが冗長なので、用途に合わせて
 どちらか一方を選んでください。
 
+アクション単位 — コントローラのメソッドで宣言:
+
 ```php
-// アクション単位: コントローラのメソッドで宣言。
 use Ray\WebFormModule\Annotation\CsrfProtection;
 use Ray\WebFormModule\Annotation\FormValidation;
 
@@ -155,8 +156,11 @@ class MyController
     {
     }
 }
+```
 
-// フォーム単位: フォーム自身で宣言。
+フォーム単位 — フォーム自身で宣言:
+
+```php
 use Ray\WebFormModule\AbstractAuraForm;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 

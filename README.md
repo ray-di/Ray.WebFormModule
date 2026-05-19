@@ -157,8 +157,9 @@ Either path causes `AbstractForm::apply()` to throw `CsrfViolationException`
 on token mismatch. Without either path, no CSRF check is performed. Combining
 both paths is harmless but redundant — pick whichever fits your use case.
 
+Per-action — declare CSRF on the controller method:
+
 ```php
-// Per-action: declare CSRF on the controller method.
 use Ray\WebFormModule\Annotation\CsrfProtection;
 use Ray\WebFormModule\Annotation\FormValidation;
 
@@ -170,8 +171,11 @@ class MyController
     {
     }
 }
+```
 
-// Per-form: declare CSRF on the form itself.
+Per-form — declare CSRF on the form itself:
+
+```php
 use Ray\WebFormModule\AbstractAuraForm;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 
