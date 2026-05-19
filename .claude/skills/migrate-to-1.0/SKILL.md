@@ -194,7 +194,10 @@ Report to the user:
 - Migrating other libraries' annotations (only `Ray\WebFormModule\Annotation\*`).
 - Renaming `SetAntiCsrfTrait` — the trait and `setAntiCsrf()` method are
   unchanged in 1.0.
-- Changes to forms that use `AntiCsrf` without `#[CsrfProtection]` —
-  flag these to the user: in 1.0 they will silently stop enforcing CSRF.
-  The user must decide whether to add `#[CsrfProtection]` to the validated
-  controller method or accept the new behaviour.
+- Migrating `@FormValidation(antiCsrf=true)` callers that did **not** use
+  `SetAntiCsrfTrait` on the form. These relied on the removed `antiCsrf`
+  option to enable CSRF; after dropping the option they need
+  `#[CsrfProtection]` on the validated method (or `SetAntiCsrfTrait` on
+  the form) to keep enforcement. Flag these to the user so they can decide.
+  Forms that already use `SetAntiCsrfTrait` continue to enforce CSRF in 1.0
+  via `AbstractForm::apply()` regardless of `#[CsrfProtection]`.
