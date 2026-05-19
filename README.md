@@ -176,10 +176,10 @@ class MyController
 Per-form — declare CSRF on the form itself:
 
 ```php
-use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\AbstractForm;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 
-class MyForm extends AbstractAuraForm
+class MyForm extends AbstractForm
 {
     use SetAntiCsrfTrait;
 }

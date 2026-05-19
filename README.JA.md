@@ -161,10 +161,10 @@ class MyController
 フォーム単位 — フォーム自身で宣言:
 
 ```php
-use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\AbstractForm;
 use Ray\WebFormModule\SetAntiCsrfTrait;
 
-class MyForm extends AbstractAuraForm
+class MyForm extends AbstractForm
 {
     use SetAntiCsrfTrait;
 }
