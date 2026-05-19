@@ -146,25 +146,21 @@ CSRF protection is **opt-in** and can be enabled through either of two
 independent paths:
 
 - **Per-form**: add `use SetAntiCsrfTrait;` to the form. `AntiCsrfInterface`
-  is injected at construction time, the token field is added in
-  `postConstruct()`, and every `apply()` call verifies the token.
+  is injected by Ray.Di through the trait's `#[Inject]` setter, the token
+  field is added in `postConstruct()`, and every `apply()` call verifies
+  the token.
 - **Per-action**: annotate the validated controller method with
   `#[CsrfProtection]`. `AuraInputInterceptor` then injects
   `AntiCsrfInterface` into the form before `apply()` runs.
 
 Either path causes `AbstractForm::apply()` to throw `CsrfViolationException`
-on token mismatch. Without either path, no CSRF check is performed.
+on token mismatch. Without either path, no CSRF check is performed. Combining
+both paths is harmless but redundant — pick whichever fits your use case.
 
 ```php
-use Ray\WebFormModule\AbstractAuraForm;
+// Per-action: declare CSRF on the controller method.
 use Ray\WebFormModule\Annotation\CsrfProtection;
 use Ray\WebFormModule\Annotation\FormValidation;
-use Ray\WebFormModule\SetAntiCsrfTrait;
-
-class MyForm extends AbstractAuraForm
-{
-    use SetAntiCsrfTrait;
-}
 
 class MyController
 {
@@ -173,6 +169,15 @@ class MyController
     public function createAction()
     {
     }
+}
+
+// Per-form: declare CSRF on the form itself.
+use Ray\WebFormModule\AbstractAuraForm;
+use Ray\WebFormModule\SetAntiCsrfTrait;
+
+class MyForm extends AbstractAuraForm
+{
+    use SetAntiCsrfTrait;
 }
 ```
 You can provide your custom `AntiCsrf` class. See more detail at [Aura.Input](https://github.com/auraphp/Aura.Input#applying-csrf-protections)
