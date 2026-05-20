@@ -82,7 +82,9 @@ becomes
 Also add `use Ray\WebFormModule\Annotation\CsrfProtection;`.
 
 If `antiCsrf=false` (or omitted), drop the option without adding
-`#[CsrfProtection]` — methods without the attribute perform no CSRF check.
+`#[CsrfProtection]`. The method itself then performs no attribute-driven
+CSRF check; the form may still enforce CSRF if it uses `SetAntiCsrfTrait`
+(see "Out of scope" below).
 
 ### 1c. `@InputValidation` and `@VndError`
 
@@ -194,7 +196,8 @@ Report to the user:
 - Migrating other libraries' annotations (only `Ray\WebFormModule\Annotation\*`).
 - Renaming `SetAntiCsrfTrait` — the trait and `setAntiCsrf()` method are
   unchanged in 1.0.
-- Changes to forms that use `AntiCsrf` without `#[CsrfProtection]` —
-  flag these to the user: in 1.0 they will silently stop enforcing CSRF.
-  The user must decide whether to add `#[CsrfProtection]` to the validated
-  controller method or accept the new behaviour.
+- Deciding whether `#[CsrfProtection]` added by Step 1b is redundant. Forms
+  that already use `SetAntiCsrfTrait` enforce CSRF via `AbstractForm::apply()`
+  regardless of the attribute, so the attribute Step 1b inserts is harmless
+  but unnecessary. Flag these to the user so they can drop the attribute if
+  they prefer a single declaration site.

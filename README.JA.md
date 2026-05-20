@@ -127,20 +127,26 @@ class MyController
 
 ### CSRF Protections
 
-CSRF対策は **opt-in** です。`SetAntiCsrfTrait` を使うフォームには `AntiCsrfInterface` が注入されますが、
-トークンの検証は `#[CsrfProtection]` 属性が付いたメソッドでのみ行われます。
-`#[CsrfProtection]` が無いメソッドでは、フォーム側に AntiCsrf がセットされていても CSRF チェックは実行されません。
+CSRF対策は **opt-in** で、独立した 2 つの経路のいずれかで有効化できます。
+
+- **フォーム単位**: フォームに `use SetAntiCsrfTrait;` を追加します。
+  Ray.Di がトレイトの `#[Inject]` setter 経由で `AntiCsrfInterface` を注入し、
+  `postConstruct()` でトークンフィールドが追加され、`apply()` の呼び出しごとに
+  トークンが検証されます。
+- **アクション単位**: バリデーション対象のコントローラメソッドに
+  `#[CsrfProtection]` を付与します。`AuraInputInterceptor` が `apply()` 実行前に
+  `AntiCsrfInterface` をフォームへ注入します。
+
+どちらの経路でも、トークン不一致時には `AbstractForm::apply()` が
+`CsrfViolationException` を throw します。どちらも使わない場合は CSRF 検証は
+行われません。両方を併用しても害はありませんが冗長なので、用途に合わせて
+どちらか一方を選んでください。
+
+アクション単位 — コントローラのメソッドで宣言:
 
 ```php
-use Ray\WebFormModule\AbstractAuraForm;
 use Ray\WebFormModule\Annotation\CsrfProtection;
 use Ray\WebFormModule\Annotation\FormValidation;
-use Ray\WebFormModule\SetAntiCsrfTrait;
-
-class MyForm extends AbstractAuraForm
-{
-    use SetAntiCsrfTrait;
-}
 
 class MyController
 {
@@ -149,6 +155,18 @@ class MyController
     public function createAction()
     {
     }
+}
+```
+
+フォーム単位 — フォーム自身で宣言:
+
+```php
+use Ray\WebFormModule\AbstractForm;
+use Ray\WebFormModule\SetAntiCsrfTrait;
+
+class MyForm extends AbstractForm
+{
+    use SetAntiCsrfTrait;
 }
 ```
 
