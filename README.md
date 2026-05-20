@@ -184,6 +184,7 @@ class MyForm extends AbstractForm
     use SetAntiCsrfTrait;
 }
 ```
+
 You can provide your custom `AntiCsrf` class. See more detail at [Aura.Input](https://github.com/auraphp/Aura.Input#applying-csrf-protections)
 
 ## Migration from 0.x
