@@ -51,6 +51,10 @@ jobs:
             ${{ runner.os }}-php${{ matrix.php-version }}-composer-
             ${{ runner.os }}-composer-
 
+      - name: Remove static analysis tools that do not support PHP 8.6 yet
+        if: matrix.php-version == '8.6'
+        run: composer remove --dev --no-update vimeo/psalm phpstan/phpstan phpmd/phpmd squizlabs/php_codesniffer doctrine/coding-standard maglnet/composer-require-checker
+
       - name: Install dependencies
         run: composer update --no-interaction --no-progress --prefer-dist
 
