@@ -17,7 +17,8 @@ final class FormValidation extends AbstractValidation
 {
     /**
      * @param string      $form      Name of the property that holds the form
-     * @param string|null $onFailure Method called on failure, `<method>ValidationFailed` when null
+     * @param string|null $onFailure Method called on failure, `<method>ValidationFailed` when null;
+     *                               FormVndErrorModule throws ValidationException without calling it
      */
     public function __construct(
         string $form = 'form',
