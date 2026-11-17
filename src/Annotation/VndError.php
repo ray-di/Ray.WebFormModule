@@ -8,6 +8,7 @@ use Attribute;
 
 /**
  * Sets the message, path, logref and links of the vnd.error body when validation fails
+ * Read for #[InputValidation], and for #[FormValidation] when FormVndErrorModule is installed
  *
  * @see https://bearsunday.github.io/manuals/1.0/en/form.html#validation-exception
  */
