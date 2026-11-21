@@ -1,0 +1,15 @@
+{
+    "require-dev": {
+        "doctrine/coding-standard": "^14.0",
+        "maglnet/composer-require-checker": "^4.0",
+        "phpmd/phpmd": "^2.13",
+        "phpstan/phpstan": "^1.10",
+        "squizlabs/php_codesniffer": "^4.0",
+        "vimeo/psalm": "^5.0 || ^6.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
